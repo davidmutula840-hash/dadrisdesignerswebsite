@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard — DADRIS DESIGNERS</title>
+  <link rel="stylesheet" href="admin.css" />
+  <link rel="icon" href="../images/logo.jpg" type="image/jpeg" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body>
+
+  <button class="sidebar-toggle" id="sidebarToggle"><i class="fas fa-bars"></i></button>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <img src="../images/logo.jpg" alt="Logo" />
+      <div class="sidebar-logo-text">
+        <div class="name">DADRIS DESIGNERS</div>
+        <div class="role">Admin Panel</div>
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Main</div>
+      <div class="nav-item active" onclick="showPanel('dashboard')"><i class="fas fa-chart-pie"></i> Dashboard</div>
+      <div class="nav-item" onclick="showPanel('clients')"><i class="fas fa-users"></i> Clients <span class="nav-badge" id="clientCount">0</span></div>
+      <div class="nav-item" onclick="showPanel('projects')"><i class="fas fa-folder-open"></i> Projects <span class="nav-badge" id="projectCount">0</span></div>
+      <div class="nav-item" onclick="showPanel('payments')"><i class="fas fa-credit-card"></i> Payments <span class="nav-badge red" id="pendingCount">0</span></div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Manage</div>
+      <div class="nav-item" onclick="showPanel('addClient')"><i class="fas fa-user-plus"></i> Add New Client</div>
+      <div class="nav-item" onclick="showPanel('addProject')"><i class="fas fa-plus-circle"></i> New Project</div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">System</div>
+      <div class="nav-item" onclick="window.open('../index.html','_blank')"><i class="fas fa-globe"></i> View Website</div>
+    </div>
+    <div class="sidebar-footer">
+      <div class="admin-info">
+        <div class="admin-avatar">A</div>
+        <div>
+          <div class="admin-name" id="adminEmailDisplay">Admin</div>
+          <div class="admin-role">Super Admin</div>
+        </div>
+        <button class="logout-btn" onclick="adminLogout()" title="Logout"><i class="fas fa-sign-out-alt"></i></button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main-content">
+    <div class="topbar">
+      <div class="topbar-left">
+        <h2 id="pageTitle">Dashboard Overview</h2>
+        <p id="pageSubtitle">Welcome back! Here's what's happening today.</p>
+      </div>
+      <div class="topbar-right">
+        <div class="topbar-user">
+          <div class="admin-avatar" style="width:32px;height:32px;font-size:0.8rem;">A</div>
+          <div>
+            <div class="topbar-user-name">Admin</div>
+            <div class="topbar-user-role">DADRIS DESIGNERS</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="page-content">
+
+      <!-- Loading overlay -->
+      <div id="loadingOverlay" style="position:fixed;inset:0;background:rgba(240,244,241,0.85);z-index:999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;">
+        <div style="width:48px;height:48px;border:4px solid #e2e8e4;border-top-color:#1a8c2e;border-radius:50%;animation:spin .8s linear infinite;"></div>
+        <p style="font-weight:600;color:#1a8c2e;">Loading Dashboard...</p>
+      </div>
+      <style>@keyframes spin{to{transform:rotate(360deg)}}</style>
+
+      <!-- ===== DASHBOARD ===== -->
+      <div class="panel active" id="panel-dashboard">
+        <div class="stats-grid">
+          <div class="stat-card"><div class="stat-icon" style="background:rgba(26,140,46,0.1);">👥</div><div><div class="stat-label">Total Clients</div><div class="stat-value" id="stat-clients">0</div><div class="stat-change up">Active accounts</div></div></div>
+          <div class="stat-card"><div class="stat-icon" style="background:rgba(21,101,192,0.1);">📁</div><div><div class="stat-label">Total Projects</div><div class="stat-value" id="stat-projects">0</div><div class="stat-change up" id="stat-ongoing-label">Ongoing: 0</div></div></div>
+          <div class="stat-card"><div class="stat-icon" style="background:rgba(244,180,0,0.1);">💰</div><div><div class="stat-label">Revenue (KSh)</div><div class="stat-value" id="stat-revenue">0</div><div class="stat-change up">Total collected</div></div></div>
+          <div class="stat-card"><div class="stat-icon" style="background:rgba(229,57,53,0.1);">⏳</div><div><div class="stat-label">Pending Payments</div><div class="stat-value" id="stat-pending">0</div><div class="stat-change down">Awaiting payment</div></div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:28px;">
+          <div class="card">
+            <div class="card-header"><h3>Recent Projects</h3><button class="btn btn-sm btn-outline" onclick="showPanel('projects')">View All</button></div>
+            <div class="card-body"><div style="overflow-x:auto;"><table class="data-table"><thead><tr><th>Project</th><th>Client</th><th>Status</th></tr></thead><tbody id="recentProjectsBody"><tr><td colspan="3" style="text-align:center;padding:20px;color:#6b7c70;">Loading...</td></tr></tbody></table></div></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3>Payment Overview</h3></div>
+            <div class="card-body" style="padding:20px;">
+              <div style="margin-bottom:16px;"><div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:0.85rem;"><span>Paid</span><span id="pct-paid" style="font-weight:700;color:#1a8c2e;">0%</span></div><div class="progress-bar"><div class="progress-fill" id="bar-paid" style="width:0%;"></div></div></div>
+              <div style="margin-bottom:16px;"><div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:0.85rem;"><span>Partial</span><span id="pct-partial" style="font-weight:700;color:#f4b400;">0%</span></div><div class="progress-bar"><div class="progress-fill" id="bar-partial" style="width:0%;background:linear-gradient(90deg,#f4b400,#ffca28);"></div></div></div>
+              <div><div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:0.85rem;"><span>Unpaid</span><span id="pct-unpaid" style="font-weight:700;color:#e53935;">0%</span></div><div class="progress-bar"><div class="progress-fill" id="bar-unpaid" style="width:0%;background:linear-gradient(90deg,#e53935,#ef5350);"></div></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3>Recent Clients</h3><button class="btn btn-sm btn-outline" onclick="showPanel('clients')">View All</button></div>
+          <div class="card-body"><div style="overflow-x:auto;"><table class="data-table"><thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Projects</th><th>Actions</th></tr></thead><tbody id="recentClientsBody"><tr><td colspan="5" style="text-align:center;padding:20px;color:#6b7c70;">Loading...</td></tr></tbody></table></div></div>
+        </div>
+      </div>
+
+      <!-- ===== CLIENTS ===== -->
+      <div class="panel" id="panel-clients">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:12px;">
+          <div><h3 style="font-size:1.1rem;font-weight:700;">All Clients</h3><p style="font-size:0.82rem;color:#6b7c70;" id="clientsSubtitle">Loading...</p></div>
+          <div style="display:flex;gap:12px;">
+            <input type="text" placeholder="🔍 Search clients..." style="padding:10px 16px;border:2px solid #e2e8e4;border-radius:50px;font-size:0.85rem;width:220px;font-family:'DM Sans',sans-serif;" id="clientSearch" oninput="filterClients()" />
+            <button class="btn btn-primary" onclick="showPanel('addClient')"><i class="fas fa-plus"></i> Add Client</button>
+          </div>
+        </div>
+        <div class="card"><div class="card-body"><div style="overflow-x:auto;"><table class="data-table"><thead><tr><th>#</th><th>Client Name</th><th>Email</th><th>Phone</th><th>Portal Username</th><th>Projects</th><th>Added</th><th>Actions</th></tr></thead><tbody id="clientsTableBody"><tr><td colspan="8" style="text-align:center;padding:32px;color:#6b7c70;">Loading clients...</td></tr></tbody></table></div></div></div>
+      </div>
+
+      <!-- ===== PROJECTS ===== -->
+      <div class="panel" id="panel-projects">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:12px;">
+          <div><h3 style="font-size:1.1rem;font-weight:700;">All Projects</h3><p style="font-size:0.82rem;color:#6b7c70;">Track all ongoing and completed projects</p></div>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;">
+            <select style="padding:10px 16px;border:2px solid #e2e8e4;border-radius:50px;font-size:0.85rem;font-family:'DM Sans',sans-serif;" id="projectStatusFilter" onchange="renderProjects()">
+              <option value="all">All Statuses</option>
+              <option value="ongoing">Ongoing</option>
+              <option value="completed">Completed</option>
+              <option value="pending">Pending</option>
+              <option value="revision">In Revision</option>
+            </select>
+            <button class="btn btn-primary" onclick="showPanel('addProject')"><i class="fas fa-plus"></i> New Project</button>
+          </div>
+        </div>
+        <div class="card"><div class="card-body"><div style="overflow-x:auto;"><table class="data-table"><thead><tr><th>#</th><th>Project</th><th>Client</th><th>Service</th><th>Status</th><th>Progress</th><th>Amount</th><th>Payment</th><th>Deadline</th><th>Actions</th></tr></thead><tbody id="projectsTableBody"><tr><td colspan="10" style="text-align:center;padding:32px;color:#6b7c70;">Loading projects...</td></tr></tbody></table></div></div></div>
+      </div>
+
+      <!-- ===== PAYMENTS ===== -->
+      <div class="panel" id="panel-payments">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:12px;">
+          <div><h3 style="font-size:1.1rem;font-weight:700;">Payment Tracker</h3><p style="font-size:0.82rem;color:#6b7c70;">Monitor all project payments</p></div>
+          <select style="padding:10px 16px;border:2px solid #e2e8e4;border-radius:50px;font-size:0.85rem;font-family:'DM Sans',sans-serif;" id="paymentFilter" onchange="renderPayments()">
+            <option value="all">All</option><option value="paid">Paid</option><option value="partial">Partial</option><option value="unpaid">Unpaid</option>
+          </select>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px;">
+          <div class="stat-card"><div class="stat-icon" style="background:rgba(26,140,46,0.1);">✅</div><div><div class="stat-label">Total Collected</div><div class="stat-value" style="font-size:1.4rem;" id="p-collected">KSh 0</div></div></div>
+          <div class="stat-card"><div class="stat-icon" style="background:rgba(244,180,0,0.1);">⏳</div><div><div class="stat-label">Partial Received</div><div class="stat-value" style="font-size:1.4rem;" id="p-partial">KSh 0</div></div></div>
+          <div class="stat-card"><div class="stat-icon" style="background:rgba(229,57,53,0.1);">❌</div><div><div class="stat-label">Pending Balance</div><div class="stat-value" style="font-size:1.4rem;" id="p-pending-amt">KSh 0</div></div></div>
+        </div>
+        <div class="card"><div class="card-body"><div style="overflow-x:auto;"><table class="data-table"><thead><tr><th>Project</th><th>Client</th><th>Total (KSh)</th><th>Paid (KSh)</th><th>Balance (KSh)</th><th>Status</th><th>Action</th></tr></thead><tbody id="paymentsTableBody"></tbody></table></div></div></div>
+      </div>
+
+      <!-- ===== ADD CLIENT ===== -->
+      <div class="panel" id="panel-addClient">
+        <div style="max-width:640px;">
+          <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:6px;">Add New Client</h3>
+          <p style="font-size:0.82rem;color:#6b7c70;margin-bottom:24px;">Create a client account. They will use these details to log into their portal from any device.</p>
+          <div class="card">
+            <div class="card-body" style="padding:28px;">
+              <div id="addClientMsg" style="display:none;padding:12px 16px;border-radius:10px;margin-bottom:16px;font-size:0.86rem;"></div>
+              <form id="addClientForm">
+                <div class="form-row-2">
+                  <div class="d-form-group"><label>Full Name *</label><input type="text" id="c-name" placeholder="e.g. James Kamau" required /></div>
+                  <div class="d-form-group"><label>Phone / WhatsApp *</label><input type="tel" id="c-phone" placeholder="e.g. 0712345678" required /></div>
+                </div>
+                <div class="d-form-group"><label>Email Address *</label><input type="email" id="c-email" placeholder="client@email.com" required /></div>
+                <div class="d-form-group"><label>Business / Company Name</label><input type="text" id="c-company" placeholder="e.g. TechStart Kenya" /></div>
+                <div class="form-row-2">
+                  <div class="d-form-group"><label>Portal Username *</label><input type="text" id="c-username" placeholder="e.g. james2025" required /></div>
+                  <div class="d-form-group"><label>Portal Password *</label><input type="text" id="c-password" placeholder="Create a password" required /></div>
+                </div>
+                <div class="d-form-group"><label>Notes (Optional)</label><textarea id="c-notes" placeholder="Any notes about this client..."></textarea></div>
+                <div style="display:flex;gap:12px;margin-top:8px;">
+                  <button type="submit" class="btn btn-primary" id="addClientBtn"><i class="fas fa-user-plus"></i> Add Client</button>
+                  <button type="button" class="btn btn-gray" onclick="showPanel('clients')">Cancel</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== ADD PROJECT ===== -->
+      <div class="panel" id="panel-addProject">
+        <div style="max-width:700px;">
+          <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:6px;">Add New Project</h3>
+          <p style="font-size:0.82rem;color:#6b7c70;margin-bottom:24px;">Create a project and assign it to a client. They will see it instantly in their portal.</p>
+          <div class="card">
+            <div class="card-body" style="padding:28px;">
+              <div id="addProjectMsg" style="display:none;padding:12px 16px;border-radius:10px;margin-bottom:16px;font-size:0.86rem;"></div>
+              <form id="addProjectForm">
+                <div class="form-row-2">
+                  <div class="d-form-group"><label>Project Name *</label><input type="text" id="p-name" placeholder="e.g. Company Logo Design" required /></div>
+                  <div class="d-form-group"><label>Assign to Client *</label><select id="p-client" required><option value="">Select Client...</option></select></div>
+                </div>
+                <div class="form-row-2">
+                  <div class="d-form-group"><label>Service Type *</label>
+                    <select id="p-service" required>
+                      <option value="">Select Service...</option>
+                      <option>Logo Design</option><option>Graphic Design</option>
+                      <option>Web Design</option><option>Branding & Identity</option>
+                      <option>Social Media Design</option><option>Print & Packaging</option><option>Other</option>
+                    </select>
+                  </div>
+                  <div class="d-form-group"><label>Status *</label>
+                    <select id="p-status" required>
+                      <option value="pending">Pending (Not Started)</option>
+                      <option value="ongoing">Ongoing</option>
+                      <option value="revision">In Revision</option>
+                      <option value="completed">Completed</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-row-2">
+                  <div class="d-form-group"><label>Total Amount (KSh) *</label><input type="number" id="p-amount" placeholder="e.g. 5000" min="0" required /></div>
+                  <div class="d-form-group"><label>Amount Paid (KSh)</label><input type="number" id="p-paid" placeholder="e.g. 2500" min="0" value="0" /></div>
+                </div>
+                <div class="form-row-2">
+                  <div class="d-form-group"><label>Start Date</label><input type="date" id="p-start" /></div>
+                  <div class="d-form-group"><label>Deadline</label><input type="date" id="p-deadline" /></div>
+                </div>
+                <div class="d-form-group">
+                  <label>Progress: <span id="progressVal" style="color:#1a8c2e;font-weight:700;">0%</span></label>
+                  <input type="range" id="p-progress" min="0" max="100" value="0" oninput="document.getElementById('progressVal').textContent=this.value+'%'" style="width:100%;margin-top:8px;" />
+                </div>
+                <div class="d-form-group"><label>Project Description</label><textarea id="p-desc" placeholder="Describe what this project involves..."></textarea></div>
+                <div class="d-form-group"><label>First Update Note (shown to client)</label><textarea id="p-note" placeholder="e.g. Project has been received. We will start work shortly." style="min-height:80px;"></textarea></div>
+                <div style="display:flex;gap:12px;margin-top:8px;">
+                  <button type="submit" class="btn btn-primary" id="addProjectBtn"><i class="fas fa-plus-circle"></i> Create Project</button>
+                  <button type="button" class="btn btn-gray" onclick="showPanel('projects')">Cancel</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- EDIT PROJECT MODAL -->
+  <div class="modal" id="editProjectModal">
+    <div class="modal-box">
+      <div class="modal-header"><h3>Edit Project</h3><button class="modal-close" onclick="closeModal('editProjectModal')">✕</button></div>
+      <div class="modal-body">
+        <input type="hidden" id="ep-id" />
+        <div class="form-row-2">
+          <div class="d-form-group"><label>Project Name</label><input type="text" id="ep-name" /></div>
+          <div class="d-form-group"><label>Status</label>
+            <select id="ep-status">
+              <option value="pending">Pending</option><option value="ongoing">Ongoing</option>
+              <option value="revision">In Revision</option><option value="completed">Completed</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row-2">
+          <div class="d-form-group"><label>Total Amount (KSh)</label><input type="number" id="ep-amount" min="0" /></div>
+          <div class="d-form-group"><label>Amount Paid (KSh)</label><input type="number" id="ep-paid" min="0" /></div>
+        </div>
+        <div class="d-form-group">
+          <label>Progress: <span id="ep-progress-val">0%</span></label>
+          <input type="range" id="ep-progress" min="0" max="100" value="0" oninput="document.getElementById('ep-progress-val').textContent=this.value+'%'" style="width:100%;margin-top:8px;" />
+        </div>
+        <div class="d-form-group"><label>Deadline</label><input type="date" id="ep-deadline" /></div>
+        <div class="d-form-group"><label>New Update Note (shown to client)</label><textarea id="ep-note" style="min-height:90px;" placeholder="Write an update for your client..."></textarea></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-gray" onclick="closeModal('editProjectModal')">Cancel</button>
+        <button class="btn btn-primary" id="saveEditBtn" onclick="saveEditProject()"><i class="fas fa-save"></i> Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIEW CLIENT MODAL -->
+  <div class="modal" id="viewClientModal">
+    <div class="modal-box">
+      <div class="modal-header"><h3>Client Details</h3><button class="modal-close" onclick="closeModal('viewClientModal')">✕</button></div>
+      <div class="modal-body" id="viewClientBody"></div>
+      <div class="modal-footer"><button class="btn btn-gray" onclick="closeModal('viewClientModal')">Close</button></div>
+    </div>
+  </div>
+
+  <div id="adminToast" class="toast"></div>
+
+  <script type="module">
+  import { initializeApp }          from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getAuth, onAuthStateChanged, signOut }
+                                     from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+  import {
+    getFirestore, collection, doc,
+    addDoc, getDocs, getDoc, updateDoc, deleteDoc,
+    query, orderBy, onSnapshot, serverTimestamp, arrayUnion
+  } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+  // ---- Firebase Init ----
+  const firebaseConfig = {
+    apiKey: "AIzaSyCYcrazrmkXJXaRMBUzTZFBOwS2BUxs3QQ",
+    authDomain: "dadris-designers.firebaseapp.com",
+    projectId: "dadris-designers",
+    storageBucket: "dadris-designers.firebasestorage.app",
+    messagingSenderId: "813719033161",
+    appId: "1:813719033161:web:ee55f44da47a7748793698"
+  };
+  const app  = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db   = getFirestore(app);
+
+  // ---- Auth Guard ----
+  onAuthStateChanged(auth, user => {
+    if (!user) { window.location.href = 'login.html'; return; }
+    document.getElementById('adminEmailDisplay').textContent = user.email;
+    document.getElementById('loadingOverlay').style.display = 'none';
+    initDashboard();
+  });
+
+  // ---- State ----
+  let clients  = [];
+  let projects = [];
+
+  // ---- Real-time listeners ----
+  function initDashboard() {
+    // Listen to clients
+    onSnapshot(query(collection(db, 'clients'), orderBy('createdAt', 'desc')), snap => {
+      clients = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      document.getElementById('clientCount').textContent = clients.length;
+      updateStats();
+      if (document.getElementById('panel-clients').classList.contains('active')) renderClients();
+      if (document.getElementById('panel-addProject').classList.contains('active')) populateClientDropdown();
+    });
+
+    // Listen to projects
+    onSnapshot(query(collection(db, 'projects'), orderBy('createdAt', 'desc')), snap => {
+      projects = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      document.getElementById('projectCount').textContent = projects.length;
+      const pending = projects.filter(p => getPaymentStatus(p.paid, p.amount) !== 'paid').length;
+      document.getElementById('pendingCount').textContent = pending;
+      updateStats();
+      if (document.getElementById('panel-projects').classList.contains('active')) renderProjects();
+      if (document.getElementById('panel-payments').classList.contains('active')) renderPayments();
+    });
+  }
+
+  // ---- STATS ----
+  function updateStats() {
+    document.getElementById('stat-clients').textContent  = clients.length;
+    document.getElementById('stat-projects').textContent = projects.length;
+    const ongoing = projects.filter(p => p.status === 'ongoing').length;
+    document.getElementById('stat-ongoing-label').textContent = 'Ongoing: ' + ongoing;
+    const revenue = projects.reduce((s, p) => s + (parseFloat(p.paid) || 0), 0);
+    document.getElementById('stat-revenue').textContent = 'KSh ' + revenue.toLocaleString();
+    const pending = projects.filter(p => getPaymentStatus(p.paid, p.amount) !== 'paid').length;
+    document.getElementById('stat-pending').textContent = pending;
+
+    // Payment bars
+    const total = projects.length || 1;
+    const paid    = projects.filter(p => getPaymentStatus(p.paid, p.amount) === 'paid').length;
+    const partial = projects.filter(p => getPaymentStatus(p.paid, p.amount) === 'partial').length;
+    const unpaid  = projects.filter(p => getPaymentStatus(p.paid, p.amount) === 'unpaid').length;
+    const pP = Math.round(paid/total*100), pPa = Math.round(partial/total*100), pU = Math.round(unpaid/total*100);
+    document.getElementById('pct-paid').textContent    = pP + '%';
+    document.getElementById('pct-partial').textContent = pPa + '%';
+    document.getElementById('pct-unpaid').textContent  = pU + '%';
+    document.getElementById('bar-paid').style.width    = pP + '%';
+    document.getElementById('bar-partial').style.width = pPa + '%';
+    document.getElementById('bar-unpaid').style.width  = pU + '%';
+
+    // Recent tables
+    const rpBody = document.getElementById('recentProjectsBody');
+    rpBody.innerHTML = projects.length === 0
+      ? '<tr><td colspan="3" style="text-align:center;padding:20px;color:#6b7c70;">No projects yet</td></tr>'
+      : projects.slice(0,5).map(p => {
+          const c = clients.find(x => x.id === p.clientId);
+          return `<tr><td><strong>${p.name}</strong></td><td>${c ? c.name : '—'}</td><td>${statusBadge(p.status)}</td></tr>`;
+        }).join('');
+
+    const rcBody = document.getElementById('recentClientsBody');
+    rcBody.innerHTML = clients.length === 0
+      ? '<tr><td colspan="5" style="text-align:center;padding:20px;color:#6b7c70;">No clients yet</td></tr>'
+      : clients.slice(0,5).map(c => {
+          const cp = projects.filter(p => p.clientId === c.id).length;
+          return `<tr><td><strong>${c.name}</strong></td><td>${c.email}</td><td>${c.phone}</td>
+            <td><span class="badge badge-blue">${cp} project(s)</span></td>
+            <td><button class="btn btn-sm btn-outline" onclick="window.viewClient('${c.id}')"><i class="fas fa-eye"></i></button></td></tr>`;
+        }).join('');
+  }
+
+  // ---- HELPERS ----
+  function statusBadge(s) {
+    const map = { ongoing:'badge-blue', completed:'badge-green', pending:'badge-gray', revision:'badge-yellow' };
+    const lbl = { ongoing:'Ongoing', completed:'Completed', pending:'Pending', revision:'In Revision' };
+    return `<span class="badge ${map[s]||'badge-gray'}">${lbl[s]||s}</span>`;
+  }
+  function paymentBadge(s) {
+    const map = { paid:'badge-green', partial:'badge-yellow', unpaid:'badge-red' };
+    const lbl = { paid:'✅ Paid', partial:'⏳ Partial', unpaid:'❌ Unpaid' };
+    return `<span class="badge ${map[s]||'badge-gray'}">${lbl[s]||s}</span>`;
+  }
+  function getPaymentStatus(paid, total) {
+    const p = parseFloat(paid)||0, t = parseFloat(total)||0;
+    if (t === 0) return 'unpaid';
+    if (p >= t) return 'paid';
+    if (p > 0)  return 'partial';
+    return 'unpaid';
+  }
+
+  // ---- CLIENTS ----
+  window.renderClients = function(list) {
+    const items = list !== undefined ? list : clients;
+    document.getElementById('clientsSubtitle').textContent = `${clients.length} client(s) total`;
+    const body = document.getElementById('clientsTableBody');
+    if (items.length === 0) {
+      body.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:32px;color:#6b7c70;">No clients yet. Add your first client!</td></tr>';
+      return;
+    }
+    body.innerHTML = items.map((c, i) => {
+      const cp = projects.filter(p => p.clientId === c.id).length;
+      const date = c.createdAt?.toDate ? c.createdAt.toDate().toLocaleDateString('en-KE') : 'N/A';
+      return `<tr>
+        <td>${i+1}</td>
+        <td><strong>${c.name}</strong><br><span style="font-size:0.75rem;color:#6b7c70;">${c.company||'—'}</span></td>
+        <td>${c.email}</td><td>${c.phone}</td>
+        <td><code style="background:#f0f4f1;padding:2px 8px;border-radius:6px;font-size:0.78rem;">${c.username}</code></td>
+        <td><span class="badge badge-blue">${cp}</span></td>
+        <td>${date}</td>
+        <td><div style="display:flex;gap:6px;">
+          <button class="btn btn-sm btn-outline" onclick="window.viewClient('${c.id}')"><i class="fas fa-eye"></i></button>
+          <button class="btn btn-sm btn-red" onclick="window.deleteClient('${c.id}')"><i class="fas fa-trash"></i></button>
+        </div></td>
+      </tr>`;
+    }).join('');
+  };
+
+  window.filterClients = function() {
+    const q = document.getElementById('clientSearch').value.toLowerCase();
+    renderClients(clients.filter(c =>
+      c.name.toLowerCase().includes(q) || c.email.toLowerCase().includes(q) || c.phone.includes(q)
+    ));
+  };
+
+  window.viewClient = function(id) {
+    const c = clients.find(x => x.id === id);
+    if (!c) return;
+    const cp = projects.filter(p => p.clientId === id);
+    document.getElementById('viewClientBody').innerHTML = `
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;">
+        <div><label style="font-size:0.72rem;color:#6b7c70;font-weight:700;text-transform:uppercase;letter-spacing:1px;">Name</label><p style="font-weight:600;margin-top:4px;">${c.name}</p></div>
+        <div><label style="font-size:0.72rem;color:#6b7c70;font-weight:700;text-transform:uppercase;letter-spacing:1px;">Company</label><p style="font-weight:600;margin-top:4px;">${c.company||'—'}</p></div>
+        <div><label style="font-size:0.72rem;color:#6b7c70;font-weight:700;text-transform:uppercase;letter-spacing:1px;">Email</label><p style="font-weight:600;margin-top:4px;">${c.email}</p></div>
+        <div><label style="font-size:0.72rem;color:#6b7c70;font-weight:700;text-transform:uppercase;letter-spacing:1px;">Phone</label><p style="font-weight:600;margin-top:4px;">${c.phone}</p></div>
+      </div>
+      <div style="background:#e8f5e9;border:1px solid #a5d6a7;border-radius:12px;padding:16px;margin-bottom:20px;">
+        <p style="font-size:0.8rem;font-weight:700;margin-bottom:8px;color:#1a8c2e;">🔑 Client Portal Login Credentials</p>
+        <p>Username: <strong>${c.username}</strong></p>
+        <p>Password: <strong>${c.password}</strong></p>
+        <p style="font-size:0.75rem;color:#6b7c70;margin-top:8px;">Share this link with them: <strong>client-portal/login.html</strong></p>
+      </div>
+      <h4 style="margin-bottom:12px;">Projects (${cp.length})</h4>
+      ${cp.length === 0 ? '<p style="color:#6b7c70;font-size:0.88rem;">No projects yet.</p>' :
+        cp.map(p => `<div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #e2e8e4;"><span style="font-weight:600;">${p.name}</span>${statusBadge(p.status)}</div>`).join('')}
+    `;
+    openModal('viewClientModal');
+  };
+
+  window.deleteClient = async function(id) {
+    if (!confirm('Delete this client? This cannot be undone.')) return;
+    try {
+      await deleteDoc(doc(db, 'clients', id));
+      showToast('✅ Client deleted.');
+    } catch { showToast('❌ Error deleting client.'); }
+  };
+
+  // Add Client
+  document.getElementById('addClientForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn  = document.getElementById('addClientBtn');
+    const msgEl = document.getElementById('addClientMsg');
+    btn.disabled = true;
+    btn.textContent = 'Saving...';
+
+    // Check username not taken
+    const snap = await getDocs(collection(db, 'clients'));
+    const taken = snap.docs.some(d => d.data().username === document.getElementById('c-username').value.trim());
+    if (taken) {
+      showMsg(msgEl, '❌ Username already taken. Choose another.', 'red');
+      btn.disabled = false; btn.innerHTML = '<i class="fas fa-user-plus"></i> Add Client'; return;
+    }
+
+    try {
+      await addDoc(collection(db, 'clients'), {
+        name:      document.getElementById('c-name').value.trim(),
+        phone:     document.getElementById('c-phone').value.trim(),
+        email:     document.getElementById('c-email').value.trim(),
+        company:   document.getElementById('c-company').value.trim(),
+        username:  document.getElementById('c-username').value.trim(),
+        password:  document.getElementById('c-password').value.trim(),
+        notes:     document.getElementById('c-notes').value.trim(),
+        createdAt: serverTimestamp(),
+      });
+      showMsg(msgEl, '✅ Client added! Share their username and password so they can login.', 'green');
+      e.target.reset();
+      setTimeout(() => showPanel('clients'), 2000);
+    } catch (err) {
+      showMsg(msgEl, '❌ Error: ' + err.message, 'red');
+    }
+    btn.disabled = false; btn.innerHTML = '<i class="fas fa-user-plus"></i> Add Client';
+  });
+
+  // ---- PROJECTS ----
+  window.renderProjects = function() {
+    const filter = document.getElementById('projectStatusFilter')?.value || 'all';
+    const items  = filter === 'all' ? projects : projects.filter(p => p.status === filter);
+    const body   = document.getElementById('projectsTableBody');
+    if (items.length === 0) {
+      body.innerHTML = '<tr><td colspan="10" style="text-align:center;padding:32px;color:#6b7c70;">No projects found.</td></tr>';
+      return;
+    }
+    body.innerHTML = items.map((p, i) => {
+      const c  = clients.find(x => x.id === p.clientId);
+      const ps = getPaymentStatus(p.paid, p.amount);
+      return `<tr>
+        <td>${i+1}</td>
+        <td><strong>${p.name}</strong></td>
+        <td>${c ? c.name : '—'}</td>
+        <td style="font-size:0.82rem;">${p.service}</td>
+        <td>${statusBadge(p.status)}</td>
+        <td>
+          <div style="min-width:80px;">
+            <div class="progress-bar" style="margin-bottom:4px;"><div class="progress-fill" style="width:${p.progress||0}%;"></div></div>
+            <span style="font-size:0.75rem;color:#6b7c70;">${p.progress||0}%</span>
+          </div>
+        </td>
+        <td>KSh ${parseFloat(p.amount||0).toLocaleString()}</td>
+        <td>${paymentBadge(ps)}</td>
+        <td style="font-size:0.82rem;">${p.deadline||'—'}</td>
+        <td><div style="display:flex;gap:6px;">
+          <button class="btn btn-sm btn-outline" onclick="window.editProject('${p.id}')"><i class="fas fa-edit"></i></button>
+          <button class="btn btn-sm btn-red" onclick="window.deleteProject('${p.id}')"><i class="fas fa-trash"></i></button>
+        </div></td>
+      </tr>`;
+    }).join('');
+  };
+
+  window.populateClientDropdown = function() {
+    const sel = document.getElementById('p-client');
+    sel.innerHTML = '<option value="">Select Client...</option>' +
+      clients.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+  };
+
+  document.getElementById('addProjectForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn   = document.getElementById('addProjectBtn');
+    const msgEl = document.getElementById('addProjectMsg');
+    btn.disabled = true; btn.textContent = 'Saving...';
+
+    const amount = parseFloat(document.getElementById('p-amount').value) || 0;
+    const paid   = parseFloat(document.getElementById('p-paid').value)   || 0;
+    const note   = document.getElementById('p-note').value.trim() || 'Project created and added to your portal.';
+
+    try {
+      await addDoc(collection(db, 'projects'), {
+        name:          document.getElementById('p-name').value.trim(),
+        clientId:      document.getElementById('p-client').value,
+        service:       document.getElementById('p-service').value,
+        status:        document.getElementById('p-status').value,
+        amount, paid,
+        paymentStatus: getPaymentStatus(paid, amount),
+        progress:      parseInt(document.getElementById('p-progress').value) || 0,
+        start:         document.getElementById('p-start').value,
+        deadline:      document.getElementById('p-deadline').value,
+        desc:          document.getElementById('p-desc').value.trim(),
+        note,
+        updates: [{ date: new Date().toLocaleDateString('en-KE'), msg: note }],
+        createdAt: serverTimestamp(),
+      });
+      showMsg(msgEl, '✅ Project created! The client can now see it in their portal.', 'green');
+      e.target.reset();
+      document.getElementById('progressVal').textContent = '0%';
+      setTimeout(() => showPanel('projects'), 2000);
+    } catch (err) {
+      showMsg(msgEl, '❌ Error: ' + err.message, 'red');
+    }
+    btn.disabled = false; btn.innerHTML = '<i class="fas fa-plus-circle"></i> Create Project';
+  });
+
+  window.editProject = function(id) {
+    const p = projects.find(x => x.id === id);
+    if (!p) return;
+    document.getElementById('ep-id').value       = p.id;
+    document.getElementById('ep-name').value     = p.name;
+    document.getElementById('ep-status').value   = p.status;
+    document.getElementById('ep-amount').value   = p.amount;
+    document.getElementById('ep-paid').value     = p.paid;
+    document.getElementById('ep-progress').value = p.progress || 0;
+    document.getElementById('ep-progress-val').textContent = (p.progress||0) + '%';
+    document.getElementById('ep-deadline').value = p.deadline || '';
+    document.getElementById('ep-note').value     = '';
+    openModal('editProjectModal');
+  };
+
+  window.saveEditProject = async function() {
+    const id  = document.getElementById('ep-id').value;
+    const btn = document.getElementById('saveEditBtn');
+    btn.disabled = true; btn.textContent = 'Saving...';
+
+    const amount = parseFloat(document.getElementById('ep-amount').value) || 0;
+    const paid   = parseFloat(document.getElementById('ep-paid').value)   || 0;
+    const note   = document.getElementById('ep-note').value.trim();
+    const progress = parseInt(document.getElementById('ep-progress').value) || 0;
+
+    const updateData = {
+      name:          document.getElementById('ep-name').value.trim(),
+      status:        document.getElementById('ep-status').value,
+      amount, paid,
+      paymentStatus: getPaymentStatus(paid, amount),
+      progress,
+      deadline:      document.getElementById('ep-deadline').value,
+    };
+
+    if (note) {
+      updateData.note = note;
+      updateData.updates = arrayUnion({ date: new Date().toLocaleDateString('en-KE'), msg: note });
+    }
+
+    try {
+      await updateDoc(doc(db, 'projects', id), updateData);
+      closeModal('editProjectModal');
+      showToast('✅ Project updated! Client will see changes immediately.');
+    } catch (err) { showToast('❌ Error: ' + err.message); }
+    btn.disabled = false; btn.innerHTML = '<i class="fas fa-save"></i> Save Changes';
+  };
+
+  window.deleteProject = async function(id) {
+    if (!confirm('Delete this project? This cannot be undone.')) return;
+    try {
+      await deleteDoc(doc(db, 'projects', id));
+      showToast('✅ Project deleted.');
+    } catch { showToast('❌ Error deleting project.'); }
+  };
+
+  // ---- PAYMENTS ----
+  window.renderPayments = function() {
+    const filter = document.getElementById('paymentFilter')?.value || 'all';
+    const items  = filter === 'all' ? projects : projects.filter(p => getPaymentStatus(p.paid, p.amount) === filter);
+
+    let collected = 0, partialAmt = 0, pendingAmt = 0;
+    projects.forEach(p => {
+      const pd = parseFloat(p.paid)||0, tt = parseFloat(p.amount)||0;
+      const ps = getPaymentStatus(pd, tt);
+      collected += pd;
+      if (ps === 'partial') partialAmt += pd;
+      if (ps !== 'paid') pendingAmt += (tt - pd);
+    });
+    document.getElementById('p-collected').textContent    = 'KSh ' + collected.toLocaleString();
+    document.getElementById('p-partial').textContent      = 'KSh ' + partialAmt.toLocaleString();
+    document.getElementById('p-pending-amt').textContent  = 'KSh ' + pendingAmt.toLocaleString();
+
+    const body = document.getElementById('paymentsTableBody');
+    if (items.length === 0) { body.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:32px;color:#6b7c70;">No payment data.</td></tr>'; return; }
+    body.innerHTML = items.map(p => {
+      const c   = clients.find(x => x.id === p.clientId);
+      const pd  = parseFloat(p.paid)||0, tt = parseFloat(p.amount)||0;
+      const bal = tt - pd;
+      const ps  = getPaymentStatus(pd, tt);
+      return `<tr>
+        <td><strong>${p.name}</strong></td>
+        <td>${c ? c.name : '—'}</td>
+        <td>KSh ${tt.toLocaleString()}</td>
+        <td style="color:#1a8c2e;font-weight:700;">KSh ${pd.toLocaleString()}</td>
+        <td style="color:${bal>0?'#e53935':'#1a8c2e'};font-weight:700;">KSh ${bal.toLocaleString()}</td>
+        <td>${paymentBadge(ps)}</td>
+        <td><button class="btn btn-sm btn-primary" onclick="window.editProject('${p.id}')"><i class="fas fa-edit"></i> Update</button></td>
+      </tr>`;
+    }).join('');
+  };
+
+  // ---- PANEL NAV ----
+  const panelTitles = {
+    dashboard: ['Dashboard Overview', "Welcome back! Here's what's happening today."],
+    clients:   ['Clients', 'Manage all your client accounts'],
+    projects:  ['Projects', 'Track all ongoing and completed projects'],
+    payments:  ['Payments', 'Monitor all project payments'],
+    addClient: ['Add New Client', 'Create a client portal account'],
+    addProject:['New Project', 'Create and assign a project to a client'],
+  };
+  window.showPanel = function(id) {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById('panel-' + id)?.classList.add('active');
+    const [title, sub] = panelTitles[id] || ['Dashboard', ''];
+    document.getElementById('pageTitle').textContent    = title;
+    document.getElementById('pageSubtitle').textContent = sub;
+    if (id === 'clients')    renderClients();
+    if (id === 'projects')   renderProjects();
+    if (id === 'payments')   renderPayments();
+    if (id === 'addProject') populateClientDropdown();
+    document.getElementById('sidebar').classList.remove('open');
+  };
+
+  // ---- MODAL ----
+  window.openModal  = id => { document.getElementById(id).classList.add('open'); document.body.style.overflow = 'hidden'; };
+  window.closeModal = id => { document.getElementById(id).classList.remove('open'); document.body.style.overflow = ''; };
+  document.querySelectorAll('.modal').forEach(m => m.addEventListener('click', e => { if (e.target === m) closeModal(m.id); }));
+
+  // ---- LOGOUT ----
+  window.adminLogout = async function() {
+    if (!confirm('Log out?')) return;
+    await signOut(auth);
+    window.location.href = 'login.html';
+  };
+
+  // ---- SIDEBAR MOBILE ----
+  document.getElementById('sidebarToggle').addEventListener('click', () => {
+    document.getElementById('sidebar').classList.toggle('open');
+  });
+
+  // ---- TOAST / MSG ----
+  window.showToast = function(msg) {
+    const t = document.getElementById('adminToast');
+    t.textContent = msg; t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3500);
+  };
+  function showMsg(el, msg, type) {
+    el.textContent = msg;
+    el.style.display = 'block';
+    el.style.background = type === 'green' ? '#e8f5e9' : '#fce4ec';
+    el.style.color = type === 'green' ? '#2e7d32' : '#c62828';
+    el.style.borderLeft = `4px solid ${type === 'green' ? '#1a8c2e' : '#e53935'}`;
+    el.style.borderRadius = '10px';
+    el.style.padding = '12px 16px';
+  }
+  </script>
+</body>
+</html>

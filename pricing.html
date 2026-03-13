@@ -3,383 +3,378 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DADRIS DESIGNERS — Designs. Define Dadris.</title>
-  <meta name="description" content="Professional graphic and web design services. Logos, branding, websites and more. Dadris Designers — Kenya's creative studio." />
+  <title>Pricing — Dadris Designers</title>
   <link rel="stylesheet" href="css/style.css" />
   <link rel="icon" href="images/logo.jpg" type="image/jpeg" />
-  <!-- Font Awesome for icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
-    /* Home-specific extra styles */
-    .why-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap: 24px; }
-    .why-card {
-      text-align: center; padding: 36px 24px;
-      background: #fff; border-radius: var(--radius-lg);
-      border: 1px solid var(--gray-200); transition: var(--transition);
+    .pricing-tabs { display:flex;gap:12px;justify-content:center;margin-bottom:48px;flex-wrap:wrap; }
+    .ptab { padding:10px 28px;border-radius:50px;border:2px solid var(--gray-200);background:transparent;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:var(--transition); }
+    .ptab.active,.ptab:hover { background:var(--green);border-color:var(--green);color:#fff; }
+    .pricing-category { display:none; }
+    .pricing-category.active { display:block; }
+    .faq-list { max-width: 760px; margin: 0 auto; }
+    .faq-item { border-bottom: 1px solid var(--gray-200); }
+    .faq-q {
+      width:100%; background:none; border:none; text-align:left; padding: 20px 0;
+      font-weight:700; font-size:1rem; cursor:pointer; display:flex; justify-content:space-between;
+      align-items:center; font-family:'DM Sans',sans-serif; color:var(--black);
     }
-    .why-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
-    .why-icon { font-size: 2.4rem; margin-bottom: 16px; }
-    .why-card h3 { font-size: 1.05rem; margin-bottom: 8px; }
-    .why-card p { font-size: 0.85rem; color: var(--gray-600); }
-    .cta-band {
-      background: linear-gradient(135deg, var(--green), #0f5c1f);
-      padding: 80px 24px; text-align: center; color: #fff;
-    }
-    .cta-band h2 { color: #fff; margin-bottom: 12px; }
-    .cta-band p  { color: rgba(255,255,255,0.75); max-width: 500px; margin: 0 auto 28px; }
-    .cta-band-btns { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
-    /* Mini portfolio on home */
-    .mini-portfolio-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; }
-    @media(max-width:768px){ .mini-portfolio-grid{ grid-template-columns:1fr 1fr; } }
-    @media(max-width:480px){ .mini-portfolio-grid{ grid-template-columns:1fr; } }
+    .faq-q .icon { font-size:1.2rem; color:var(--green); transition:transform var(--transition); }
+    .faq-q.open .icon { transform: rotate(45deg); }
+    .faq-a { display:none; padding-bottom:20px; color:var(--gray-600); font-size:0.9rem; line-height:1.75; }
+    .faq-a.open { display:block; }
+    .price-note { background:rgba(26,140,46,0.06);border:1px solid rgba(26,140,46,0.2);border-radius:var(--radius);padding:20px 24px;margin-top:32px;font-size:0.88rem;color:var(--gray-800); }
+    .price-note strong { color:var(--green); }
   </style>
 </head>
 <body>
 
-  <!-- ======= NAVBAR ======= -->
   <nav id="navbar">
     <div class="nav-inner">
       <a href="index.html" class="nav-logo">
-        <img src="images/logo.jpg" alt="Dadris Designers Logo" />
+        <img src="images/logo.jpg" alt="Logo" />
         <div class="nav-logo-text">
           <span class="brand">DADRIS DESIGNERS</span>
           <span class="tagline">Designs. Define Dadris</span>
         </div>
       </a>
       <ul class="nav-links">
-        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="index.html">Home</a></li>
         <li><a href="about.html">About</a></li>
         <li><a href="services.html">Services</a></li>
         <li><a href="portfolio.html">Portfolio</a></li>
-        <li><a href="pricing.html">Pricing</a></li>
+        <li><a href="pricing.html" class="active">Pricing</a></li>
         <li><a href="contact.html">Contact</a></li>
       </ul>
       <div class="nav-cta">
         <a href="client-portal/login.html" class="btn btn-outline" style="padding:10px 22px;font-size:0.85rem;">Client Login</a>
         <a href="contact.html" class="btn btn-primary" style="padding:10px 22px;font-size:0.85rem;">Get a Quote</a>
       </div>
-      <div class="hamburger" id="hamburger">
-        <span></span><span></span><span></span>
-      </div>
+      <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
     </div>
   </nav>
-
-  <!-- Mobile Menu -->
   <div class="mobile-menu" id="mobileMenu">
     <span class="mobile-close" id="mobileClose">✕</span>
-    <a href="index.html">Home</a>
-    <a href="about.html">About</a>
-    <a href="services.html">Services</a>
-    <a href="portfolio.html">Portfolio</a>
-    <a href="pricing.html">Pricing</a>
-    <a href="contact.html">Contact</a>
+    <a href="index.html">Home</a><a href="about.html">About</a>
+    <a href="services.html">Services</a><a href="portfolio.html">Portfolio</a>
+    <a href="pricing.html">Pricing</a><a href="contact.html">Contact</a>
     <a href="client-portal/login.html" class="btn btn-primary">Client Login</a>
   </div>
 
-  <!-- ======= HERO ======= -->
-  <section class="hero">
-    <div class="hero-grid-bg"></div>
-    <div class="hero-content">
-      <div class="hero-text">
-        <div class="hero-badge">
-          <span></span> Available for new projects
-        </div>
-        <h1>We Create Designs That <em>Define</em> Your Brand</h1>
-        <p class="hero-desc">
-          Professional graphic design, logos, branding, and web design services.
-          We turn your vision into stunning visuals that make your business unforgettable.
-        </p>
-        <div class="hero-actions">
-          <a href="portfolio.html" class="btn btn-primary">
-            <i class="fas fa-eye"></i> View Our Work
-          </a>
-          <a href="contact.html" class="btn btn-outline" style="border-color:rgba(255,255,255,0.3);color:#fff;">
-            <i class="fas fa-paper-plane"></i> Get a Free Quote
-          </a>
-        </div>
-        <div class="hero-stats">
-          <div class="hero-stat">
-            <div class="num" data-count="150" data-suffix="+">0+</div>
-            <div class="label">Projects Done</div>
-          </div>
-          <div class="hero-stat">
-            <div class="num" data-count="80" data-suffix="+">0+</div>
-            <div class="label">Happy Clients</div>
-          </div>
-          <div class="hero-stat">
-            <div class="num" data-count="5" data-suffix="★">0★</div>
-            <div class="label">Avg. Rating</div>
-          </div>
-        </div>
-      </div>
-      <div class="hero-visual">
-        <div class="hero-logo-ring">
-          <div class="ring ring-1"></div>
-          <div class="ring ring-2"></div>
-          <div class="ring ring-3"></div>
-          <div class="hero-logo-inner">
-            <img src="images/logo.jpg" alt="Dadris Designers" />
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ======= SERVICES PREVIEW ======= -->
-  <section class="section services">
-    <div class="container">
-      <div class="section-header fade-up">
-        <div class="tag">What We Do</div>
-        <h2>Our Creative <span>Services</span></h2>
-        <p>From logos to full websites — we handle every part of your visual identity.</p>
-      </div>
-      <div class="services-grid">
-        <div class="service-card fade-up">
-          <div class="service-icon" style="background:rgba(26,140,46,0.1);">🎨</div>
-          <h3>Graphic Design</h3>
-          <p>Flyers, posters, banners, social media graphics — all designed to grab attention and communicate your message.</p>
-          <div class="price">From KSh 1,500</div>
-        </div>
-        <div class="service-card fade-up">
-          <div class="service-icon" style="background:rgba(21,101,192,0.1);">💻</div>
-          <h3>Web Design</h3>
-          <p>Beautiful, responsive websites that work perfectly on all devices — from business sites to e-commerce stores.</p>
-          <div class="price">From KSh 15,000</div>
-        </div>
-        <div class="service-card fade-up">
-          <div class="service-icon" style="background:rgba(244,180,0,0.1);">✏️</div>
-          <h3>Logo Design</h3>
-          <p>A professional logo that captures your brand personality and makes you instantly recognizable.</p>
-          <div class="price">From KSh 2,500</div>
-        </div>
-        <div class="service-card fade-up">
-          <div class="service-icon" style="background:rgba(204,31,31,0.1);">🏷️</div>
-          <h3>Branding & Identity</h3>
-          <p>Complete brand packages including logos, color palettes, fonts, business cards, and brand guidelines.</p>
-          <div class="price">From KSh 8,000</div>
-        </div>
-      </div>
-      <div style="text-align:center;margin-top:40px;">
-        <a href="services.html" class="btn btn-outline">
-          <i class="fas fa-arrow-right"></i> See All Services
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ======= WHY CHOOSE US ======= -->
-  <section class="section" style="background:var(--white);">
-    <div class="container">
-      <div class="section-header fade-up">
-        <div class="tag">Why Dadris</div>
-        <h2>Why Clients <span>Choose Us</span></h2>
-        <p>We combine creativity with results-driven design to help your business grow.</p>
-      </div>
-      <div class="why-grid">
-        <div class="why-card fade-up">
-          <div class="why-icon">⚡</div>
-          <h3>Fast Turnaround</h3>
-          <p>Most projects delivered in 24–72 hours without compromising quality.</p>
-        </div>
-        <div class="why-card fade-up">
-          <div class="why-icon">💎</div>
-          <h3>Premium Quality</h3>
-          <p>Every design is crafted with attention to detail and professional standards.</p>
-        </div>
-        <div class="why-card fade-up">
-          <div class="why-icon">🔄</div>
-          <h3>Unlimited Revisions</h3>
-          <p>We keep refining until you're 100% satisfied with the result.</p>
-        </div>
-        <div class="why-card fade-up">
-          <div class="why-icon">📞</div>
-          <h3>Dedicated Support</h3>
-          <p>Direct communication via WhatsApp and email throughout your project.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ======= MINI PORTFOLIO ======= -->
-<section class="section portfolio" style="background:var(--gray-50);">
-  <div class="container">
-    <div class="section-header fade-up">
-      <div class="tag">Our Work</div>
-      <h2>Recent <span>Projects</span></h2>
-      <p>A taste of our best work — web, graphics, branding & print.</p>
-    </div>
-
-    <div class="mini-portfolio-grid">
-
-      <!-- WEB: CJPD Diocese — Wide -->
-      <div class="portfolio-item fade-up portfolio-wide" data-category="web">
-        <img src="images/cjpd.jpg" class="portfolio-item-img" alt="CJPD Kakamega Diocese" />
-        <div class="portfolio-overlay">
-          <div class="overlay-tag web-tag">Web Design</div>
-          <h3>CJPD Kakamega Diocese</h3>
-          <span>Official church diocese website</span>
-          <div class="overlay-actions">
-            <a href="https://davidmutula840-hash.github.io/CJPD-CDOK-website/" target="_blank" rel="noopener" class="portfolio-visit-btn">
-              <i class="fas fa-external-link-alt"></i> Visit Website
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <!-- GRAPHIC: Church Flyer -->
-      <div class="portfolio-item fade-up" data-category="graphic">
-        <img src="images/gallery7.png" class="portfolio-item-img" alt="Church Flyer" />
-        <div class="portfolio-overlay">
-          <div class="overlay-tag graphic-tag">Flyer Design</div>
-          <h3>Glorious Gospel Church</h3>
-          <span>Church event flyer design</span>
-          <div class="overlay-actions">
-            <button class="portfolio-view-btn" onclick="openLightbox(this)" data-src="images/gallery7.png" data-title="Glorious Gospel Church Flyer">
-              <i class="fas fa-search-plus"></i> View Design
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- GRAPHIC: Branding Mockups — Tall -->
-      <div class="portfolio-item fade-up portfolio-tall" data-category="branding">
-        <img src="images/gallery2.jpg" class="portfolio-item-img" alt="Branding Mockups" />
-        <div class="portfolio-overlay">
-          <div class="overlay-tag branding-tag">Branding</div>
-          <h3>Branding Mockups</h3>
-          <span>Full brand identity & mockup presentation</span>
-          <div class="overlay-actions">
-            <button class="portfolio-view-btn" onclick="openLightbox(this)" data-src="images/gallery2.jpg" data-title="Branding Mockups">
-              <i class="fas fa-search-plus"></i> View Design
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- WEB: Dadris Academy -->
-      <div class="portfolio-item fade-up" data-category="web">
-        <img src="images/logo.jpg" class="portfolio-item-img" alt="Dadris Designers Academy" />
-        <div class="portfolio-overlay">
-          <div class="overlay-tag web-tag">Web Design</div>
-          <h3>Dadris Designers Academy</h3>
-          <span>Online learning platform for design students</span>
-          <div class="overlay-actions">
-            <a href="https://davidmutula840-hash.github.io/Dadris-Academy-/" target="_blank" rel="noopener" class="portfolio-visit-btn">
-              <i class="fas fa-external-link-alt"></i> Visit Website
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <!-- GRAPHIC: Shop Branding -->
-      <div class="portfolio-item fade-up" data-category="branding">
-        <img src="images/dennoh.jpeg" class="portfolio-item-img" alt="Shop Branding" />
-        <div class="portfolio-overlay">
-          <div class="overlay-tag branding-tag">Shop Branding</div>
-          <h3>Dennoh Shop Branding</h3>
-          <span>Full shop brand identity design</span>
-          <div class="overlay-actions">
-            <button class="portfolio-view-btn" onclick="openLightbox(this)" data-src="images/dennoh.jpeg" data-title="Dennoh Shop Branding">
-              <i class="fas fa-search-plus"></i> View Design
-            </button>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-    <div style="text-align:center;margin-top:48px;" class="fade-up">
-      <a href="portfolio.html" class="btn btn-primary">
-        <i class="fas fa-images"></i> View Full Portfolio
-      </a>
-    </div>
-  </div>
-</section>
-
-<!-- LIGHTBOX -->
-<div id="portfolioLightbox" onclick="closeLightbox()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.93);z-index:9999;align-items:center;justify-content:center;flex-direction:column;padding:20px;">
-  <button onclick="closeLightbox()" style="position:absolute;top:20px;right:28px;background:none;border:none;color:#fff;font-size:2rem;cursor:pointer;line-height:1;">✕</button>
-  <img id="lightboxImg" src="" alt="" style="max-width:90vw;max-height:82vh;object-fit:contain;border-radius:12px;box-shadow:0 24px 80px rgba(0,0,0,0.8);" onclick="event.stopPropagation()" />
-  <p id="lightboxTitle" style="color:rgba(255,255,255,0.7);margin-top:16px;font-size:0.9rem;font-family:'DM Sans',sans-serif;"></p>
-</div>
-
-<script>
-  function openLightbox(btn) {
-    event.stopPropagation();
-    const lb = document.getElementById('portfolioLightbox');
-    document.getElementById('lightboxImg').src = btn.dataset.src;
-    document.getElementById('lightboxTitle').textContent = btn.dataset.title;
-    lb.style.display = 'flex';
-    document.body.style.overflow = 'hidden';
-  }
-  function closeLightbox() {
-    document.getElementById('portfolioLightbox').style.display = 'none';
-    document.body.style.overflow = '';
-  }
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
-</script>
-
-  <!-- ======= TESTIMONIALS ======= -->
-  <section class="section testimonials">
-    <div class="container">
-      <div class="section-header fade-up">
-        <div class="tag">Client Love</div>
-        <h2>What Our <span style="color:var(--green-light)">Clients Say</span></h2>
-        <p>Real words from real clients who trusted us with their brand.</p>
-      </div>
-      <div class="testimonials-grid">
-        <div class="testimonial-card fade-up">
-          <div class="stars">★★★★★</div>
-          <p>"Dadris Designers transformed our brand completely. The logo they created is exactly what we envisioned — modern, clean, and memorable."</p>
-          <div class="t-author">
-            <div class="t-avatar">JK</div>
-            <div>
-              <div class="t-name">James Kamau</div>
-              <div class="t-role">CEO, TechStart Kenya</div>
-            </div>
-          </div>
-        </div>
-        <div class="testimonial-card fade-up">
-          <div class="stars">★★★★★</div>
-          <p>"Fast, professional, and affordable. They built our entire website in 3 days and it looks absolutely stunning. Highly recommended!"</p>
-          <div class="t-author">
-            <div class="t-avatar">AM</div>
-            <div>
-              <div class="t-name">Amina Mohamed</div>
-              <div class="t-role">Owner, Amina's Boutique</div>
-            </div>
-          </div>
-        </div>
-        <div class="testimonial-card fade-up">
-          <div class="stars">★★★★★</div>
-          <p>"The best design team I've worked with. They understood my vision immediately and delivered beyond my expectations. Will definitely hire again."</p>
-          <div class="t-author">
-            <div class="t-avatar">PO</div>
-            <div>
-              <div class="t-name">Peter Ochieng</div>
-              <div class="t-role">Marketing Director, SunRise Foods</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ======= CTA BAND ======= -->
-  <div class="cta-band">
-    <h2>Ready to Elevate Your Brand?</h2>
-    <p>Let's create something amazing together. Get a free quote today — no strings attached.</p>
-    <div class="cta-band-btns">
-      <a href="contact.html" class="btn btn-white">
-        <i class="fas fa-envelope"></i> Get a Free Quote
-      </a>
-      <a href="https://wa.me/254745365756" target="_blank" class="btn btn-outline" style="border-color:rgba(255,255,255,0.5);color:#fff;">
-        <i class="fab fa-whatsapp"></i> Chat on WhatsApp
-      </a>
+  <div class="page-banner">
+    <div class="page-banner-content">
+      <div class="tag">Transparent Pricing</div>
+      <h1>Simple, Clear Pricing</h1>
+      <p>No hidden fees. No surprises. Just great design at fair prices.</p>
+      <div class="breadcrumb"><a href="index.html">Home</a> <span>›</span> <span>Pricing</span></div>
     </div>
   </div>
 
-  <!-- ======= FOOTER ======= -->
+  <section class="section pricing">
+    <div class="container">
+      <div class="section-header fade-up">
+        <div class="tag">Choose Your Service</div>
+        <h2>Pricing <span>Packages</span></h2>
+        <p>Select a service category below to see our packages.</p>
+      </div>
+
+      <div class="pricing-tabs fade-up">
+        <button class="ptab active" onclick="showCategory('logo')">Logo Design</button>
+        <button class="ptab" onclick="showCategory('web')">Web Design</button>
+        <button class="ptab" onclick="showCategory('graphic')">Graphic Design</button>
+        <button class="ptab" onclick="showCategory('branding')">Branding</button>
+        <button class="ptab" onclick="showCategory('social')">Social Media</button>
+      </div>
+
+      <!-- Logo Pricing -->
+      <div class="pricing-category active" id="cat-logo">
+        <div class="pricing-grid">
+          <div class="pricing-card fade-up">
+            <div class="pricing-name">Basic</div>
+            <div class="pricing-price">KSh 800</div>
+            <div class="pricing-period">One-time payment</div>
+            <div class="pricing-features">
+              <div class="feature-item"><span class="check">✓</span> 1 Logo Concept</div>
+              <div class="feature-item"><span class="check">✓</span> 2 Revisions</div>
+              <div class="feature-item"><span class="check">✓</span> PNG & JPEG Files</div>
+              <div class="feature-item"><span class="check">✓</span> Transparent Background</div>
+              <div class="feature-item" style="opacity:0.4;"><span class="check">✗</span> Vector (SVG) File</div>
+              <div class="feature-item" style="opacity:0.4;"><span class="check">✗</span> Brand Guidelines</div>
+            </div>
+            <a href="contact.html" class="btn btn-outline" style="width:100%;justify-content:center;">Order Basic</a>
+          </div>
+          <div class="pricing-card featured fade-up">
+            <div class="pricing-badge">🔥 Most Popular</div>
+            <div class="pricing-name">Standard</div>
+            <div class="pricing-price">KSh 1,500</div>
+            <div class="pricing-period">One-time payment</div>
+            <div class="pricing-features">
+              <div class="feature-item"><span class="check">✓</span> 3 Logo Concepts</div>
+              <div class="feature-item"><span class="check">✓</span> Unlimited Revisions</div>
+              <div class="feature-item"><span class="check">✓</span> All File Formats</div>
+              <div class="feature-item"><span class="check">✓</span> Transparent Background</div>
+              <div class="feature-item"><span class="check">✓</span> Vector (SVG) File</div>
+              <div class="feature-item" style="opacity:0.5;"><span class="check">✗</span> Brand Guidelines</div>
+            </div>
+            <a href="contact.html" class="btn btn-primary" style="width:100%;justify-content:center;">Order Standard</a>
+          </div>
+          <div class="pricing-card fade-up">
+            <div class="pricing-name">Premium</div>
+            <div class="pricing-price">KSh 3,000</div>
+            <div class="pricing-period">One-time payment</div>
+            <div class="pricing-features">
+              <div class="feature-item"><span class="check">✓</span> 5 Logo Concepts</div>
+              <div class="feature-item"><span class="check">✓</span> Unlimited Revisions</div>
+              <div class="feature-item"><span class="check">✓</span> All File Formats</div>
+              <div class="feature-item"><span class="check">✓</span> Transparent Background</div>
+              <div class="feature-item"><span class="check">✓</span> Vector (SVG) File</div>
+              <div class="feature-item"><span class="check">✓</span> Brand Guidelines PDF</div>
+            </div>
+            <a href="contact.html" class="btn btn-outline" style="width:100%;justify-content:center;">Order Premium</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Web Pricing -->
+      <div class="pricing-category" id="cat-web">
+        <div class="pricing-grid">
+          <div class="pricing-card fade-up">
+            <div class="pricing-name">Starter Site</div>
+            <div class="pricing-price">KSh 10,000</div>
+            <div class="pricing-period">One-time payment</div>
+            <div class="pricing-features">
+              <div class="feature-item"><span class="check">✓</span> Up to 3 Pages</div>
+              <div class="feature-item"><span class="check">✓</span> Mobile Responsive</div>
+              <div class="feature-item"><span class="check">✓</span> Contact Form</div>
+              <div class="feature-item"><span class="check">✓</span> Basic SEO Setup</div>
+              <div class="feature-item" style="opacity:0.4;"><span class="check">✗</span> E-Commerce</div>
+              <div class="feature-item" style="opacity:0.4;"><span class="check">✗</span> Client Dashboard</div>
+            </div>
+            <a href="contact.html" class="btn btn-outline" style="width:100%;justify-content:center;">Get Started</a>
+          </div>
+          <div class="pricing-card featured fade-up">
+            <div class="pricing-badge">⭐ Best Value</div>
+            <div class="pricing-name">Business Site</div>
+            <div class="pricing-price">KSh 18,000</div>
+            <div class="pricing-period">One-time payment</div>
+            <div class="pricing-features">
+              <div class="feature-item"><span class="check">✓</span> Up to 7 Pages</div>
+              <div class="feature-item"><span class="check">✓</span> Mobile Responsive</div>
+              <div class="feature-item"><span class="check">✓</span> Contact Form + Map</div>
+              <div class="feature-item"><span class="check">✓</span> Full SEO Setup</div>
+              <div class="feature-item"><span class="check">✓</span> Blog / News Section</div>
+              <div class="feature-item"><span class="check">✓</span> 3 Months Support</div>
+            </div>
+            <a href="contact.html" class="btn btn-primary" style="width:100%;justify-content:center;">Order Now</a>
+          </div>
+          <div class="pricing-card fade-up">
+            <div class="pricing-name">E-Commerce</div>
+            <div class="pricing-price">KSh 45,000</div>
+            <div class="pricing-period">One-time payment</div>
+            <div class="pricing-features">
+              <div class="feature-item"><span class="check">✓</span> Online Store Setup</div>
+              <div class="feature-item"><span class="check">✓</span> Product Catalogue</div>
+              <div class="feature-item"><span class="check">✓</span> M-Pesa Integration</div>
+              <div class="feature-item"><span class="check">✓</span> Order Management</div>
+              <div class="feature-item"><span class="check">✓</span> Full SEO</div>
+              <div class="feature-item"><span class="check">✓</span> 6 Months Support</div>
+            </div>
+            <a href="contact.html" class="btn btn-outline" style="width:100%;justify-content:center;">Order Now</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Graphic Design Pricing -->
+      <div class="pricing-category" id="cat-graphic">
+        <div class="pricing-grid">
+          <div class="pricing-card fade-up">
+            <div class="pricing-name">Single Design</div>
+            <div class="pricing-price">KSh 500</div>
+            <div class="pricing-period">Per design</div>
+            <div class="pricing-features">
+              <div class="feature-item"><span class="check">✓</span> 1 Flyer / Poster</div>
+              <div class="feature-item"><span class="check">✓</span> 2 Revisions</div>
+              <div class="feature-item"><span class="check">✓</span> High Res PNG/PDF</div>
+              <div class="feature-item"><span class="check">✓</span> Print Ready</div>
+              <div class="feature-item" style="opacity:0.4;"><span class="check">✗</span> Source File</div>
+            </div>
+            <a href="contact.html" class="btn btn-outline" style="width:100%;justify-content:center;">Order Now</a>
+          </div>
+          <div class="pricing-card featured fade-up">
+            <div class="pricing-badge">💡 Smart Choice</div>
+            <div class="pricing-name">Pack of 5</div>
+            <div class="pricing-price">KSh 2,000</div>
+            <div class="pricing-period">5 designs (saves KSh 500)</div>
+            <div class="pricing-features">
+              <div class="feature-item"><span class="check">✓</span> 5 Designs</div>
+              <div class="feature-item"><span class="check">✓</span> Unlimited Revisions</div>
+              <div class="feature-item"><span class="check">✓</span> High Res PNG/PDF</div>
+              <div class="feature-item"><span class="check">✓</span> Print Ready</div>
+              <div class="feature-item"><span class="check">✓</span> Source File (PSD)</div>
+            </div>
+            <a href="contact.html" class="btn btn-primary" style="width:100%;justify-content:center;">Order Pack</a>
+          </div>
+          <div class="pricing-card fade-up">
+            <div class="pricing-name">Monthly Retainer</div>
+            <div class="pricing-price">KSh 5,000</div>
+            <div class="pricing-period">Per month</div>
+            <div class="pricing-features">
+              <div class="feature-item"><span class="check">✓</span> Up to 20 Designs/Mo</div>
+              <div class="feature-item"><span class="check">✓</span> Priority Turnaround</div>
+              <div class="feature-item"><span class="check">✓</span> All File Formats</div>
+              <div class="feature-item"><span class="check">✓</span> Dedicated Designer</div>
+              <div class="feature-item"><span class="check">✓</span> Source Files Included</div>
+            </div>
+            <a href="contact.html" class="btn btn-outline" style="width:100%;justify-content:center;">Subscribe</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Branding Pricing -->
+      <div class="pricing-category" id="cat-branding">
+        <div class="pricing-grid">
+          <div class="pricing-card fade-up">
+            <div class="pricing-name">Starter Brand</div>
+            <div class="pricing-price">KSh 3,000</div>
+            <div class="pricing-period">One-time</div>
+            <div class="pricing-features">
+              <div class="feature-item"><span class="check">✓</span> Logo Design</div>
+              <div class="feature-item"><span class="check">✓</span> Brand Colors</div>
+              <div class="feature-item"><span class="check">✓</span> Business Card</div>
+              <div class="feature-item" style="opacity:0.4;"><span class="check">✗</span> Style Guide</div>
+              <div class="feature-item" style="opacity:0.4;"><span class="check">✗</span> Social Media Kit</div>
+            </div>
+            <a href="contact.html" class="btn btn-outline" style="width:100%;justify-content:center;">Get Started</a>
+          </div>
+          <div class="pricing-card featured fade-up">
+            <div class="pricing-badge">🏆 Full Package</div>
+            <div class="pricing-name">Complete Brand</div>
+            <div class="pricing-price">KSh 8,000</div>
+            <div class="pricing-period">One-time</div>
+            <div class="pricing-features">
+              <div class="feature-item"><span class="check">✓</span> Logo Design</div>
+              <div class="feature-item"><span class="check">✓</span> Brand Colors & Fonts</div>
+              <div class="feature-item"><span class="check">✓</span> Business Card</div>
+              <div class="feature-item"><span class="check">✓</span> Brand Style Guide</div>
+              <div class="feature-item"><span class="check">✓</span> Social Media Kit</div>
+              <div class="feature-item"><span class="check">✓</span> Letterhead & Envelope</div>
+            </div>
+            <a href="contact.html" class="btn btn-primary" style="width:100%;justify-content:center;">Order Package</a>
+          </div>
+          <div class="pricing-card fade-up">
+            <div class="pricing-name">Enterprise</div>
+            <div class="pricing-price">KSh 15,000+</div>
+            <div class="pricing-period">Custom quote</div>
+            <div class="pricing-features">
+              <div class="feature-item"><span class="check">✓</span> Everything in Complete</div>
+              <div class="feature-item"><span class="check">✓</span> Brand Strategy Session</div>
+              <div class="feature-item"><span class="check">✓</span> Website Design</div>
+              <div class="feature-item"><span class="check">✓</span> Signage Design</div>
+              <div class="feature-item"><span class="check">✓</span> Marketing Collateral</div>
+              <div class="feature-item"><span class="check">✓</span> 6 Months Support</div>
+            </div>
+            <a href="contact.html" class="btn btn-outline" style="width:100%;justify-content:center;">Get Custom Quote</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Social Media Pricing -->
+      <div class="pricing-category" id="cat-social">
+        <div class="pricing-grid">
+          <div class="pricing-card fade-up">
+            <div class="pricing-name">Starter</div>
+            <div class="pricing-price">KSh 2,000</div>
+            <div class="pricing-period">Per month</div>
+            <div class="pricing-features">
+              <div class="feature-item"><span class="check">✓</span> 8 Posts/Month</div>
+              <div class="feature-item"><span class="check">✓</span> 1 Platform</div>
+              <div class="feature-item"><span class="check">✓</span> Basic Captions</div>
+              <div class="feature-item" style="opacity:0.4;"><span class="check">✗</span> Stories / Reels</div>
+              <div class="feature-item" style="opacity:0.4;"><span class="check">✗</span> Strategy Consultation</div>
+            </div>
+            <a href="contact.html" class="btn btn-outline" style="width:100%;justify-content:center;">Subscribe</a>
+          </div>
+          <div class="pricing-card featured fade-up">
+            <div class="pricing-badge">📈 Grow Faster</div>
+            <div class="pricing-name">Growth</div>
+            <div class="pricing-price">KSh 5,000</div>
+            <div class="pricing-period">Per month</div>
+            <div class="pricing-features">
+              <div class="feature-item"><span class="check">✓</span> 20 Posts/Month</div>
+              <div class="feature-item"><span class="check">✓</span> 2 Platforms</div>
+              <div class="feature-item"><span class="check">✓</span> Captions & Hashtags</div>
+              <div class="feature-item"><span class="check">✓</span> 4 Story Templates</div>
+              <div class="feature-item"><span class="check">✓</span> Monthly Strategy Call</div>
+            </div>
+            <a href="contact.html" class="btn btn-primary" style="width:100%;justify-content:center;">Subscribe</a>
+          </div>
+          <div class="pricing-card fade-up">
+            <div class="pricing-name">Pro</div>
+            <div class="pricing-price">KSh 10,000</div>
+            <div class="pricing-period">Per month</div>
+            <div class="pricing-features">
+              <div class="feature-item"><span class="check">✓</span> Unlimited Posts</div>
+              <div class="feature-item"><span class="check">✓</span> All Platforms</div>
+              <div class="feature-item"><span class="check">✓</span> Reels & Stories</div>
+              <div class="feature-item"><span class="check">✓</span> Ad Creative Design</div>
+              <div class="feature-item"><span class="check">✓</span> Weekly Strategy Calls</div>
+            </div>
+            <a href="contact.html" class="btn btn-outline" style="width:100%;justify-content:center;">Subscribe</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="price-note fade-up">
+        <strong>📌 Note:</strong> All prices are starting prices. Final cost depends on project complexity and requirements.
+        Contact us for a personalized quote — we work with all budgets and are happy to discuss what works for you.
+        50% deposit required to start work; balance on delivery.
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section" style="background:var(--gray-50);">
+    <div class="container">
+      <div class="section-header fade-up">
+        <div class="tag">FAQ</div>
+        <h2>Frequently Asked <span>Questions</span></h2>
+      </div>
+      <div class="faq-list">
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            How do I pay for my project? <span class="icon">+</span>
+          </button>
+          <div class="faq-a">We accept M-Pesa, bank transfer, and cash. A 50% deposit is required to start work, and the remaining 50% is paid upon delivery of final files.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            How long does it take to complete a project? <span class="icon">+</span>
+          </button>
+          <div class="faq-a">Simple graphics (flyers, social posts) take 24–48 hours. Logos take 2–4 days. Websites take 1–3 weeks depending on complexity. We always agree on a deadline before starting.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            What file formats will I receive? <span class="icon">+</span>
+          </button>
+          <div class="faq-a">You'll receive PNG, JPEG, PDF, and SVG (vector) formats for logos. For print designs, we provide print-ready PDF files. For web, we deliver optimized digital formats.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            Can I request changes after delivery? <span class="icon">+</span>
+          </button>
+          <div class="faq-a">Yes! We offer revisions as part of every package. Minor changes within the original brief are covered. Major changes may incur an additional fee — we'll always tell you before proceeding.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            Do you work with clients outside Kenya? <span class="icon">+</span>
+          </button>
+          <div class="faq-a">Absolutely! We work with clients worldwide. Communication is via email and WhatsApp, and we use secure digital payment methods for international clients.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <footer>
     <div class="container">
       <div class="footer-grid">
@@ -391,48 +386,31 @@
               <div class="slogan">Designs. Define Dadris</div>
             </div>
           </div>
-          <p>We create designs that define brands. Professional graphic design, logo creation, and web design services across Kenya.</p>
+          <p>Professional graphic design, logo creation, and web design services across Kenya.</p>
           <div class="footer-social">
             <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
             <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
-            <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
             <a href="https://wa.me/254745365756" class="social-icon"><i class="fab fa-whatsapp"></i></a>
           </div>
         </div>
-        <div class="footer-col">
-          <h4>Navigation</h4>
-          <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="about.html">About Us</a></li>
-            <li><a href="services.html">Services</a></li>
-            <li><a href="portfolio.html">Portfolio</a></li>
-            <li><a href="pricing.html">Pricing</a></li>
-            <li><a href="contact.html">Contact</a></li>
-          </ul>
-        </div>
-        <div class="footer-col">
-          <h4>Services</h4>
-          <ul>
-            <li><a href="services.html">Graphic Design</a></li>
-            <li><a href="services.html">Web Design</a></li>
-            <li><a href="services.html">Logo Design</a></li>
-            <li><a href="services.html">Branding</a></li>
-            <li><a href="services.html">Social Media</a></li>
-          </ul>
-        </div>
-        <div class="footer-col">
-          <h4>Contact</h4>
-          <ul>
-            <li><a href="tel:+254745365756"><i class="fas fa-phone" style="margin-right:8px;color:var(--green-light);"></i>0745 365 756</a></li>
-            <li><a href="mailto:dadrisdesigners@gmail.com"><i class="fas fa-envelope" style="margin-right:8px;color:var(--green-light);"></i>dadrisdesigners@gmail.com</a></li>
-            <li><a href="#"><i class="fas fa-map-marker-alt" style="margin-right:8px;color:var(--green-light);"></i>Kenya</a></li>
-          </ul>
-          <div style="margin-top:20px;">
-            <a href="client-portal/login.html" class="btn btn-outline" style="font-size:0.8rem;padding:10px 20px;">
-              <i class="fas fa-user"></i> Client Portal
-            </a>
-          </div>
-        </div>
+        <div class="footer-col"><h4>Pages</h4><ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="services.html">Services</a></li>
+          <li><a href="portfolio.html">Portfolio</a></li>
+          <li><a href="pricing.html">Pricing</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul></div>
+        <div class="footer-col"><h4>Services</h4><ul>
+          <li><a href="services.html">Graphic Design</a></li>
+          <li><a href="services.html">Web Design</a></li>
+          <li><a href="services.html">Logo Design</a></li>
+          <li><a href="services.html">Branding</a></li>
+        </ul></div>
+        <div class="footer-col"><h4>Contact</h4><ul>
+          <li><a href="tel:+254745365756">📞 0745 365 756</a></li>
+          <li><a href="mailto:dadrisdesigners@gmail.com">✉️ dadrisdesigners@gmail.com</a></li>
+        </ul></div>
       </div>
       <div class="footer-bottom">
         <p>© 2025 DADRIS DESIGNERS. All rights reserved.</p>
@@ -441,19 +419,30 @@
     </div>
   </footer>
 
-  <!-- ======= FLOATING BUTTONS ======= -->
   <div class="floating-buttons">
-    <a href="https://wa.me/254745365756?text=Hello%20Dadris%20Designers!%20I%20need%20a%20design%20quote." target="_blank" class="float-btn float-whatsapp">
-      <i class="fab fa-whatsapp"></i>
-      <span class="tooltip">WhatsApp Us</span>
+    <a href="https://wa.me/254745365756" target="_blank" class="float-btn float-whatsapp">
+      <i class="fab fa-whatsapp"></i><span class="tooltip">WhatsApp Us</span>
     </a>
     <a href="tel:+254745365756" class="float-btn float-call">
-      <i class="fas fa-phone"></i>
-      <span class="tooltip">Call Us</span>
+      <i class="fas fa-phone"></i><span class="tooltip">Call Us</span>
     </a>
   </div>
-
   <div id="toast" class="toast"></div>
   <script src="js/main.js"></script>
+  <script>
+    function showCategory(cat) {
+      document.querySelectorAll('.pricing-category').forEach(c => c.classList.remove('active'));
+      document.querySelectorAll('.ptab').forEach(t => t.classList.remove('active'));
+      document.getElementById('cat-' + cat).classList.add('active');
+      event.target.classList.add('active');
+    }
+    function toggleFaq(btn) {
+      const ans = btn.nextElementSibling;
+      const isOpen = ans.classList.contains('open');
+      document.querySelectorAll('.faq-a').forEach(a => a.classList.remove('open'));
+      document.querySelectorAll('.faq-q').forEach(b => b.classList.remove('open'));
+      if (!isOpen) { ans.classList.add('open'); btn.classList.add('open'); }
+    }
+  </script>
 </body>
 </html>

@@ -3,41 +3,52 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>About Us — Dadris Designers</title>
+  <title>DADRIS DESIGNERS — Designs. Define Dadris.</title>
+  <meta name="description" content="Professional graphic and web design services. Logos, branding, websites and more. Dadris Designers — Kenya's creative studio." />
   <link rel="stylesheet" href="css/style.css" />
   <link rel="icon" href="images/logo.jpg" type="image/jpeg" />
+  <!-- Font Awesome for icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
-    .team-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(240px,1fr)); gap: 28px; }
-    .team-card { background:#fff; border-radius:var(--radius-lg); overflow:hidden; text-align:center; border:1px solid var(--gray-200); transition:var(--transition); }
-    .team-card:hover { transform:translateY(-4px); box-shadow:var(--shadow-md); }
-    .team-avatar { height:200px; background:linear-gradient(135deg,var(--green),#0d4f1f); display:flex; align-items:center; justify-content:center; font-size:4rem; }
-    .team-info { padding:24px; }
-    .team-info h3 { margin-bottom:4px; }
-    .team-info .role { color:var(--green); font-size:0.82rem; font-weight:600; text-transform:uppercase; letter-spacing:1px; margin-bottom:10px; }
-    .team-info p { font-size:0.85rem; color:var(--gray-600); }
-    .milestones { display:grid; grid-template-columns:repeat(4,1fr); gap:24px; }
-    @media(max-width:768px){.milestones{grid-template-columns:repeat(2,1fr);}}
-    @media(max-width:480px){.milestones{grid-template-columns:1fr 1fr;}}
-    .milestone { text-align:center; padding:32px 20px; background:#fff; border-radius:var(--radius-lg); border:1px solid var(--gray-200); }
-    .milestone .num { font-family:'Bebas Neue',sans-serif; font-size:3rem; color:var(--green); line-height:1; }
-    .milestone .label { font-size:0.85rem; color:var(--gray-600); font-weight:600; margin-top:6px; }
+    /* Home-specific extra styles */
+    .why-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap: 24px; }
+    .why-card {
+      text-align: center; padding: 36px 24px;
+      background: #fff; border-radius: var(--radius-lg);
+      border: 1px solid var(--gray-200); transition: var(--transition);
+    }
+    .why-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+    .why-icon { font-size: 2.4rem; margin-bottom: 16px; }
+    .why-card h3 { font-size: 1.05rem; margin-bottom: 8px; }
+    .why-card p { font-size: 0.85rem; color: var(--gray-600); }
+    .cta-band {
+      background: linear-gradient(135deg, var(--green), #0f5c1f);
+      padding: 80px 24px; text-align: center; color: #fff;
+    }
+    .cta-band h2 { color: #fff; margin-bottom: 12px; }
+    .cta-band p  { color: rgba(255,255,255,0.75); max-width: 500px; margin: 0 auto 28px; }
+    .cta-band-btns { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+    /* Mini portfolio on home */
+    .mini-portfolio-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; }
+    @media(max-width:768px){ .mini-portfolio-grid{ grid-template-columns:1fr 1fr; } }
+    @media(max-width:480px){ .mini-portfolio-grid{ grid-template-columns:1fr; } }
   </style>
 </head>
 <body>
 
+  <!-- ======= NAVBAR ======= -->
   <nav id="navbar">
     <div class="nav-inner">
       <a href="index.html" class="nav-logo">
-        <img src="images/logo.jpg" alt="Logo" />
+        <img src="images/logo.jpg" alt="Dadris Designers Logo" />
         <div class="nav-logo-text">
           <span class="brand">DADRIS DESIGNERS</span>
           <span class="tagline">Designs. Define Dadris</span>
         </div>
       </a>
       <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="about.html" class="active">About</a></li>
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="about.html">About</a></li>
         <li><a href="services.html">Services</a></li>
         <li><a href="portfolio.html">Portfolio</a></li>
         <li><a href="pricing.html">Pricing</a></li>
@@ -47,161 +58,328 @@
         <a href="client-portal/login.html" class="btn btn-outline" style="padding:10px 22px;font-size:0.85rem;">Client Login</a>
         <a href="contact.html" class="btn btn-primary" style="padding:10px 22px;font-size:0.85rem;">Get a Quote</a>
       </div>
-      <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+      <div class="hamburger" id="hamburger">
+        <span></span><span></span><span></span>
+      </div>
     </div>
   </nav>
+
+  <!-- Mobile Menu -->
   <div class="mobile-menu" id="mobileMenu">
     <span class="mobile-close" id="mobileClose">✕</span>
-    <a href="index.html">Home</a><a href="about.html">About</a>
-    <a href="services.html">Services</a><a href="portfolio.html">Portfolio</a>
-    <a href="pricing.html">Pricing</a><a href="contact.html">Contact</a>
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="services.html">Services</a>
+    <a href="portfolio.html">Portfolio</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="contact.html">Contact</a>
     <a href="client-portal/login.html" class="btn btn-primary">Client Login</a>
   </div>
 
-  <!-- Page Banner -->
-  <div class="page-banner">
-    <div class="page-banner-content">
-      <div class="tag">Our Story</div>
-      <h1>About Dadris Designers</h1>
-      <p>A passionate creative studio dedicated to bringing your brand vision to life through powerful design.</p>
-      <div class="breadcrumb">
-        <a href="index.html">Home</a> <span>›</span> <span>About</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- About Section -->
-  <section class="section">
-    <div class="container">
-      <div class="about-grid">
-        <div class="about-visual fade-up">
-          <div class="about-img-wrap">
-            <img src="images/logo.jpg" alt="Dadris Designers" />
+  <!-- ======= HERO ======= -->
+  <section class="hero">
+    <div class="hero-grid-bg"></div>
+    <div class="hero-content">
+      <div class="hero-text">
+        <div class="hero-badge">
+          <span></span> Available for new projects
+        </div>
+        <h1>We Create Designs That <em>Define</em> Your Brand</h1>
+        <p class="hero-desc">
+          Professional graphic design, logos, branding, and web design services.
+          We turn your vision into stunning visuals that make your business unforgettable.
+        </p>
+        <div class="hero-actions">
+          <a href="portfolio.html" class="btn btn-primary">
+            <i class="fas fa-eye"></i> View Our Work
+          </a>
+          <a href="contact.html" class="btn btn-outline" style="border-color:rgba(255,255,255,0.3);color:#fff;">
+            <i class="fas fa-paper-plane"></i> Get a Free Quote
+          </a>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <div class="num" data-count="150" data-suffix="+">0+</div>
+            <div class="label">Projects Done</div>
           </div>
-          <div class="about-badge-float">
-            <div class="num">5★</div>
-            <div class="txt">Client Rating</div>
+          <div class="hero-stat">
+            <div class="num" data-count="80" data-suffix="+">0+</div>
+            <div class="label">Happy Clients</div>
+          </div>
+          <div class="hero-stat">
+            <div class="num" data-count="5" data-suffix="★">0★</div>
+            <div class="label">Avg. Rating</div>
           </div>
         </div>
-        <div class="about-content fade-up">
-          <div class="tag">Who We Are</div>
-          <h2>Creative Minds Behind <span>Great Brands</span></h2>
-          <p>
-            Dadris Designers is a Kenya-based creative design studio committed to helping businesses of all sizes
-            look professional, credible, and memorable. We believe every business deserves great design — and
-            that design is not just about how things look, but how they work and how they make people feel.
-          </p>
-          <p>
-            From startups to established companies, we've helped over 80 clients across Kenya and beyond build
-            brands that stand out. Whether you need a simple logo or a complete web presence, we bring the same
-            level of passion and professionalism to every project.
-          </p>
-          <div class="about-values">
-            <div class="value-item">
-              <div class="value-icon">🎯</div>
-              <div>
-                <h4>Purpose-Driven</h4>
-                <p>Every design decision serves your goals.</p>
-              </div>
-            </div>
-            <div class="value-item">
-              <div class="value-icon">⚡</div>
-              <div>
-                <h4>Fast & Reliable</h4>
-                <p>We deliver on time, every time.</p>
-              </div>
-            </div>
-            <div class="value-item">
-              <div class="value-icon">💡</div>
-              <div>
-                <h4>Creative First</h4>
-                <p>Fresh ideas tailored to your brand.</p>
-              </div>
-            </div>
-            <div class="value-item">
-              <div class="value-icon">🤝</div>
-              <div>
-                <h4>Client-Focused</h4>
-                <p>Your satisfaction is our priority.</p>
-              </div>
-            </div>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-logo-ring">
+          <div class="ring ring-1"></div>
+          <div class="ring ring-2"></div>
+          <div class="ring ring-3"></div>
+          <div class="hero-logo-inner">
+            <img src="images/logo.jpg" alt="Dadris Designers" />
           </div>
-          <div style="margin-top:32px;">
-            <a href="contact.html" class="btn btn-primary">
-              <i class="fas fa-paper-plane"></i> Work With Us
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======= SERVICES PREVIEW ======= -->
+  <section class="section services">
+    <div class="container">
+      <div class="section-header fade-up">
+        <div class="tag">What We Do</div>
+        <h2>Our Creative <span>Services</span></h2>
+        <p>From logos to full websites — we handle every part of your visual identity.</p>
+      </div>
+      <div class="services-grid">
+        <div class="service-card fade-up">
+          <div class="service-icon" style="background:rgba(26,140,46,0.1);">🎨</div>
+          <h3>Graphic Design</h3>
+          <p>Flyers, posters, banners, social media graphics — all designed to grab attention and communicate your message.</p>
+          <div class="price">From KSh 1,500</div>
+        </div>
+        <div class="service-card fade-up">
+          <div class="service-icon" style="background:rgba(21,101,192,0.1);">💻</div>
+          <h3>Web Design</h3>
+          <p>Beautiful, responsive websites that work perfectly on all devices — from business sites to e-commerce stores.</p>
+          <div class="price">From KSh 15,000</div>
+        </div>
+        <div class="service-card fade-up">
+          <div class="service-icon" style="background:rgba(244,180,0,0.1);">✏️</div>
+          <h3>Logo Design</h3>
+          <p>A professional logo that captures your brand personality and makes you instantly recognizable.</p>
+          <div class="price">From KSh 2,500</div>
+        </div>
+        <div class="service-card fade-up">
+          <div class="service-icon" style="background:rgba(204,31,31,0.1);">🏷️</div>
+          <h3>Branding & Identity</h3>
+          <p>Complete brand packages including logos, color palettes, fonts, business cards, and brand guidelines.</p>
+          <div class="price">From KSh 8,000</div>
+        </div>
+      </div>
+      <div style="text-align:center;margin-top:40px;">
+        <a href="services.html" class="btn btn-outline">
+          <i class="fas fa-arrow-right"></i> See All Services
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======= WHY CHOOSE US ======= -->
+  <section class="section" style="background:var(--white);">
+    <div class="container">
+      <div class="section-header fade-up">
+        <div class="tag">Why Dadris</div>
+        <h2>Why Clients <span>Choose Us</span></h2>
+        <p>We combine creativity with results-driven design to help your business grow.</p>
+      </div>
+      <div class="why-grid">
+        <div class="why-card fade-up">
+          <div class="why-icon">⚡</div>
+          <h3>Fast Turnaround</h3>
+          <p>Most projects delivered in 24–72 hours without compromising quality.</p>
+        </div>
+        <div class="why-card fade-up">
+          <div class="why-icon">💎</div>
+          <h3>Premium Quality</h3>
+          <p>Every design is crafted with attention to detail and professional standards.</p>
+        </div>
+        <div class="why-card fade-up">
+          <div class="why-icon">🔄</div>
+          <h3>Unlimited Revisions</h3>
+          <p>We keep refining until you're 100% satisfied with the result.</p>
+        </div>
+        <div class="why-card fade-up">
+          <div class="why-icon">📞</div>
+          <h3>Dedicated Support</h3>
+          <p>Direct communication via WhatsApp and email throughout your project.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======= MINI PORTFOLIO ======= -->
+<section class="section portfolio" style="background:var(--gray-50);">
+  <div class="container">
+    <div class="section-header fade-up">
+      <div class="tag">Our Work</div>
+      <h2>Recent <span>Projects</span></h2>
+      <p>A taste of our best work — web, graphics, branding & print.</p>
+    </div>
+
+    <div class="mini-portfolio-grid">
+
+      <!-- WEB: CJPD Diocese — Wide -->
+      <div class="portfolio-item fade-up portfolio-wide" data-category="web">
+        <img src="images/cjpd.jpg" class="portfolio-item-img" alt="CJPD Kakamega Diocese" />
+        <div class="portfolio-overlay">
+          <div class="overlay-tag web-tag">Web Design</div>
+          <h3>CJPD Kakamega Diocese</h3>
+          <span>Official church diocese website</span>
+          <div class="overlay-actions">
+            <a href="https://davidmutula840-hash.github.io/CJPD-CDOK-website/" target="_blank" rel="noopener" class="portfolio-visit-btn">
+              <i class="fas fa-external-link-alt"></i> Visit Website
             </a>
           </div>
         </div>
       </div>
-    </div>
-  </section>
 
-  <!-- Milestones -->
-  <section class="section" style="background:var(--gray-50);">
+      <!-- GRAPHIC: Church Flyer -->
+      <div class="portfolio-item fade-up" data-category="graphic">
+        <img src="images/gallery7.png" class="portfolio-item-img" alt="Church Flyer" />
+        <div class="portfolio-overlay">
+          <div class="overlay-tag graphic-tag">Flyer Design</div>
+          <h3>Glorious Gospel Church</h3>
+          <span>Church event flyer design</span>
+          <div class="overlay-actions">
+            <button class="portfolio-view-btn" onclick="openLightbox(this)" data-src="images/gallery7.png" data-title="Glorious Gospel Church Flyer">
+              <i class="fas fa-search-plus"></i> View Design
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- GRAPHIC: Branding Mockups — Tall -->
+      <div class="portfolio-item fade-up portfolio-tall" data-category="branding">
+        <img src="images/gallery2.jpg" class="portfolio-item-img" alt="Branding Mockups" />
+        <div class="portfolio-overlay">
+          <div class="overlay-tag branding-tag">Branding</div>
+          <h3>Branding Mockups</h3>
+          <span>Full brand identity & mockup presentation</span>
+          <div class="overlay-actions">
+            <button class="portfolio-view-btn" onclick="openLightbox(this)" data-src="images/gallery2.jpg" data-title="Branding Mockups">
+              <i class="fas fa-search-plus"></i> View Design
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- WEB: Dadris Academy -->
+      <div class="portfolio-item fade-up" data-category="web">
+        <img src="images/logo.jpg" class="portfolio-item-img" alt="Dadris Designers Academy" />
+        <div class="portfolio-overlay">
+          <div class="overlay-tag web-tag">Web Design</div>
+          <h3>Dadris Designers Academy</h3>
+          <span>Online learning platform for design students</span>
+          <div class="overlay-actions">
+            <a href="https://davidmutula840-hash.github.io/Dadris-Academy-/" target="_blank" rel="noopener" class="portfolio-visit-btn">
+              <i class="fas fa-external-link-alt"></i> Visit Website
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- GRAPHIC: Shop Branding -->
+      <div class="portfolio-item fade-up" data-category="branding">
+        <img src="images/dennoh.jpeg" class="portfolio-item-img" alt="Shop Branding" />
+        <div class="portfolio-overlay">
+          <div class="overlay-tag branding-tag">Shop Branding</div>
+          <h3>Dennoh Shop Branding</h3>
+          <span>Full shop brand identity design</span>
+          <div class="overlay-actions">
+            <button class="portfolio-view-btn" onclick="openLightbox(this)" data-src="images/dennoh.jpeg" data-title="Dennoh Shop Branding">
+              <i class="fas fa-search-plus"></i> View Design
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="text-align:center;margin-top:48px;" class="fade-up">
+      <a href="portfolio.html" class="btn btn-primary">
+        <i class="fas fa-images"></i> View Full Portfolio
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- LIGHTBOX -->
+<div id="portfolioLightbox" onclick="closeLightbox()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.93);z-index:9999;align-items:center;justify-content:center;flex-direction:column;padding:20px;">
+  <button onclick="closeLightbox()" style="position:absolute;top:20px;right:28px;background:none;border:none;color:#fff;font-size:2rem;cursor:pointer;line-height:1;">✕</button>
+  <img id="lightboxImg" src="" alt="" style="max-width:90vw;max-height:82vh;object-fit:contain;border-radius:12px;box-shadow:0 24px 80px rgba(0,0,0,0.8);" onclick="event.stopPropagation()" />
+  <p id="lightboxTitle" style="color:rgba(255,255,255,0.7);margin-top:16px;font-size:0.9rem;font-family:'DM Sans',sans-serif;"></p>
+</div>
+
+<script>
+  function openLightbox(btn) {
+    event.stopPropagation();
+    const lb = document.getElementById('portfolioLightbox');
+    document.getElementById('lightboxImg').src = btn.dataset.src;
+    document.getElementById('lightboxTitle').textContent = btn.dataset.title;
+    lb.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLightbox() {
+    document.getElementById('portfolioLightbox').style.display = 'none';
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+</script>
+
+  <!-- ======= TESTIMONIALS ======= -->
+  <section class="section testimonials">
     <div class="container">
       <div class="section-header fade-up">
-        <div class="tag">Our Numbers</div>
-        <h2>Success in <span>Numbers</span></h2>
+        <div class="tag">Client Love</div>
+        <h2>What Our <span style="color:var(--green-light)">Clients Say</span></h2>
+        <p>Real words from real clients who trusted us with their brand.</p>
       </div>
-      <div class="milestones">
-        <div class="milestone fade-up">
-          <div class="num">150+</div>
-          <div class="label">Projects Completed</div>
-        </div>
-        <div class="milestone fade-up">
-          <div class="num">80+</div>
-          <div class="label">Happy Clients</div>
-        </div>
-        <div class="milestone fade-up">
-          <div class="num">3+</div>
-          <div class="label">Years Experience</div>
-        </div>
-        <div class="milestone fade-up">
-          <div class="num">5★</div>
-          <div class="label">Average Rating</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Team -->
-  <section class="section">
-    <div class="container">
-      <div class="section-header fade-up">
-        <div class="tag">The Team</div>
-        <h2>Meet the <span>Creatives</span></h2>
-        <p>Talented people who love what they do and do it exceptionally well.</p>
-      </div>
-      <div class="team-grid">
-        <div class="team-card fade-up">
-          <div class="team-avatar">👨‍🎨</div>
-          <div class="team-info">
-            <h3>The Creative Director</h3>
-            <div class="role">Founder & Lead Designer</div>
-            <p>The visionary behind Dadris Designers. Leads every project with passion and precision.</p>
+      <div class="testimonials-grid">
+        <div class="testimonial-card fade-up">
+          <div class="stars">★★★★★</div>
+          <p>"Dadris Designers transformed our brand completely. The logo they created is exactly what we envisioned — modern, clean, and memorable."</p>
+          <div class="t-author">
+            <div class="t-avatar">JK</div>
+            <div>
+              <div class="t-name">James Kamau</div>
+              <div class="t-role">CEO, TechStart Kenya</div>
+            </div>
           </div>
         </div>
-        <div class="team-card fade-up">
-          <div class="team-avatar" style="background:linear-gradient(135deg,var(--blue),#0d2b6b);">👩‍💻</div>
-          <div class="team-info">
-            <h3>Web Developer</h3>
-            <div class="role">Frontend & UI Developer</div>
-            <p>Turns beautiful designs into fully functional, responsive websites and web apps.</p>
+        <div class="testimonial-card fade-up">
+          <div class="stars">★★★★★</div>
+          <p>"Fast, professional, and affordable. They built our entire website in 3 days and it looks absolutely stunning. Highly recommended!"</p>
+          <div class="t-author">
+            <div class="t-avatar">AM</div>
+            <div>
+              <div class="t-name">Amina Mohamed</div>
+              <div class="t-role">Owner, Amina's Boutique</div>
+            </div>
           </div>
         </div>
-        <div class="team-card fade-up">
-          <div class="team-avatar" style="background:linear-gradient(135deg,var(--red),#8b0000);">🎬</div>
-          <div class="team-info">
-            <h3>Motion Designer</h3>
-            <div class="role">Social Media & Animation</div>
-            <p>Creates eye-catching social media content, GIFs, and brand animations.</p>
+        <div class="testimonial-card fade-up">
+          <div class="stars">★★★★★</div>
+          <p>"The best design team I've worked with. They understood my vision immediately and delivered beyond my expectations. Will definitely hire again."</p>
+          <div class="t-author">
+            <div class="t-avatar">PO</div>
+            <div>
+              <div class="t-name">Peter Ochieng</div>
+              <div class="t-role">Marketing Director, SunRise Foods</div>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Footer -->
+  <!-- ======= CTA BAND ======= -->
+  <div class="cta-band">
+    <h2>Ready to Elevate Your Brand?</h2>
+    <p>Let's create something amazing together. Get a free quote today — no strings attached.</p>
+    <div class="cta-band-btns">
+      <a href="contact.html" class="btn btn-white">
+        <i class="fas fa-envelope"></i> Get a Free Quote
+      </a>
+      <a href="https://wa.me/254745365756" target="_blank" class="btn btn-outline" style="border-color:rgba(255,255,255,0.5);color:#fff;">
+        <i class="fab fa-whatsapp"></i> Chat on WhatsApp
+      </a>
+    </div>
+  </div>
+
+  <!-- ======= FOOTER ======= -->
   <footer>
     <div class="container">
       <div class="footer-grid">
@@ -239,6 +417,7 @@
             <li><a href="services.html">Web Design</a></li>
             <li><a href="services.html">Logo Design</a></li>
             <li><a href="services.html">Branding</a></li>
+            <li><a href="services.html">Social Media</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -246,7 +425,13 @@
           <ul>
             <li><a href="tel:+254745365756"><i class="fas fa-phone" style="margin-right:8px;color:var(--green-light);"></i>0745 365 756</a></li>
             <li><a href="mailto:dadrisdesigners@gmail.com"><i class="fas fa-envelope" style="margin-right:8px;color:var(--green-light);"></i>dadrisdesigners@gmail.com</a></li>
+            <li><a href="#"><i class="fas fa-map-marker-alt" style="margin-right:8px;color:var(--green-light);"></i>Kenya</a></li>
           </ul>
+          <div style="margin-top:20px;">
+            <a href="client-portal/login.html" class="btn btn-outline" style="font-size:0.8rem;padding:10px 20px;">
+              <i class="fas fa-user"></i> Client Portal
+            </a>
+          </div>
         </div>
       </div>
       <div class="footer-bottom">
@@ -256,12 +441,15 @@
     </div>
   </footer>
 
+  <!-- ======= FLOATING BUTTONS ======= -->
   <div class="floating-buttons">
-    <a href="https://wa.me/254745365756?text=Hello%20Dadris%20Designers!" target="_blank" class="float-btn float-whatsapp">
-      <i class="fab fa-whatsapp"></i><span class="tooltip">WhatsApp Us</span>
+    <a href="https://wa.me/254745365756?text=Hello%20Dadris%20Designers!%20I%20need%20a%20design%20quote." target="_blank" class="float-btn float-whatsapp">
+      <i class="fab fa-whatsapp"></i>
+      <span class="tooltip">WhatsApp Us</span>
     </a>
     <a href="tel:+254745365756" class="float-btn float-call">
-      <i class="fas fa-phone"></i><span class="tooltip">Call Us</span>
+      <i class="fas fa-phone"></i>
+      <span class="tooltip">Call Us</span>
     </a>
   </div>
 

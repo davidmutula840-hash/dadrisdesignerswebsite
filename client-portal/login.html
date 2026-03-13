@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Client Portal — DADRIS DESIGNERS</title>
+  <link rel="icon" href="../images/logo.jpg" type="image/jpeg" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;600;700&display=swap');
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'DM Sans', sans-serif; min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #060e07, #0a1a0e, #0d2b14); padding: 20px; }
+    .grid-bg { position: fixed; inset: 0; opacity: .03; background-image: linear-gradient(rgba(255,255,255,1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px); background-size: 40px 40px; pointer-events: none; }
+    .login-wrap { width: 100%; max-width: 440px; position: relative; z-index: 1; }
+    .login-card { background: #fff; border-radius: 24px; overflow: hidden; box-shadow: 0 32px 80px rgba(0,0,0,0.5); }
+    .login-header { background: linear-gradient(135deg, #0a1a0e, #1a8c2e); padding: 40px 36px; text-align: center; position: relative; overflow: hidden; }
+    .login-header::before { content: ''; position: absolute; top: -40px; right: -40px; width: 160px; height: 160px; background: rgba(255,255,255,0.04); border-radius: 50%; }
+    .portal-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.9); font-size: 0.7rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; padding: 5px 16px; border-radius: 50px; margin-bottom: 16px; }
+    .portal-badge span { width: 7px; height: 7px; background: #6ee87b; border-radius: 50%; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+    .login-header img { width: 80px; height: 80px; border-radius: 50%; margin: 0 auto 14px; display: block; border: 3px solid rgba(255,255,255,0.25); box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
+    .login-header h1 { color: #fff; font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 900; letter-spacing: 1px; }
+    .login-header p { color: rgba(255,255,255,0.6); font-size: 0.82rem; margin-top: 5px; }
+    .login-body { padding: 36px; }
+    .login-body h3 { font-size: 1rem; font-weight: 700; margin-bottom: 4px; }
+    .login-body p.sub { font-size: 0.82rem; color: #6b7c70; margin-bottom: 24px; }
+    .form-group { margin-bottom: 18px; }
+    .form-group label { display: block; font-size: 0.82rem; font-weight: 700; margin-bottom: 7px; color: #1a1a1a; }
+    .form-group input { width: 100%; padding: 13px 16px; border: 2px solid #e2e8e4; border-radius: 12px; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; transition: border-color .25s; color: #1a1a1a; }
+    .form-group input:focus { outline: none; border-color: #1a8c2e; box-shadow: 0 0 0 4px rgba(26,140,46,0.1); }
+    .input-wrap { position: relative; }
+    .input-wrap input { padding-right: 46px; }
+    .toggle-pw { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #9aaba0; background: none; border: none; font-size: 1rem; }
+    .btn-login { width: 100%; padding: 15px; background: linear-gradient(135deg, #1a8c2e, #22a838); color: #fff; border: none; border-radius: 50px; font-size: 1rem; font-weight: 700; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: .25s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .btn-login:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(26,140,46,0.35); }
+    .btn-login:disabled { opacity: 0.7; cursor: not-allowed; }
+    .error-msg { background: #fce4ec; color: #c62828; padding: 12px 16px; border-radius: 12px; font-size: 0.84rem; margin-bottom: 16px; border-left: 4px solid #e53935; display: none; }
+    .spinner { width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spinr .7s linear infinite; display: inline-block; }
+    @keyframes spinr { to { transform: rotate(360deg); } }
+    .help-box { background: #f0f7f1; border: 1px solid #c8e6c9; border-radius: 12px; padding: 14px 16px; margin-top: 20px; font-size: 0.82rem; color: #2e7d32; }
+    .help-box strong { display: block; margin-bottom: 4px; }
+    .login-footer { text-align: center; padding: 0 36px 28px; font-size: 0.82rem; color: #6b7c70; }
+    .login-footer a { color: #1a8c2e; font-weight: 600; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="grid-bg"></div>
+  <div class="login-wrap">
+    <div class="login-card">
+      <div class="login-header">
+        <div class="portal-badge"><span></span> Client Portal</div>
+        <img src="../images/logo.jpg" alt="DADRIS DESIGNERS" />
+        <h1>DADRIS DESIGNERS</h1>
+        <p>Track your project progress anytime, anywhere</p>
+      </div>
+      <div class="login-body">
+        <h3>Welcome Back!</h3>
+        <p class="sub">Enter the login details we sent you to access your project dashboard.</p>
+        <div class="error-msg" id="errorMsg"></div>
+        <form id="clientLoginForm">
+          <div class="form-group">
+            <label><i class="fas fa-user" style="color:#1a8c2e;margin-right:6px;"></i>Your Username</label>
+            <input type="text" id="clientUser" placeholder="Enter your username" required autocomplete="off" />
+          </div>
+          <div class="form-group">
+            <label><i class="fas fa-lock" style="color:#1a8c2e;margin-right:6px;"></i>Password</label>
+            <div class="input-wrap">
+              <input type="password" id="clientPass" placeholder="Enter your password" required />
+              <button type="button" class="toggle-pw" onclick="togglePw()"><i class="fas fa-eye" id="eyeIcon"></i></button>
+            </div>
+          </div>
+          <button type="submit" class="btn-login" id="loginBtn">
+            <i class="fas fa-sign-in-alt"></i> Access My Projects
+          </button>
+        </form>
+        <div class="help-box">
+          <strong>🔐 Need your login details?</strong>
+          Contact us on WhatsApp: <a href="https://wa.me/254745365756">0745 365 756</a> or email <a href="mailto:dadrisdesigners@gmail.com">dadrisdesigners@gmail.com</a>
+        </div>
+      </div>
+      <div class="login-footer">
+        <a href="../index.html"><i class="fas fa-arrow-left"></i> Back to Website</a>
+        &nbsp;·&nbsp;
+        <a href="https://wa.me/254745365756" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp Us</a>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp }  from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getFirestore, collection, query, where, getDocs }
+                               from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCYcrazrmkXJXaRMBUzTZFBOwS2BUxs3QQ",
+      authDomain: "dadris-designers.firebaseapp.com",
+      projectId: "dadris-designers",
+      storageBucket: "dadris-designers.firebasestorage.app",
+      messagingSenderId: "813719033161",
+      appId: "1:813719033161:web:ee55f44da47a7748793698"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db  = getFirestore(app);
+
+    document.getElementById('clientLoginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const username = document.getElementById('clientUser').value.trim();
+      const password = document.getElementById('clientPass').value.trim();
+      const btn      = document.getElementById('loginBtn');
+      const errEl    = document.getElementById('errorMsg');
+
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner"></span> Checking...';
+      errEl.style.display = 'none';
+
+      try {
+        // Look up client by username in Firestore
+        const q    = query(collection(db, 'clients'), where('username', '==', username));
+        const snap = await getDocs(q);
+
+        if (snap.empty) {
+          throw new Error('Username not found.');
+        }
+
+        const clientDoc  = snap.docs[0];
+        const clientData = clientDoc.data();
+
+        if (clientData.password !== password) {
+          throw new Error('Incorrect password.');
+        }
+
+        // Save to session and redirect
+        sessionStorage.setItem('dadris_client_id',   clientDoc.id);
+        sessionStorage.setItem('dadris_client_name', clientData.name);
+        window.location.href = 'portal.html';
+
+      } catch (err) {
+        errEl.textContent  = '❌ ' + (err.message.includes('Username') || err.message.includes('password') ? err.message : 'Login failed. Please check your credentials.');
+        errEl.style.display = 'block';
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Access My Projects';
+      }
+    });
+
+    window.togglePw = function() {
+      const inp  = document.getElementById('clientPass');
+      const icon = document.getElementById('eyeIcon');
+      inp.type   = inp.type === 'password' ? 'text' : 'password';
+      icon.className = inp.type === 'password' ? 'fas fa-eye' : 'fas fa-eye-slash';
+    };
+  </script>
+</body>
+</html>
