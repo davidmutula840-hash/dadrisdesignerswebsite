@@ -36,6 +36,33 @@
     .price-note { background:rgba(26,140,46,0.06);border:1px solid rgba(26,140,46,0.2);border-radius:var(--radius);padding:20px 24px;margin-top:32px;font-size:0.88rem;color:var(--gray-800); }
     .price-note strong { color:var(--green); }
   </style>
+
+  <!-- =====================================================
+     DADRIS DESIGNERS PWA — HEAD TAGS
+     Paste ALL of this inside <head> on EVERY page
+     ===================================================== -->
+
+<!-- PWA Manifest -->
+<link rel="manifest" href="/dadrisdesignerswebsite/manifest.json" />
+
+<!-- Theme color (browser chrome color on Android) -->
+<meta name="theme-color" content="#1a8c2e" />
+
+<!-- iOS specific -->
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Dadris" />
+<link rel="apple-touch-icon" href="/dadrisdesignerswebsite/images/logo.jpg" />
+
+<!-- Android / general -->
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="application-name" content="DADRIS DESIGNERS" />
+
+<!-- Splash screen color -->
+<meta name="msapplication-TileColor" content="#1a8c2e" />
+<meta name="msapplication-TileImage" content="/dadrisdesignerswebsite/images/logo.jpg" />
+
+
 </head>
 <body>
 
@@ -453,5 +480,9 @@
       if (!isOpen) { ans.classList.add('open'); btn.classList.add('open'); }
     }
   </script>
+
+
+  <script src="chatbot.js"></script>
+  <script src="/dadrisdesignerswebsite/pwa-init.js"></script>
 </body>
 </html>

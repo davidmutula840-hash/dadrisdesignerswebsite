@@ -33,6 +33,32 @@
     .milestone .num { font-family:'Bebas Neue',sans-serif; font-size:3rem; color:var(--green); line-height:1; }
     .milestone .label { font-size:0.85rem; color:var(--gray-600); font-weight:600; margin-top:6px; }
   </style>
+  <!-- =====================================================
+     DADRIS DESIGNERS PWA — HEAD TAGS
+     Paste ALL of this inside <head> on EVERY page
+     ===================================================== -->
+
+<!-- PWA Manifest -->
+<link rel="manifest" href="/dadrisdesignerswebsite/manifest.json" />
+
+<!-- Theme color (browser chrome color on Android) -->
+<meta name="theme-color" content="#1a8c2e" />
+
+<!-- iOS specific -->
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Dadris" />
+<link rel="apple-touch-icon" href="/dadrisdesignerswebsite/images/logo.jpg" />
+
+<!-- Android / general -->
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="application-name" content="DADRIS DESIGNERS" />
+
+<!-- Splash screen color -->
+<meta name="msapplication-TileColor" content="#1a8c2e" />
+<meta name="msapplication-TileImage" content="/dadrisdesignerswebsite/images/logo.jpg" />
+
+
 </head>
 <body>
 
@@ -277,5 +303,10 @@
 
   <div id="toast" class="toast"></div>
   <script src="js/main.js"></script>
+
+  
+  <script src="chatbot.js"></script>
+
+  <script src="/dadrisdesignerswebsite/pwa-init.js"></script>
 </body>
 </html>
