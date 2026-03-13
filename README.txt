@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfolio — Dadris Designers</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" href="images/logo.jpg" type="image/jpeg" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    /* ============================================
+       PORTFOLIO PAGE — COMPLETE STYLES
+       ============================================ */
+
+    .portfolio-section {
+      padding: 60px 0 80px;
+      background: #f0f4f1;
+    }
+
+    /* FILTER BAR */
+    .portfolio-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      padding: 0 24px 40px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .filter-btn {
+      padding: 9px 22px;
+      border-radius: 50px;
+      border: 2px solid #d4ddd6;
+      background: #fff;
+      color: #444;
+      font-size: 0.84rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .filter-btn:hover { border-color: #1a8c2e; color: #1a8c2e; }
+    .filter-btn.active { background: #1a8c2e; border-color: #1a8c2e; color: #fff; }
+
+    /* GRID */
+    .portfolio-full-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-auto-rows: 280px;
+      gap: 20px;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* CARD */
+    .portfolio-item {
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      cursor: pointer;
+      background: #ccc;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      transition: transform 0.35s ease, box-shadow 0.35s ease;
+    }
+    .portfolio-item:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+    }
+
+    /* IMAGE — must fill the card completely */
+    .portfolio-item-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.55s ease;
+    }
+    .portfolio-item:hover .portfolio-item-img {
+      transform: scale(1.08);
+    }
+
+    /* OVERLAY — sits on top of image */
+    .portfolio-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to top,
+        rgba(6, 14, 7, 0.97) 0%,
+        rgba(6, 14, 7, 0.7) 40%,
+        rgba(6, 14, 7, 0.15) 100%
+      );
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 22px 20px;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.35s ease, transform 0.35s ease;
+      z-index: 2;
+    }
+    .portfolio-item:hover .portfolio-overlay {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* CATEGORY TAG */
+    .overlay-tag {
+      display: inline-block;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 50px;
+      margin-bottom: 8px;
+      width: fit-content;
+      color: #fff;
+    }
+    .web-tag      { background: #1565c0; }
+    .graphic-tag  { background: #6a1b9a; }
+    .logo-tag     { background: #e65100; }
+    .branding-tag { background: #f4b400; color: #333 !important; }
+    .print-tag    { background: #cc1f1f; }
+    .social-tag   { background: #00796b; }
+
+    /* TITLE & DESC */
+    .portfolio-overlay h3 {
+      color: #ffffff;
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+      font-family: 'Playfair Display', serif;
+      line-height: 1.3;
+    }
+    .portfolio-overlay span {
+      color: rgba(255,255,255,0.6);
+      font-size: 0.76rem;
+      display: block;
+      margin-bottom: 14px;
+    }
+
+    /* ACTION BUTTONS */
+    .overlay-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .portfolio-visit-btn,
+    .portfolio-view-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 8px 18px;
+      border-radius: 50px;
+      text-decoration: none;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      transition: all 0.25s ease;
+      border: none;
+      white-space: nowrap;
+    }
+    .portfolio-visit-btn {
+      background: #1a8c2e;
+      color: #fff !important;
+    }
+    .portfolio-visit-btn:hover { background: #22a838; transform: translateY(-2px); }
+
+    .portfolio-view-btn {
+      background: rgba(255,255,255,0.15);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.35);
+      backdrop-filter: blur(4px);
+    }
+    .portfolio-view-btn:hover { background: rgba(255,255,255,0.28); }
+
+    /* Green glow border on hover */
+    .portfolio-item::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 16px;
+      border: 2px solid transparent;
+      transition: border-color 0.35s ease;
+      pointer-events: none;
+      z-index: 3;
+    }
+    .portfolio-item:hover::after { border-color: rgba(26,140,46,0.5); }
+
+    /* LIGHTBOX */
+    #portfolioLightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.94);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      padding: 20px;
+    }
+    #portfolioLightbox.open { display: flex; }
+    #lightboxClose {
+      position: absolute;
+      top: 20px;
+      right: 28px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: #fff;
+      font-size: 1.3rem;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+    #lightboxClose:hover { background: rgba(229,57,53,0.6); }
+    #lightboxImg {
+      max-width: 88vw;
+      max-height: 80vh;
+      object-fit: contain;
+      border-radius: 12px;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.8);
+    }
+    #lightboxTitle {
+      color: rgba(255,255,255,0.75);
+      margin-top: 16px;
+      font-size: 0.9rem;
+      font-family: 'DM Sans', sans-serif;
+      text-align: center;
+    }
+
+    /* HIDDEN ITEMS (filtered out) */
+    .portfolio-item.hidden {
+      display: none;
+    }
+
+    /* ---- RESPONSIVE ---- */
+    @media (max-width: 960px) {
+      .portfolio-full-grid {
+        grid-template-columns: repeat(2, 1fr);
+        grid-auto-rows: 240px;
+      }
+    }
+    @media (max-width: 580px) {
+      .portfolio-full-grid {
+        grid-template-columns: 1fr;
+        grid-auto-rows: 260px;
+        padding: 0 16px;
+      }
+      .portfolio-filters {
+        padding: 0 16px 32px;
+        gap: 8px;
+      }
+      .filter-btn {
+        padding: 8px 16px;
+        font-size: 0.78rem;
+      }
+      .portfolio-overlay {
+        opacity: 1;
+        transform: none;
+        background: linear-gradient(
+          to top,
+          rgba(6,14,7,0.97) 0%,
+          rgba(6,14,7,0.6) 50%,
+          transparent 100%
+        );
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <nav id="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <img src="images/logo.jpg" alt="Logo" />
+        <div class="nav-logo-text">
+          <span class="brand">DADRIS DESIGNERS</span>
+          <span class="tagline">Designs. Define Dadris</span>
+        </div>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="portfolio.html" class="active">Portfolio</a></li>
+        <li><a href="pricing.html">Pricing</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+      <div class="nav-cta">
+        <a href="client-portal/login.html" class="btn btn-outline" style="padding:10px 22px;font-size:0.85rem;">Client Login</a>
+        <a href="contact.html" class="btn btn-primary" style="padding:10px 22px;font-size:0.85rem;">Get a Quote</a>
+      </div>
+      <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+    </div>
+  </nav>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <span class="mobile-close" id="mobileClose">✕</span>
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="services.html">Services</a>
+    <a href="portfolio.html">Portfolio</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="contact.html">Contact</a>
+    <a href="client-portal/login.html" class="btn btn-primary">Client Login</a>
+  </div>
+
+  <div class="page-banner">
+    <div class="page-banner-content">
+      <div class="tag">Our Work</div>
+      <h1>Portfolio</h1>
+      <p>A showcase of designs we've created for clients across Kenya and beyond.</p>
+      <div class="breadcrumb">
+        <a href="index.html">Home</a> <span>›</span> <span>Portfolio</span>
+      </div>
+    </div>
+  </div>
+
+  <section class="portfolio-section">
+
+    <!-- FILTER BAR -->
+    <div class="portfolio-filters fade-up">
+      <button class="filter-btn active" data-filter="all">All Work</button>
+      <button class="filter-btn" data-filter="web">Web Design</button>
+      <button class="filter-btn" data-filter="graphic">Graphic Design</button>
+      <button class="filter-btn" data-filter="logo">Logo Design</button>
+      <button class="filter-btn" data-filter="branding">Branding</button>
+      <button class="filter-btn" data-filter="print">Print & Banners</button>
+      <button class="filter-btn" data-filter="social">Social Media</button>
+    </div>
+
+    <!-- PORTFOLIO GRID -->
+    <div class="portfolio-full-grid" id="portfolioGrid">
+
+      <!-- 1: CJPD Diocese — WEB -->
+      <div class="portfolio-item fade-up" data-category="web">
+        <img src="images/cjpd.jpg" class="portfolio-item-img" alt="CJPD Kakamega Diocese" />
+        <div class="portfolio-overlay">
+          <div class="overlay-tag web-tag">Web Design</div>
+          <h3>CJPD Kakamega Diocese</h3>
+          <span>Official church diocese website</span>
+          <div class="overlay-actions">
+            <a href="https://davidmutula840-hash.github.io/CJPD-CDOK-website/"
+               target="_blank" rel="noopener" class="portfolio-visit-btn">
+              <i class="fas fa-external-link-alt"></i> Visit Website
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2: Dadris Academy — WEB -->
+      <div class="portfolio-item fade-up" data-category="web">
+        <img src="images/academy.jpg" class="portfolio-item-img" alt="Dadris Designers Academy" />
+        <div class="portfolio-overlay">
+          <div class="overlay-tag web-tag">Web Design</div>
+          <h3>Dadris Designers Academy</h3>
+          <span>Online learning platform for design students</span>
+          <div class="overlay-actions">
+            <a href="https://davidmutula840-hash.github.io/Dadris-Academy-/"
+               target="_blank" rel="noopener" class="portfolio-visit-btn">
+              <i class="fas fa-external-link-alt"></i> Visit Website
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3: Dadris System — WEB -->
+      <div class="portfolio-item fade-up" data-category="web">
+        <img src="images/brimu.jpeg" class="portfolio-item-img" alt="Dadris System" />
+        <div class="portfolio-overlay">
+          <div class="overlay-tag web-tag">Web Design</div>
+          <h3>Dadris System</h3>
+          <span>Full business management web system</span>
+          <div class="overlay-actions">
+            <a href="https://davidmutula840-hash.github.io/dadrissystem.com/"
+               target="_blank" rel="noopener" class="portfolio-visit-btn">
+              <i class="fas fa-external-link-alt"></i> Visit Website
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4: David Mutula Portfolio — WEB -->
+      <div class="portfolio-item fade-up" data-category="web">
+        <img src="images/team-dadris.png" class="portfolio-item-img" alt="David Mutula Portfolio" />
+        <div class="portfolio-overlay">
+          <div class="overlay-tag web-tag">Web Design</div>
+          <h3>David Mutula Portfolio</h3>
+          <span>Personal portfolio — design & development</span>
+          <div class="overlay-actions">
+            <a href="https://davidmutula840-hash.github.io/DavidMutula/"
+               target="_blank" rel="noopener" class="portfolio-visit-btn">
+              <i class="fas fa-external-link-alt"></i> Visit Website
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5: Church Flyer — GRAPHIC -->
+      <div class="portfolio-item fade-up" data-category="graphic">
+        <img src="images/gallery7.png" class="portfolio-item-img" alt="Church Flyer" />
+        <div class="portfolio-overlay">
+          <div class="overlay-tag graphic-tag">Flyer Design</div>
+          <h3>Glorious Gospel Church</h3>
+          <span>Church event flyer design</span>
+          <div class="overlay-actions">
+            <button class="portfolio-view-btn"
+              data-src="images/gallery7.png"
+              data-title="Glorious Gospel Church Flyer">
+              <i class="fas fa-search-plus"></i> View Design
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6: Branding Mockups — BRANDING -->
+      <div class="portfolio-item fade-up" data-category="branding">
+        <img src="images/gallery2.jpg" class="portfolio-item-img" alt="Branding Mockups" />
+        <div class="portfolio-overlay">
+          <div class="overlay-tag branding-tag">Branding</div>
+          <h3>Branding Mockups</h3>
+          <span>Full brand identity & mockup presentation</span>
+          <div class="overlay-actions">
+            <button class="portfolio-view-btn"
+              data-src="images/gallery2.jpg"
+              data-title="Branding Mockups">
+              <i class="fas fa-search-plus"></i> View Design
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7: Billboard — PRINT -->
+      <div class="portfolio-item fade-up" data-category="print">
+        <img src="images/billboard.jpeg" class="portfolio-item-img" alt="Billboard Project" />
+        <div class="portfolio-overlay">
+          <div class="overlay-tag print-tag">Billboard Design</div>
+          <h3>Billboard Project</h3>
+          <span>Large format outdoor billboard design</span>
+          <div class="overlay-actions">
+            <button class="portfolio-view-btn"
+              data-src="images/billboard.jpeg"
+              data-title="Billboard Project">
+              <i class="fas fa-search-plus"></i> View Design
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8: Rollup Banner — PRINT -->
+      <div class="portfolio-item fade-up" data-category="print">
+        <img src="images/rollup.jpg" class="portfolio-item-img" alt="Rollup Banner" />
+        <div class="portfolio-overlay">
+          <div class="overlay-tag print-tag">Rollup Banner</div>
+          <h3>Rollup Banner Design</h3>
+          <span>Professional rollup banner for events</span>
+          <div class="overlay-actions">
+            <button class="portfolio-view-btn"
+              data-src="images/rollup.jpg"
+              data-title="Rollup Banner Design">
+              <i class="fas fa-search-plus"></i> View Design
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 9: Dennoh Shop Branding — BRANDING -->
+      <div class="portfolio-item fade-up" data-category="branding">
+        <img src="images/dennoh.jpeg" class="portfolio-item-img" alt="Dennoh Shop Branding" />
+        <div class="portfolio-overlay">
+          <div class="overlay-tag branding-tag">Shop Branding</div>
+          <h3>Dennoh Shop Branding</h3>
+          <span>Full shop brand identity design</span>
+          <div class="overlay-actions">
+            <button class="portfolio-view-btn"
+              data-src="images/dennoh.jpeg"
+              data-title="Dennoh Shop Branding">
+              <i class="fas fa-search-plus"></i> View Design
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 10: Hotel Social Media — SOCIAL -->
+      <div class="portfolio-item fade-up" data-category="social">
+        <img src="images/social.jpg" class="portfolio-item-img" alt="Hotel Social Media Poster" />
+        <div class="portfolio-overlay">
+          <div class="overlay-tag social-tag">Social Media</div>
+          <h3>Hotel Promo Poster</h3>
+          <span>Social media poster design for a hotel</span>
+          <div class="overlay-actions">
+            <button class="portfolio-view-btn"
+              data-src="images/social.jpg"
+              data-title="Hotel Social Media Poster">
+              <i class="fas fa-search-plus"></i> View Design
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 11: Suzzie Collections — GRAPHIC -->
+      <div class="portfolio-item fade-up" data-category="graphic">
+        <img src="images/gallery4.jpg" class="portfolio-item-img" alt="Suzzie Collections" />
+        <div class="portfolio-overlay">
+          <div class="overlay-tag graphic-tag">Poster Design</div>
+          <h3>Suzzie Collections</h3>
+          <span>Fashion brand promotional poster</span>
+          <div class="overlay-actions">
+            <button class="portfolio-view-btn"
+              data-src="images/gallery4.jpg"
+              data-title="Suzzie Collections Poster">
+              <i class="fas fa-search-plus"></i> View Design
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 12: Banner Designs — PRINT -->
+      <div class="portfolio-item fade-up" data-category="print">
+        <img src="images/gallery11.jpeg" class="portfolio-item-img" alt="Banner Designs" />
+        <div class="portfolio-overlay">
+          <div class="overlay-tag print-tag">Banner Design</div>
+          <h3>Banner Designs</h3>
+          <span>Large format print banner designs</span>
+          <div class="overlay-actions">
+            <button class="portfolio-view-btn"
+              data-src="images/gallery11.jpeg"
+              data-title="Banner Designs">
+              <i class="fas fa-search-plus"></i> View Design
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end grid -->
+  </section>
+
+  <!-- LIGHTBOX -->
+  <div id="portfolioLightbox">
+    <button id="lightboxClose"><i class="fas fa-times"></i></button>
+    <img id="lightboxImg" src="" alt="" />
+    <p id="lightboxTitle"></p>
+  </div>
+
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="footer-logo">
+            <img src="images/logo.jpg" alt="Logo" />
+            <div class="footer-logo-text">
+              <div class="name">DADRIS DESIGNERS</div>
+              <div class="slogan">Designs. Define Dadris</div>
+            </div>
+          </div>
+          <p>Professional graphic design, logo creation, and web design services across Kenya.</p>
+          <div class="footer-social">
+            <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+            <a href="https://wa.me/254745365756" class="social-icon"><i class="fab fa-whatsapp"></i></a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Navigation</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="portfolio.html">Portfolio</a></li>
+            <li><a href="pricing.html">Pricing</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Services</h4>
+          <ul>
+            <li><a href="services.html">Graphic Design</a></li>
+            <li><a href="services.html">Web Design</a></li>
+            <li><a href="services.html">Logo Design</a></li>
+            <li><a href="services.html">Branding</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Contact</h4>
+          <ul>
+            <li><a href="tel:+254745365756">📞 0745 365 756</a></li>
+            <li><a href="mailto:dadrisdesigners@gmail.com">✉️ dadrisdesigners@gmail.com</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2025 DADRIS DESIGNERS. All rights reserved.</p>
+        <p class="credits">Designs. Define Dadris ✦</p>
+      </div>
+    </div>
+  </footer>
+
+  <div class="floating-buttons">
+    <a href="https://wa.me/254745365756" target="_blank" class="float-btn float-whatsapp">
+      <i class="fab fa-whatsapp"></i><span class="tooltip">WhatsApp Us</span>
+    </a>
+    <a href="tel:+254745365756" class="float-btn float-call">
+      <i class="fas fa-phone"></i><span class="tooltip">Call Us</span>
+    </a>
+  </div>
+
+  <div id="toast" class="toast"></div>
+  <script src="js/main.js"></script>
+
+  <script>
+    // ---- FILTER ----
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', function () {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        const filter = this.dataset.filter;
+        document.querySelectorAll('#portfolioGrid .portfolio-item').forEach(item => {
+          item.classList.toggle('hidden', filter !== 'all' && item.dataset.category !== filter);
+        });
+      });
+    });
+
+    // ---- LIGHTBOX ----
+    const lb      = document.getElementById('portfolioLightbox');
+    const lbImg   = document.getElementById('lightboxImg');
+    const lbTitle = document.getElementById('lightboxTitle');
+    const lbClose = document.getElementById('lightboxClose');
+
+    // Open on View Design button click
+    document.querySelectorAll('.portfolio-view-btn').forEach(btn => {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        lbImg.src         = this.dataset.src;
+        lbTitle.textContent = this.dataset.title;
+        lb.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      });
+    });
+
+    // Close
+    function closeLightbox() {
+      lb.classList.remove('open');
+      document.body.style.overflow = '';
+      lbImg.src = '';
+    }
+    lbClose.addEventListener('click', closeLightbox);
+    lb.addEventListener('click', function (e) {
+      if (e.target === lb) closeLightbox();
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeLightbox();
+    });
+  </script>
+
+</body>
+</html>

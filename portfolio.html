@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact Us — Dadris Designers</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" href="images/logo.jpg" type="image/jpeg" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body>
+
+  <nav id="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <img src="images/logo.jpg" alt="Logo" />
+        <div class="nav-logo-text">
+          <span class="brand">DADRIS DESIGNERS</span>
+          <span class="tagline">Designs. Define Dadris</span>
+        </div>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="portfolio.html">Portfolio</a></li>
+        <li><a href="pricing.html">Pricing</a></li>
+        <li><a href="contact.html" class="active">Contact</a></li>
+      </ul>
+      <div class="nav-cta">
+        <a href="client-portal/login.html" class="btn btn-outline" style="padding:10px 22px;font-size:0.85rem;">Client Login</a>
+        <a href="contact.html" class="btn btn-primary" style="padding:10px 22px;font-size:0.85rem;">Get a Quote</a>
+      </div>
+      <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+    </div>
+  </nav>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <span class="mobile-close" id="mobileClose">✕</span>
+    <a href="index.html">Home</a><a href="about.html">About</a>
+    <a href="services.html">Services</a><a href="portfolio.html">Portfolio</a>
+    <a href="pricing.html">Pricing</a><a href="contact.html">Contact</a>
+    <a href="client-portal/login.html" class="btn btn-primary">Client Login</a>
+  </div>
+
+  <div class="page-banner">
+    <div class="page-banner-content">
+      <div class="tag">Get In Touch</div>
+      <h1>Contact Us</h1>
+      <p>Ready to start a project or have a question? We'd love to hear from you.</p>
+      <div class="breadcrumb"><a href="index.html">Home</a> <span>›</span> <span>Contact</span></div>
+    </div>
+  </div>
+
+  <section class="section contact">
+    <div class="container">
+      <div class="contact-grid">
+
+        <!-- LEFT: Contact Info (unchanged) -->
+        <div class="contact-info fade-up">
+          <div class="tag" style="display:inline-block;background:var(--green);color:#fff;font-size:0.7rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;padding:5px 14px;border-radius:50px;margin-bottom:14px;">Reach Out</div>
+          <h2>Let's Talk <span>Design</span></h2>
+          <p>Fill in the form and we'll get back to you within 2 hours during working hours. Or reach us directly below.</p>
+
+          <div class="contact-item">
+            <div class="contact-icon" style="background:rgba(26,140,46,0.1);">📞</div>
+            <div>
+              <h4>Phone / WhatsApp</h4>
+              <a href="tel:+254745365756">0745 365 756</a>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon" style="background:rgba(21,101,192,0.1);">✉️</div>
+            <div>
+              <h4>Email</h4>
+              <a href="mailto:dadrisdesigners@gmail.com">dadrisdesigners@gmail.com</a>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon" style="background:rgba(244,180,0,0.1);">📍</div>
+            <div>
+              <h4>Location</h4>
+              <p>Kenya (Available Nationwide)</p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon" style="background:rgba(204,31,31,0.1);">⏰</div>
+            <div>
+              <h4>Working Hours</h4>
+              <p>Mon – Sat: 8:00 AM – 8:00 PM<br>Sun: 10:00 AM – 5:00 PM</p>
+            </div>
+          </div>
+
+          <div style="margin-top:32px;">
+            <p style="font-weight:700;margin-bottom:14px;font-size:0.9rem;">Connect on Social</p>
+            <div style="display:flex;gap:12px;">
+              <a href="#" class="social-icon" style="background:rgba(0,0,0,0.06);border:1px solid var(--gray-200);color:var(--black);"><i class="fab fa-facebook-f"></i></a>
+              <a href="#" class="social-icon" style="background:rgba(0,0,0,0.06);border:1px solid var(--gray-200);color:var(--black);"><i class="fab fa-instagram"></i></a>
+              <a href="https://wa.me/254745365756" class="social-icon" style="background:#25d366;color:#fff;border-color:#25d366;"><i class="fab fa-whatsapp"></i></a>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT: Contact Form with Formspree -->
+        <div class="contact-form-wrap fade-up">
+          <div class="contact-form">
+            <h3 style="margin-bottom:6px;">Send Us a Message</h3>
+            <p style="font-size:0.84rem;color:#6b7c70;margin-bottom:24px;">We'll reply to your email within 24 hours. 📩</p>
+
+            <!-- SUCCESS MESSAGE -->
+            <div id="formSuccess" style="
+              display:none;
+              background:#e8f5e9;
+              border:1px solid #a5d6a7;
+              border-left:4px solid #1a8c2e;
+              border-radius:12px;
+              padding:16px 20px;
+              margin-bottom:20px;
+              font-size:0.88rem;
+              color:#2e7d32;
+            ">
+              ✅ <strong>Message sent successfully!</strong><br>
+              We'll get back to you within 24 hours. Check your inbox for a confirmation.
+            </div>
+
+            <!-- ERROR MESSAGE -->
+            <div id="formError" style="
+              display:none;
+              background:#fce4ec;
+              border:1px solid #f48fb1;
+              border-left:4px solid #e53935;
+              border-radius:12px;
+              padding:16px 20px;
+              margin-bottom:20px;
+              font-size:0.88rem;
+              color:#c62828;
+            ">
+              ❌ <strong>Something went wrong.</strong>
+              Please try again or
+              <a href="https://wa.me/254745365756" style="color:#c62828;font-weight:700;text-decoration:underline;">WhatsApp us directly.</a>
+            </div>
+
+            <form id="contactForm">
+              <!-- Spam protection honeypot -->
+              <input type="text" name="_gotcha" style="display:none" />
+              <!-- Formspree reply-to -->
+              <input type="hidden" name="_replyto" id="replyto" />
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Your Name *</label>
+                  <input
+                    type="text"
+                    name="Name"
+                    placeholder="John Kamau"
+                    required
+                  />
+                </div>
+                <div class="form-group">
+                  <label>Phone / WhatsApp *</label>
+                  <input
+                    type="tel"
+                    name="Phone"
+                    placeholder="0712 345 678"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Email Address</label>
+                <input
+                  type="email"
+                  id="emailInput"
+                  name="Email"
+                  placeholder="john@example.com"
+                  oninput="document.getElementById('replyto').value=this.value"
+                />
+              </div>
+
+              <div class="form-group">
+                <label>Service Needed *</label>
+                <select name="Service" required>
+                  <option value="">Select a service...</option>
+                  <option>Logo Design</option>
+                  <option>Graphic Design (Flyer, Poster, etc.)</option>
+                  <option>Web Design</option>
+                  <option>Branding & Identity</option>
+                  <option>Social Media Design</option>
+                  <option>Print & Packaging</option>
+                  <option>Other / Not Sure</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label>Project Budget (KSh)</label>
+                <select name="Budget">
+                  <option value="">Select your budget range...</option>
+                  <option>Under KSh 5,000</option>
+                  <option>KSh 5,000 – 15,000</option>
+                  <option>KSh 15,000 – 50,000</option>
+                  <option>KSh 50,000+</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label>Tell Us About Your Project *</label>
+                <textarea
+                  name="Message"
+                  placeholder="Describe what you need. The more detail you give, the better we can help you!"
+                  required
+                ></textarea>
+              </div>
+
+              <button type="submit" id="submitBtn" class="btn btn-primary" style="width:100%;justify-content:center;font-size:1rem;padding:16px;">
+                <i class="fas fa-paper-plane"></i> Send Message
+              </button>
+
+              <p style="text-align:center;margin-top:12px;font-size:0.76rem;color:#9aaba0;">
+                🔒 Your information is private and will never be shared.
+              </p>
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick Action Buttons (unchanged) -->
+  <div style="background:var(--gray-50);padding:60px 24px;text-align:center;">
+    <h2 style="margin-bottom:12px;">Prefer a Quick Chat?</h2>
+    <p style="color:var(--gray-600);margin-bottom:32px;max-width:500px;margin-left:auto;margin-right:auto;">
+      Skip the form and reach us directly. We respond fast!
+    </p>
+    <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
+      <a href="https://wa.me/254745365756?text=Hello!%20I%20need%20a%20design%20quote." target="_blank" class="btn btn-primary" style="background:#25d366;border-color:#25d366;font-size:1.05rem;padding:16px 36px;">
+        <i class="fab fa-whatsapp"></i> WhatsApp Now
+      </a>
+      <a href="tel:+254745365756" class="btn btn-outline" style="font-size:1.05rem;padding:16px 36px;">
+        <i class="fas fa-phone"></i> Call 0745 365 756
+      </a>
+      <a href="mailto:dadrisdesigners@gmail.com" class="btn btn-outline" style="font-size:1.05rem;padding:16px 36px;">
+        <i class="fas fa-envelope"></i> Send Email
+      </a>
+    </div>
+  </div>
+
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="footer-logo">
+            <img src="images/logo.jpg" alt="Logo" />
+            <div class="footer-logo-text">
+              <div class="name">DADRIS DESIGNERS</div>
+              <div class="slogan">Designs. Define Dadris</div>
+            </div>
+          </div>
+          <p>Professional graphic design, logo creation, and web design services across Kenya.</p>
+          <div class="footer-social">
+            <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+            <a href="https://wa.me/254745365756" class="social-icon"><i class="fab fa-whatsapp"></i></a>
+          </div>
+        </div>
+        <div class="footer-col"><h4>Pages</h4><ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="services.html">Services</a></li>
+          <li><a href="portfolio.html">Portfolio</a></li>
+          <li><a href="pricing.html">Pricing</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul></div>
+        <div class="footer-col"><h4>Services</h4><ul>
+          <li><a href="services.html">Graphic Design</a></li>
+          <li><a href="services.html">Web Design</a></li>
+          <li><a href="services.html">Logo Design</a></li>
+          <li><a href="services.html">Branding</a></li>
+        </ul></div>
+        <div class="footer-col"><h4>Contact</h4><ul>
+          <li><a href="tel:+254745365756">📞 0745 365 756</a></li>
+          <li><a href="mailto:dadrisdesigners@gmail.com">✉️ dadrisdesigners@gmail.com</a></li>
+        </ul></div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2025 DADRIS DESIGNERS. All rights reserved.</p>
+        <p class="credits">Designs. Define Dadris ✦</p>
+      </div>
+    </div>
+  </footer>
+
+  <div class="floating-buttons">
+    <a href="https://wa.me/254745365756" target="_blank" class="float-btn float-whatsapp">
+      <i class="fab fa-whatsapp"></i><span class="tooltip">WhatsApp Us</span>
+    </a>
+    <a href="tel:+254745365756" class="float-btn float-call">
+      <i class="fas fa-phone"></i><span class="tooltip">Call Us</span>
+    </a>
+  </div>
+
+  <div id="toast" class="toast"></div>
+  <script src="js/main.js"></script>
+
+  <script>
+    const form       = document.getElementById('contactForm');
+    const submitBtn  = document.getElementById('submitBtn');
+    const successMsg = document.getElementById('formSuccess');
+    const errorMsg   = document.getElementById('formError');
+
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      // Loading state
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+      successMsg.style.display = 'none';
+      errorMsg.style.display   = 'none';
+
+      try {
+        const response = await fetch('https://formspree.io/f/movkyakz', {
+          method:  'POST',
+          body:    new FormData(form),
+          headers: { 'Accept': 'application/json' }
+        });
+
+        if (response.ok) {
+          // Show success, reset form
+          successMsg.style.display = 'block';
+          successMsg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          form.reset();
+          submitBtn.innerHTML = '✅ Message Sent!';
+
+          // Reset button after 4 seconds
+          setTimeout(() => {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Message';
+          }, 4000);
+
+        } else {
+          throw new Error('Failed');
+        }
+
+      } catch (err) {
+        errorMsg.style.display = 'block';
+        errorMsg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Message';
+      }
+    });
+  </script>
+
+</body>
+</html>

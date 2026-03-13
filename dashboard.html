@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Services — Dadris Designers</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" href="images/logo.jpg" type="image/jpeg" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    .service-detail-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(300px,1fr)); gap: 32px; }
+    .service-detail-card {
+      background: #fff; border-radius: var(--radius-lg); overflow: hidden;
+      border: 1px solid var(--gray-200); transition: var(--transition);
+    }
+    .service-detail-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
+    .service-card-header {
+      padding: 32px 28px; display: flex; align-items: center; gap: 16px;
+    }
+    .service-card-icon { font-size: 2.8rem; }
+    .service-card-header h3 { font-size: 1.3rem; margin-bottom: 4px; }
+    .service-card-header .price { color: var(--green); font-family: 'Bebas Neue',sans-serif; font-size: 1.3rem; }
+    .service-card-body { padding: 0 28px 28px; }
+    .service-card-body p { font-size: 0.9rem; color: var(--gray-600); margin-bottom: 16px; }
+    .service-list li { display: flex; align-items: center; gap: 10px; font-size: 0.88rem; padding: 6px 0; border-bottom: 1px solid var(--gray-100); }
+    .service-list li:last-child { border-bottom: none; }
+    .service-list li .dot { width: 7px; height: 7px; background: var(--green); border-radius: 50%; flex-shrink: 0; }
+    .process-steps { display: grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap: 24px; position: relative; }
+    .process-step { text-align: center; padding: 32px 20px; }
+    .step-num {
+      width: 60px; height: 60px; background: var(--green); color: #fff;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-family: 'Bebas Neue',sans-serif; font-size: 1.8rem;
+      margin: 0 auto 16px;
+    }
+    .process-step h3 { font-size: 1rem; margin-bottom: 8px; }
+    .process-step p  { font-size: 0.85rem; color: var(--gray-600); }
+  </style>
+</head>
+<body>
+
+  <nav id="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <img src="images/logo.jpg" alt="Logo" />
+        <div class="nav-logo-text">
+          <span class="brand">DADRIS DESIGNERS</span>
+          <span class="tagline">Designs. Define Dadris</span>
+        </div>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="services.html" class="active">Services</a></li>
+        <li><a href="portfolio.html">Portfolio</a></li>
+        <li><a href="pricing.html">Pricing</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+      <div class="nav-cta">
+        <a href="client-portal/login.html" class="btn btn-outline" style="padding:10px 22px;font-size:0.85rem;">Client Login</a>
+        <a href="contact.html" class="btn btn-primary" style="padding:10px 22px;font-size:0.85rem;">Get a Quote</a>
+      </div>
+      <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+    </div>
+  </nav>
+  <div class="mobile-menu" id="mobileMenu">
+    <span class="mobile-close" id="mobileClose">✕</span>
+    <a href="index.html">Home</a><a href="about.html">About</a>
+    <a href="services.html">Services</a><a href="portfolio.html">Portfolio</a>
+    <a href="pricing.html">Pricing</a><a href="contact.html">Contact</a>
+    <a href="client-portal/login.html" class="btn btn-primary">Client Login</a>
+  </div>
+
+  <div class="page-banner">
+    <div class="page-banner-content">
+      <div class="tag">What We Offer</div>
+      <h1>Our Design Services</h1>
+      <p>Everything your brand needs to look professional, credible, and unforgettable.</p>
+      <div class="breadcrumb">
+        <a href="index.html">Home</a> <span>›</span> <span>Services</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Services -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header fade-up">
+        <div class="tag">All Services</div>
+        <h2>What We <span>Create For You</span></h2>
+        <p>Professional design services tailored to grow your business.</p>
+      </div>
+      <div class="service-detail-grid">
+
+        <div class="service-detail-card fade-up">
+          <div class="service-card-header" style="background:linear-gradient(135deg,rgba(26,140,46,0.06),rgba(26,140,46,0.02));">
+            <div class="service-card-icon">🎨</div>
+            <div>
+              <h3>Graphic Design</h3>
+              <div class="price">From KSh 1,500</div>
+            </div>
+          </div>
+          <div class="service-card-body">
+            <p>Eye-catching graphics for all your print and digital marketing needs. We create designs that communicate and convert.</p>
+            <ul class="service-list">
+              <li><span class="dot"></span> Flyers & Posters</li>
+              <li><span class="dot"></span> Social Media Graphics</li>
+              <li><span class="dot"></span> Banners & Billboards</li>
+              <li><span class="dot"></span> Business Cards</li>
+              <li><span class="dot"></span> Brochures & Catalogues</li>
+              <li><span class="dot"></span> T-Shirt & Merchandise Design</li>
+            </ul>
+            <div style="margin-top:20px;">
+              <a href="contact.html" class="btn btn-primary" style="width:100%;justify-content:center;">Order Now</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="service-detail-card fade-up">
+          <div class="service-card-header" style="background:linear-gradient(135deg,rgba(21,101,192,0.06),rgba(21,101,192,0.02));">
+            <div class="service-card-icon">💻</div>
+            <div>
+              <h3>Web Design</h3>
+              <div class="price">From KSh 15,000</div>
+            </div>
+          </div>
+          <div class="service-card-body">
+            <p>Beautiful, fast, and responsive websites that work on all devices and help you attract more customers online.</p>
+            <ul class="service-list">
+              <li><span class="dot"></span> Business Websites</li>
+              <li><span class="dot"></span> E-Commerce Stores</li>
+              <li><span class="dot"></span> Portfolio Websites</li>
+              <li><span class="dot"></span> Landing Pages</li>
+              <li><span class="dot"></span> Blog & News Sites</li>
+              <li><span class="dot"></span> Website Redesign</li>
+            </ul>
+            <div style="margin-top:20px;">
+              <a href="contact.html" class="btn btn-primary" style="width:100%;justify-content:center;">Get a Quote</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="service-detail-card fade-up">
+          <div class="service-card-header" style="background:linear-gradient(135deg,rgba(244,180,0,0.08),rgba(244,180,0,0.02));">
+            <div class="service-card-icon">✏️</div>
+            <div>
+              <h3>Logo Design</h3>
+              <div class="price">From KSh 2,500</div>
+            </div>
+          </div>
+          <div class="service-card-body">
+            <p>A unique, professional logo that captures your brand identity and makes you instantly recognizable in the market.</p>
+            <ul class="service-list">
+              <li><span class="dot"></span> Custom Logo Creation</li>
+              <li><span class="dot"></span> Multiple Concept Options</li>
+              <li><span class="dot"></span> Unlimited Revisions</li>
+              <li><span class="dot"></span> All File Formats (PNG, SVG, PDF)</li>
+              <li><span class="dot"></span> Transparent Background</li>
+              <li><span class="dot"></span> Full Copyright Ownership</li>
+            </ul>
+            <div style="margin-top:20px;">
+              <a href="contact.html" class="btn btn-primary" style="width:100%;justify-content:center;">Order Logo</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="service-detail-card fade-up">
+          <div class="service-card-header" style="background:linear-gradient(135deg,rgba(204,31,31,0.06),rgba(204,31,31,0.02));">
+            <div class="service-card-icon">🏷️</div>
+            <div>
+              <h3>Branding & Identity</h3>
+              <div class="price">From KSh 8,000</div>
+            </div>
+          </div>
+          <div class="service-card-body">
+            <p>Complete brand identity packages that give your business a cohesive, professional look across all touchpoints.</p>
+            <ul class="service-list">
+              <li><span class="dot"></span> Logo + Brand Colors</li>
+              <li><span class="dot"></span> Brand Style Guide</li>
+              <li><span class="dot"></span> Business Card Design</li>
+              <li><span class="dot"></span> Letterhead & Envelope</li>
+              <li><span class="dot"></span> Social Media Kit</li>
+              <li><span class="dot"></span> Email Signature</li>
+            </ul>
+            <div style="margin-top:20px;">
+              <a href="contact.html" class="btn btn-primary" style="width:100%;justify-content:center;">Start Branding</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="service-detail-card fade-up">
+          <div class="service-card-header" style="background:linear-gradient(135deg,rgba(26,140,46,0.06),rgba(244,180,0,0.04));">
+            <div class="service-card-icon">📱</div>
+            <div>
+              <h3>Social Media Design</h3>
+              <div class="price">From KSh 3,000</div>
+            </div>
+          </div>
+          <div class="service-card-body">
+            <p>Consistent, attractive social media content designed to grow your audience and engagement across platforms.</p>
+            <ul class="service-list">
+              <li><span class="dot"></span> Facebook & Instagram Posts</li>
+              <li><span class="dot"></span> Story Templates</li>
+              <li><span class="dot"></span> Profile Banners & Covers</li>
+              <li><span class="dot"></span> Monthly Content Packages</li>
+              <li><span class="dot"></span> Highlight Icons</li>
+              <li><span class="dot"></span> Ad Creatives</li>
+            </ul>
+            <div style="margin-top:20px;">
+              <a href="contact.html" class="btn btn-primary" style="width:100%;justify-content:center;">Order Package</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="service-detail-card fade-up">
+          <div class="service-card-header" style="background:linear-gradient(135deg,rgba(21,101,192,0.06),rgba(26,140,46,0.04));">
+            <div class="service-card-icon">🖨️</div>
+            <div>
+              <h3>Print & Packaging</h3>
+              <div class="price">From KSh 2,000</div>
+            </div>
+          </div>
+          <div class="service-card-body">
+            <p>Print-ready designs that look great both on screen and in print — from packaging to signage.</p>
+            <ul class="service-list">
+              <li><span class="dot"></span> Product Packaging</li>
+              <li><span class="dot"></span> Labels & Stickers</li>
+              <li><span class="dot"></span> Menu Design</li>
+              <li><span class="dot"></span> Event Programs</li>
+              <li><span class="dot"></span> Signage & Banners</li>
+              <li><span class="dot"></span> Pull-Up Banners</li>
+            </ul>
+            <div style="margin-top:20px;">
+              <a href="contact.html" class="btn btn-primary" style="width:100%;justify-content:center;">Order Now</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Process Section -->
+  <section class="section" style="background:var(--gray-50);">
+    <div class="container">
+      <div class="section-header fade-up">
+        <div class="tag">How It Works</div>
+        <h2>Our <span>Simple Process</span></h2>
+        <p>Getting your design project done is easy. Here's how we work together.</p>
+      </div>
+      <div class="process-steps">
+        <div class="process-step fade-up">
+          <div class="step-num">1</div>
+          <h3>Contact Us</h3>
+          <p>Reach out via WhatsApp, email, or the contact form. Tell us about your project.</p>
+        </div>
+        <div class="process-step fade-up">
+          <div class="step-num">2</div>
+          <h3>Brief & Quote</h3>
+          <p>We understand your needs and send you a detailed quote and timeline.</p>
+        </div>
+        <div class="process-step fade-up">
+          <div class="step-num">3</div>
+          <h3>Design & Review</h3>
+          <p>We create your design. You review it and request any changes.</p>
+        </div>
+        <div class="process-step fade-up">
+          <div class="step-num">4</div>
+          <h3>Deliver Files</h3>
+          <p>Once approved and paid, we send all final files in all formats you need.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div style="text-align:center;padding:60px 24px;background:linear-gradient(135deg,#0a1a0e,#0d2b14);">
+    <h2 style="color:#fff;margin-bottom:12px;">Ready to Start Your Project?</h2>
+    <p style="color:rgba(255,255,255,0.65);margin-bottom:28px;">Let's create something amazing. Contact us today for a free consultation.</p>
+    <a href="contact.html" class="btn btn-primary" style="font-size:1rem;">
+      <i class="fas fa-paper-plane"></i> Get a Free Quote
+    </a>
+  </div>
+
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="footer-logo">
+            <img src="images/logo.jpg" alt="Logo" />
+            <div class="footer-logo-text">
+              <div class="name">DADRIS DESIGNERS</div>
+              <div class="slogan">Designs. Define Dadris</div>
+            </div>
+          </div>
+          <p>Professional graphic design, logo creation, and web design services across Kenya.</p>
+          <div class="footer-social">
+            <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+            <a href="https://wa.me/254745365756" class="social-icon"><i class="fab fa-whatsapp"></i></a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Navigation</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="portfolio.html">Portfolio</a></li>
+            <li><a href="pricing.html">Pricing</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Services</h4>
+          <ul>
+            <li><a href="#">Graphic Design</a></li>
+            <li><a href="#">Web Design</a></li>
+            <li><a href="#">Logo Design</a></li>
+            <li><a href="#">Branding</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Contact</h4>
+          <ul>
+            <li><a href="tel:+254745365756">📞 0745 365 756</a></li>
+            <li><a href="mailto:dadrisdesigners@gmail.com">✉️ dadrisdesigners@gmail.com</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2025 DADRIS DESIGNERS. All rights reserved.</p>
+        <p class="credits">Designs. Define Dadris ✦</p>
+      </div>
+    </div>
+  </footer>
+
+  <div class="floating-buttons">
+    <a href="https://wa.me/254745365756" target="_blank" class="float-btn float-whatsapp">
+      <i class="fab fa-whatsapp"></i><span class="tooltip">WhatsApp Us</span>
+    </a>
+    <a href="tel:+254745365756" class="float-btn float-call">
+      <i class="fas fa-phone"></i><span class="tooltip">Call Us</span>
+    </a>
+  </div>
+  <div id="toast" class="toast"></div>
+  <script src="js/main.js"></script>
+</body>
+</html>

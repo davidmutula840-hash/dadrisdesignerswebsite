@@ -1,0 +1,173 @@
+# DADRIS DESIGNERS — WEBSITE + MANAGEMENT SYSTEM
+## Complete Setup Guide
+
+---
+
+## 📁 FOLDER STRUCTURE
+
+```
+dadris-designers/
+│
+├── index.html          ← Home Page
+├── about.html          ← About Us Page
+├── services.html       ← Services Page
+├── portfolio.html      ← Portfolio Page
+├── pricing.html        ← Pricing Page
+├── contact.html        ← Contact Page
+│
+├── css/
+│   └── style.css       ← Main website styles
+│
+├── js/
+│   └── main.js         ← Main website JavaScript
+│
+├── images/
+│   └── logo.jpg        ← Your logo (replace with your logo)
+│
+├── admin/
+│   ├── login.html      ← Admin Login Page
+│   ├── dashboard.html  ← Admin Dashboard
+│   └── admin.css       ← Dashboard styles
+│
+└── client-portal/
+    ├── login.html      ← Client Login Page
+    └── portal.html     ← Client Dashboard
+```
+
+---
+
+## 🚀 HOW TO OPEN THE WEBSITE
+
+### Option 1: Open directly in browser (for testing)
+1. Open the `dadris-designers` folder
+2. Double-click `index.html`
+3. It will open in your browser
+
+### Option 2: Upload to hosting (for going live)
+See DEPLOYMENT section below.
+
+---
+
+## 🔐 ADMIN DASHBOARD
+
+**URL:** `admin/login.html`
+
+**Default Login:**
+- Username: `admin`
+- Password: `dadris2025`
+
+> ⚠️ IMPORTANT: Change this password after first login (in Settings panel)
+
+### What you can do in the Admin Dashboard:
+- ✅ See all clients and projects at a glance
+- ✅ Add new clients with their portal login details
+- ✅ Add and manage projects
+- ✅ Update project status (Pending / Ongoing / In Revision / Completed)
+- ✅ Track payments (Paid / Partial / Unpaid)
+- ✅ Update project progress (0–100%)
+- ✅ Write update notes that clients can see in their portal
+- ✅ View payment overview and revenue stats
+
+---
+
+## 👤 CLIENT PORTAL
+
+**URL:** `client-portal/login.html`
+
+Clients log in using the username & password YOU create for them in the Admin Dashboard.
+
+### What clients can see:
+- ✅ All their projects and current status
+- ✅ Progress bar for each project
+- ✅ Latest updates from you
+- ✅ Payment summary (amount paid, balance due)
+- ✅ WhatsApp button to message you directly
+
+---
+
+## 📋 HOW TO ADD A CLIENT (Step by Step)
+
+1. Go to `admin/login.html` → login
+2. Click **"Add New Client"** in the sidebar
+3. Fill in:
+   - Client name, phone, email
+   - Company name (optional)
+   - Choose a username (e.g. `james2025`)
+   - Create a password (e.g. `James@123`)
+4. Click **"Add Client"**
+5. Share these with your client:
+   - Portal link: `client-portal/login.html`
+   - Their username and password
+
+---
+
+## 📁 HOW TO ADD A PROJECT
+
+1. In admin dashboard, click **"New Project"**
+2. Fill in project name, select client, service type
+3. Set status, amount, and deposit paid
+4. Set progress % and write an update note
+5. Click **"Create Project"**
+
+The client will immediately see this in their portal!
+
+---
+
+## 🌍 HOW TO PUT THE WEBSITE ONLINE (FREE)
+
+### Using Netlify (Easiest - Free):
+1. Go to www.netlify.com → Sign up free
+2. Click "Add New Site" → "Deploy manually"
+3. Drag and drop the entire `dadris-designers` folder
+4. Your website will be live at a netlify.app URL
+5. You can connect your own domain later
+
+### Using GitHub Pages (Also Free):
+1. Create account at github.com
+2. Create new repository
+3. Upload all files
+4. Go to Settings → Pages → Enable
+
+---
+
+## 📞 CONTACT DETAILS ALREADY CONFIGURED
+
+- Phone: 0745 365 756
+- WhatsApp: 0745 365 756
+- Email: dadrisdesigners@gmail.com
+
+All floating buttons and contact links are pre-configured.
+
+---
+
+## 🖼️ HOW TO ADD YOUR REAL PORTFOLIO IMAGES
+
+1. Save your design images in the `images/` folder
+2. Open `portfolio.html`
+3. Find any portfolio item like:
+   ```html
+   <div class="portfolio-placeholder">
+   ```
+4. Replace with:
+   ```html
+   <img src="images/your-image.jpg" class="portfolio-item-img" alt="Project Name" />
+   ```
+
+---
+
+## ⚠️ IMPORTANT NOTES
+
+1. **Data Storage:** Client and project data is saved in your browser's local storage.
+   This means data stays on that computer/browser. For multi-device access, you'll need
+   a backend like Firebase (we can help set this up later).
+
+2. **Contact Form:** The contact form shows a success message but doesn't actually send emails yet.
+   To make it send real emails, sign up at formspree.io (free) and follow their instructions.
+
+3. **Password Security:** The current admin password is basic. For a live site, consider
+   upgrading to Firebase Authentication.
+
+---
+
+Built with ❤️ for DADRIS DESIGNERS
+"Designs. Define Dadris" ✦
