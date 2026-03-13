@@ -34,8 +34,8 @@
     .logout-btn:hover { background: rgba(229,57,53,0.4); }
 
     /* TABS */
-    .tab-bar { background: #fff; border-bottom: 1px solid var(--border); padding: 0 28px; display: flex; gap: 4px; }
-    .tab { padding: 16px 20px; font-size: 0.87rem; font-weight: 600; cursor: pointer; color: var(--text-light); border-bottom: 3px solid transparent; transition: var(--tr); display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+    .tab-bar { background: #fff; border-bottom: 1px solid var(--border); padding: 0 28px; display: flex; gap: 4px; overflow-x: auto; }
+    .tab { padding: 16px 20px; font-size: 0.87rem; font-weight: 600; cursor: pointer; color: var(--text-light); border-bottom: 3px solid transparent; transition: var(--tr); display: flex; align-items: center; gap: 8px; white-space: nowrap; flex-shrink: 0; }
     .tab:hover { color: var(--green); }
     .tab.active { color: var(--green); border-bottom-color: var(--green); }
     .tab-panel { display: none; }
@@ -117,6 +117,27 @@
     .summary-card .s-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-light); margin-bottom: 6px; }
     .summary-card .s-value { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; }
 
+    /* FILES TAB */
+    .files-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+    .file-card { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--border); overflow: hidden; transition: var(--tr); }
+    .file-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+    .file-card-img { width: 100%; height: 180px; object-fit: cover; display: block; background: #f0f7f1; }
+    .file-card-img-placeholder { width: 100%; height: 130px; background: linear-gradient(135deg, #e8f5e9, #f0f7f1); display: flex; align-items: center; justify-content: center; font-size: 3rem; }
+    .file-card-body { padding: 18px 20px; }
+    .file-type-badge { display: inline-block; padding: 3px 10px; border-radius: 50px; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 10px; }
+    .file-card-title { font-weight: 700; font-size: 0.95rem; margin-bottom: 6px; }
+    .file-card-project { font-size: 0.75rem; color: var(--text-light); margin-bottom: 10px; display: flex; align-items: center; gap: 5px; }
+    .file-card-note { font-size: 0.82rem; color: #444; line-height: 1.6; margin-bottom: 14px; background: #f8faf8; border-radius: 8px; padding: 10px 12px; border-left: 3px solid var(--green); }
+    .file-card-footer { padding: 12px 20px; border-top: 1px solid var(--border); display: flex; gap: 8px; background: #fafcfa; }
+    .file-btn { flex: 1; padding: 9px 10px; border-radius: 50px; font-size: 0.78rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; font-family: 'DM Sans', sans-serif; transition: var(--tr); text-decoration: none; border: 2px solid transparent; }
+    .file-btn-green { background: var(--green); color: #fff; }
+    .file-btn-green:hover { background: #22a838; }
+    .file-btn-outline { background: transparent; color: var(--green); border-color: var(--green); }
+    .file-btn-outline:hover { background: var(--green); color: #fff; }
+    .file-btn-wa { background: #25d366; color: #fff; }
+    .file-btn-wa:hover { background: #20b958; }
+    .file-date { font-size: 0.7rem; color: var(--text-light); margin-top: 2px; }
+
     /* FLOATING BTNS */
     .wa-float { position: fixed; bottom: 24px; right: 24px; z-index: 900; display: flex; flex-direction: column; gap: 12px; }
     .wa-btn { width: 52px; height: 52px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; color: #fff; box-shadow: 0 4px 16px rgba(0,0,0,0.25); transition: var(--tr); }
@@ -127,6 +148,7 @@
     @media(max-width:700px) {
       .welcome-banner { flex-direction: column; align-items: flex-start; }
       .projects-grid { grid-template-columns: 1fr; }
+      .files-grid { grid-template-columns: 1fr; }
       .payment-summary-grid { grid-template-columns: 1fr; }
       .tab span { display: none; }
       .tab { padding: 14px 14px; }
@@ -159,6 +181,7 @@
   <div class="tab-bar">
     <div class="tab active" onclick="switchTab('projects', this)"><i class="fas fa-folder-open"></i> <span>My Projects</span></div>
     <div class="tab" onclick="switchTab('payments', this)"><i class="fas fa-credit-card"></i> <span>Payments</span></div>
+    <div class="tab" onclick="switchTab('files', this)"><i class="fas fa-share-alt"></i> <span>Files &amp; Links</span></div>
     <div class="tab" onclick="switchTab('profile', this)"><i class="fas fa-user"></i> <span>My Profile</span></div>
   </div>
 
@@ -189,6 +212,25 @@
       <div id="paymentsContent"><div class="loading-state"><div class="loading-spinner"></div><p style="color:#6b7c70;font-weight:600;">Loading...</p></div></div>
     </div>
 
+    <!-- FILES & LINKS TAB -->
+    <div class="tab-panel" id="tab-files">
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:24px;flex-wrap:wrap;gap:12px;">
+        <div>
+          <h2 style="font-family:'Playfair Display',serif;margin-bottom:6px;">Files &amp; Links</h2>
+          <p style="color:var(--text-light);font-size:0.88rem;">Completed work, drafts and files sent to you by our team.</p>
+        </div>
+        <div id="filesCount" style="background:#fff;border:1px solid var(--border);border-radius:50px;padding:8px 20px;font-size:0.82rem;font-weight:700;color:var(--green);box-shadow:var(--shadow);">
+          <i class="fas fa-file-alt" style="margin-right:6px;"></i>Loading...
+        </div>
+      </div>
+      <div id="filesGrid" class="files-grid">
+        <div class="loading-state" style="grid-column:1/-1;">
+          <div class="loading-spinner"></div>
+          <p style="color:#6b7c70;font-weight:600;">Loading your files...</p>
+        </div>
+      </div>
+    </div>
+
     <!-- PROFILE TAB -->
     <div class="tab-panel" id="tab-profile">
       <h2 style="font-family:'Playfair Display',serif;margin-bottom:6px;">My Profile</h2>
@@ -217,7 +259,7 @@
 
   <script type="module">
     import { initializeApp }   from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getFirestore, collection, query, where, onSnapshot, orderBy }
+    import { getFirestore, collection, query, where, onSnapshot, orderBy, getDocs, getDoc, doc }
                                 from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -244,39 +286,41 @@
     document.getElementById('welcomeMsg').textContent        = `Welcome back, ${clientName.split(' ')[0]}! 👋`;
 
     let myProjects = [];
+    let myFiles    = [];
     let clientData = null;
 
-    // Load client profile
-    const clientQ = query(collection(db, 'clients'), where('__name__', '==', clientId));
-
     // Listen to client's projects in real time
-    const projectsQ = query(
-      collection(db, 'projects'),
-      where('clientId', '==', clientId)
-    );
-
+    const projectsQ = query(collection(db, 'projects'), where('clientId', '==', clientId));
     onSnapshot(projectsQ, snap => {
       myProjects = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-
-      // Update stats
       document.getElementById('totalProjects').textContent   = myProjects.length;
       document.getElementById('ongoingProjects').textContent = myProjects.filter(p => p.status === 'ongoing').length;
       document.getElementById('doneProjects').textContent    = myProjects.filter(p => p.status === 'completed').length;
-
       renderProjects();
     });
 
+    // Listen to deliverables in real time
+    const filesQ = query(
+      collection(db, 'deliverables'),
+      where('clientId', '==', clientId)
+    );
+    onSnapshot(filesQ, snap => {
+      // Sort by sentAt descending (newest first)
+      myFiles = snap.docs.map(d => ({ id: d.id, ...d.data() }))
+        .sort((a, b) => {
+          const ta = a.sentAt?.toDate?.() || new Date(0);
+          const tb = b.sentAt?.toDate?.() || new Date(0);
+          return tb - ta;
+        });
+      document.getElementById('filesCount').innerHTML =
+        `<i class="fas fa-file-alt" style="margin-right:6px;"></i>${myFiles.length} file(s) sent`;
+      // Re-render if tab is active
+      if (document.getElementById('tab-files').classList.contains('active')) renderFiles();
+    });
+
     // Load profile from Firestore
-    const { getDocs } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js");
-    const cSnap = await getDocs(query(collection(db, 'clients'), where('__name__', '==', clientId)));
-    if (!cSnap.empty) {
-      clientData = { id: cSnap.docs[0].id, ...cSnap.docs[0].data() };
-    } else {
-      // fallback: query by doc id directly
-      const { getDoc, doc } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js");
-      const cDoc = await getDoc(doc(db, 'clients', clientId));
-      if (cDoc.exists()) clientData = { id: cDoc.id, ...cDoc.data() };
-    }
+    const cDoc = await getDoc(doc(db, 'clients', clientId));
+    if (cDoc.exists()) clientData = { id: cDoc.id, ...cDoc.data() };
 
     // ---- HELPERS ----
     function statusBadge(s) {
@@ -305,7 +349,6 @@
         </div>`;
         return;
       }
-
       grid.innerHTML = myProjects.map(p => {
         const paid = parseFloat(p.paid)||0, total = parseFloat(p.amount)||0;
         const latestUpdate = p.updates?.length > 0 ? p.updates[p.updates.length - 1] : null;
@@ -339,11 +382,78 @@
       }).join('');
     }
 
+    // ---- RENDER FILES ----
+    function renderFiles() {
+      const grid = document.getElementById('filesGrid');
+      if (myFiles.length === 0) {
+        grid.innerHTML = `
+          <div class="empty-state" style="grid-column:1/-1;">
+            <div class="icon">📂</div>
+            <h3>No Files Yet</h3>
+            <p>Files, design previews and links shared by our team will appear here. Stay tuned!</p>
+            <a href="https://wa.me/254745365756?text=Hi!%20I'm%20checking%20on%20my%20project%20files." target="_blank"
+               style="display:inline-flex;align-items:center;gap:8px;margin-top:20px;background:#25d366;color:#fff;padding:12px 28px;border-radius:50px;font-weight:700;font-size:0.9rem;">
+              <i class="fab fa-whatsapp"></i> Ask About Your Files
+            </a>
+          </div>`;
+        return;
+      }
+
+      // Type config
+      const typeConfig = {
+        'Final Delivery':  { color:'#1a8c2e', bg:'rgba(26,140,46,0.1)',  icon:'✅' },
+        'Draft / Concept': { color:'#1565c0', bg:'rgba(21,101,192,0.1)', icon:'📝' },
+        'Revision':        { color:'#b45309', bg:'rgba(244,180,0,0.12)', icon:'🔄' },
+        'Reference File':  { color:'#6a1b9a', bg:'rgba(106,27,154,0.1)', icon:'📎' },
+        'Invoice':         { color:'#c62828', bg:'rgba(229,57,53,0.1)',  icon:'💰' },
+      };
+
+      grid.innerHTML = myFiles.map(f => {
+        const proj   = myProjects.find(p => p.id === f.projectId);
+        const date   = f.sentAt?.toDate ? f.sentAt.toDate().toLocaleDateString('en-KE', { day:'numeric', month:'short', year:'numeric' }) : '';
+        const tc     = typeConfig[f.type] || { color:'#6b7c70', bg:'#f0f4f1', icon:'📄' };
+
+        const imgHtml = f.imgUrl
+          ? `<img src="${f.imgUrl}" class="file-card-img" alt="${f.title}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
+             <div class="file-card-img-placeholder" style="display:none;">${tc.icon}</div>`
+          : `<div class="file-card-img-placeholder">${tc.icon}</div>`;
+
+        return `
+          <div class="file-card">
+            ${imgHtml}
+            <div class="file-card-body">
+              <div class="file-type-badge" style="color:${tc.color};background:${tc.bg};">${tc.icon} ${f.type}</div>
+              <div class="file-card-title">${f.title}</div>
+              <div class="file-card-project">
+                <i class="fas fa-folder" style="color:var(--green);"></i>
+                ${proj ? proj.name : 'Your Project'}
+                ${date ? `<span style="margin-left:auto;" class="file-date">📅 ${date}</span>` : ''}
+              </div>
+              ${f.note ? `<div class="file-card-note">${f.note}</div>` : ''}
+            </div>
+            <div class="file-card-footer">
+              ${f.link
+                ? `<a href="${f.link}" target="_blank" class="file-btn file-btn-green">
+                     <i class="fas fa-external-link-alt"></i> Open / Download
+                   </a>`
+                : `<span class="file-btn" style="background:#f0f4f1;color:#6b7c70;cursor:default;">No link attached</span>`
+              }
+              <a href="https://wa.me/254745365756?text=Hi!%20Feedback%20on%20'${encodeURIComponent(f.title)}'%20for%20project%20${encodeURIComponent(proj?.name||'')}"
+                 target="_blank" class="file-btn file-btn-wa" style="flex:0 0 auto;padding:9px 14px;">
+                <i class="fab fa-whatsapp"></i>
+              </a>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
     // ---- PROJECT DETAIL ----
     window.viewProjectDetail = function(id) {
       const p = myProjects.find(x => x.id === id);
       if (!p) return;
       const paid = parseFloat(p.paid)||0, total = parseFloat(p.amount)||0;
+      // Count files for this project
+      const projFiles = myFiles.filter(f => f.projectId === id);
       document.getElementById('modalTitle').textContent = p.name;
       document.getElementById('modalBody').innerHTML = `
         <div style="margin-bottom:20px;display:flex;gap:8px;flex-wrap:wrap;">${statusBadge(p.status)}&nbsp;${payBadge(paid,total)}</div>
@@ -360,6 +470,15 @@
           <div style="height:12px;background:#e8f5e9;border-radius:50px;overflow:hidden;"><div style="height:100%;width:${p.progress||0}%;background:linear-gradient(90deg,#1a8c2e,#22a838);border-radius:50px;"></div></div>
         </div>
         ${p.desc ? `<div style="margin-bottom:20px;"><div style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#6b7c70;margin-bottom:8px;">Description</div><p style="font-size:0.88rem;line-height:1.7;color:#444;">${p.desc}</p></div>` : ''}
+        ${projFiles.length > 0 ? `
+          <div style="margin-bottom:20px;padding:16px;background:#e8f5e9;border-radius:12px;border:1px solid #a5d6a7;">
+            <div style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#1a8c2e;margin-bottom:10px;">📎 Files Sent (${projFiles.length})</div>
+            ${projFiles.map(f => `
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #c8e6c9;gap:8px;">
+                <span style="font-size:0.84rem;font-weight:600;">${f.title}</span>
+                ${f.link ? `<a href="${f.link}" target="_blank" style="font-size:0.75rem;color:#1565c0;font-weight:700;white-space:nowrap;"><i class="fas fa-external-link-alt"></i> Open</a>` : ''}
+              </div>`).join('')}
+          </div>` : ''}
         <div>
           <div style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#6b7c70;margin-bottom:12px;">📋 Progress Updates</div>
           ${(p.updates?.length > 0) ? [...p.updates].reverse().map(u => `
@@ -391,7 +510,6 @@
       let totalAmt = 0, totalPaid = 0;
       myProjects.forEach(p => { totalAmt += parseFloat(p.amount)||0; totalPaid += parseFloat(p.paid)||0; });
       const balance = totalAmt - totalPaid;
-
       el.innerHTML = `
         <div class="payment-summary-grid">
           <div class="summary-card"><div class="s-label">Total Value</div><div class="s-value" style="color:#1a1a1a;">KSh ${totalAmt.toLocaleString()}</div></div>
@@ -434,6 +552,7 @@
           ['fa-user','Username', c.username],
           ['fa-calendar','Client Since', joinDate],
           ['fa-folder','Total Projects', myProjects.length + ' project(s)'],
+          ['fa-file-alt','Files Received', myFiles.length + ' file(s)'],
         ].map(([icon,label,val]) => `
           <div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);">
             <i class="fas ${icon}" style="width:20px;color:#1a8c2e;font-size:0.95rem;"></i>
@@ -451,6 +570,7 @@
       el.classList.add('active');
       document.getElementById('tab-' + name).classList.add('active');
       if (name === 'payments') renderPayments();
+      if (name === 'files')    renderFiles();
       if (name === 'profile')  renderProfile();
     };
 

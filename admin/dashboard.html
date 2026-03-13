@@ -32,6 +32,7 @@
       <div class="sidebar-section-label">Manage</div>
       <div class="nav-item" onclick="showPanel('addClient')"><i class="fas fa-user-plus"></i> Add New Client</div>
       <div class="nav-item" onclick="showPanel('addProject')"><i class="fas fa-plus-circle"></i> New Project</div>
+      <div class="nav-item" onclick="showPanel('deliverables')"><i class="fas fa-share-alt"></i> Send Files & Links</div>
     </div>
     <div class="sidebar-section">
       <div class="sidebar-section-label">System</div>
@@ -235,6 +236,72 @@
         </div>
       </div>
 
+      <!-- ===== SEND FILES & LINKS ===== -->
+      <div class="panel" id="panel-deliverables">
+        <div style="max-width:700px;">
+          <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:6px;">Send Files &amp; Links to Client</h3>
+          <p style="font-size:0.82rem;color:#6b7c70;margin-bottom:24px;">Share completed work, drafts or reference files. Clients see this instantly in their portal under "Files &amp; Links".</p>
+          <div class="card">
+            <div class="card-body" style="padding:28px;">
+              <div id="deliverableMsg" style="display:none;padding:12px 16px;border-radius:10px;margin-bottom:16px;font-size:0.86rem;"></div>
+              <form id="deliverableForm">
+                <div class="d-form-group">
+                  <label>Select Project *</label>
+                  <select id="d-project" required>
+                    <option value="">Choose a project...</option>
+                  </select>
+                </div>
+                <div class="d-form-group">
+                  <label>Delivery Title *</label>
+                  <input type="text" id="d-title" placeholder="e.g. Logo Final Version, Website Draft 1, Brand Guide..." required />
+                </div>
+                <div class="d-form-group">
+                  <label>Delivery Type</label>
+                  <select id="d-type">
+                    <option value="Final Delivery">✅ Final Delivery</option>
+                    <option value="Draft / Concept">📝 Draft / Concept</option>
+                    <option value="Revision">🔄 Revision</option>
+                    <option value="Reference File">📎 Reference File</option>
+                    <option value="Invoice">💰 Invoice</option>
+                  </select>
+                </div>
+                <div class="d-form-group">
+                  <label>File / Drive Link</label>
+                  <input type="url" id="d-link" placeholder="https://drive.google.com/... or https://dropbox.com/..." />
+                  <small style="color:#6b7c70;font-size:0.75rem;margin-top:5px;display:block;">💡 Paste a Google Drive, Dropbox, WeTransfer or any file URL. Make sure sharing is set to "Anyone with link".</small>
+                </div>
+                <div class="d-form-group">
+                  <label>Direct Image URL <span style="color:#6b7c70;font-weight:400;">(optional — client will see a preview)</span></label>
+                  <input type="url" id="d-imgurl" placeholder="https://... direct link ending in .jpg .png .gif etc" />
+                  <small style="color:#6b7c70;font-size:0.75rem;margin-top:5px;display:block;">💡 If your image is hosted online, paste the direct URL here for a visual preview in the portal.</small>
+                </div>
+                <div class="d-form-group">
+                  <label>Message / Note to Client *</label>
+                  <textarea id="d-note" style="min-height:110px;" placeholder="e.g. Hello! Here is your final logo in all formats. Please review and send your feedback via WhatsApp. Thank you!" required></textarea>
+                </div>
+                <div style="display:flex;gap:12px;margin-top:8px;">
+                  <button type="submit" class="btn btn-primary" id="sendDeliverableBtn">
+                    <i class="fas fa-paper-plane"></i> Send to Client
+                  </button>
+                  <button type="button" class="btn btn-gray" onclick="showPanel('projects')">Cancel</button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- SENT DELIVERABLES LIST -->
+          <div style="margin-top:36px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+              <h4 style="font-size:0.95rem;font-weight:700;">Previously Sent</h4>
+              <button class="btn btn-sm btn-outline" onclick="loadSentDeliverables()"><i class="fas fa-sync-alt"></i> Refresh</button>
+            </div>
+            <div id="sentDeliverablesList">
+              <p style="color:#6b7c70;font-size:0.88rem;padding:20px 0;">Loading...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </main>
 
@@ -263,6 +330,40 @@
         </div>
         <div class="d-form-group"><label>Deadline</label><input type="date" id="ep-deadline" /></div>
         <div class="d-form-group"><label>New Update Note (shown to client)</label><textarea id="ep-note" style="min-height:90px;" placeholder="Write an update for your client..."></textarea></div>
+
+        <!-- SEND FILE FROM MODAL -->
+        <div style="margin-top:20px;border-top:2px dashed #e2e8e4;padding-top:20px;">
+          <p style="font-size:0.85rem;font-weight:700;margin-bottom:14px;color:#1a1a1a;">
+            <i class="fas fa-share-alt" style="color:#1a8c2e;margin-right:7px;"></i>Also Send a File / Link with this Update
+            <span style="font-weight:400;color:#6b7c70;font-size:0.78rem;"> (optional)</span>
+          </p>
+          <div class="d-form-group">
+            <label style="font-size:0.8rem;">Delivery Title</label>
+            <input type="text" id="ep-d-title" placeholder="e.g. Logo Draft 1, Website Preview..." />
+          </div>
+          <div class="d-form-group">
+            <label style="font-size:0.8rem;">Delivery Type</label>
+            <select id="ep-d-type">
+              <option value="Final Delivery">✅ Final Delivery</option>
+              <option value="Draft / Concept">📝 Draft / Concept</option>
+              <option value="Revision">🔄 Revision</option>
+              <option value="Reference File">📎 Reference File</option>
+              <option value="Invoice">💰 Invoice</option>
+            </select>
+          </div>
+          <div class="d-form-group">
+            <label style="font-size:0.8rem;">File / Drive Link</label>
+            <input type="url" id="ep-d-link" placeholder="https://drive.google.com/..." />
+          </div>
+          <div class="d-form-group">
+            <label style="font-size:0.8rem;">Direct Image URL</label>
+            <input type="url" id="ep-d-imgurl" placeholder="https://... direct image link (.jpg .png)" />
+          </div>
+          <div class="d-form-group">
+            <label style="font-size:0.8rem;">Note to Client (for this file)</label>
+            <textarea id="ep-d-note" style="min-height:70px;" placeholder="Short message about this file..."></textarea>
+          </div>
+        </div>
       </div>
       <div class="modal-footer">
         <button class="btn btn-gray" onclick="closeModal('editProjectModal')">Cancel</button>
@@ -289,7 +390,7 @@
   import {
     getFirestore, collection, doc,
     addDoc, getDocs, getDoc, updateDoc, deleteDoc,
-    query, orderBy, onSnapshot, serverTimestamp, arrayUnion
+    query, orderBy, where, onSnapshot, serverTimestamp, arrayUnion
   } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
   // ---- Firebase Init ----
@@ -319,16 +420,15 @@
 
   // ---- Real-time listeners ----
   function initDashboard() {
-    // Listen to clients
     onSnapshot(query(collection(db, 'clients'), orderBy('createdAt', 'desc')), snap => {
       clients = snap.docs.map(d => ({ id: d.id, ...d.data() }));
       document.getElementById('clientCount').textContent = clients.length;
       updateStats();
       if (document.getElementById('panel-clients').classList.contains('active')) renderClients();
       if (document.getElementById('panel-addProject').classList.contains('active')) populateClientDropdown();
+      if (document.getElementById('panel-deliverables').classList.contains('active')) populateDeliverableDropdown();
     });
 
-    // Listen to projects
     onSnapshot(query(collection(db, 'projects'), orderBy('createdAt', 'desc')), snap => {
       projects = snap.docs.map(d => ({ id: d.id, ...d.data() }));
       document.getElementById('projectCount').textContent = projects.length;
@@ -337,6 +437,7 @@
       updateStats();
       if (document.getElementById('panel-projects').classList.contains('active')) renderProjects();
       if (document.getElementById('panel-payments').classList.contains('active')) renderPayments();
+      if (document.getElementById('panel-deliverables').classList.contains('active')) populateDeliverableDropdown();
     });
   }
 
@@ -351,7 +452,6 @@
     const pending = projects.filter(p => getPaymentStatus(p.paid, p.amount) !== 'paid').length;
     document.getElementById('stat-pending').textContent = pending;
 
-    // Payment bars
     const total = projects.length || 1;
     const paid    = projects.filter(p => getPaymentStatus(p.paid, p.amount) === 'paid').length;
     const partial = projects.filter(p => getPaymentStatus(p.paid, p.amount) === 'partial').length;
@@ -364,7 +464,6 @@
     document.getElementById('bar-partial').style.width = pPa + '%';
     document.getElementById('bar-unpaid').style.width  = pU + '%';
 
-    // Recent tables
     const rpBody = document.getElementById('recentProjectsBody');
     rpBody.innerHTML = projects.length === 0
       ? '<tr><td colspan="3" style="text-align:center;padding:20px;color:#6b7c70;">No projects yet</td></tr>'
@@ -401,6 +500,15 @@
     if (p >= t) return 'paid';
     if (p > 0)  return 'partial';
     return 'unpaid';
+  }
+  function showMsg(el, msg, type) {
+    el.textContent = msg;
+    el.style.display = 'block';
+    el.style.background = type === 'green' ? '#e8f5e9' : '#fce4ec';
+    el.style.color = type === 'green' ? '#2e7d32' : '#c62828';
+    el.style.borderLeft = `4px solid ${type === 'green' ? '#1a8c2e' : '#e53935'}`;
+    el.style.borderRadius = '10px';
+    el.style.padding = '12px 16px';
   }
 
   // ---- CLIENTS ----
@@ -456,7 +564,15 @@
       </div>
       <h4 style="margin-bottom:12px;">Projects (${cp.length})</h4>
       ${cp.length === 0 ? '<p style="color:#6b7c70;font-size:0.88rem;">No projects yet.</p>' :
-        cp.map(p => `<div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #e2e8e4;"><span style="font-weight:600;">${p.name}</span>${statusBadge(p.status)}</div>`).join('')}
+        cp.map(p => `<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #e2e8e4;">
+          <span style="font-weight:600;">${p.name}</span>
+          <div style="display:flex;gap:8px;align-items:center;">
+            ${statusBadge(p.status)}
+            <button class="btn btn-sm btn-outline" onclick="closeModal('viewClientModal');showPanel('deliverables');setTimeout(()=>{document.getElementById('d-project').value='${p.id}'},300);" style="font-size:0.72rem;padding:4px 10px;">
+              <i class="fas fa-share-alt"></i> Send File
+            </button>
+          </div>
+        </div>`).join('')}
     `;
     openModal('viewClientModal');
   };
@@ -469,22 +585,18 @@
     } catch { showToast('❌ Error deleting client.'); }
   };
 
-  // Add Client
   document.getElementById('addClientForm').addEventListener('submit', async (e) => {
     e.preventDefault();
-    const btn  = document.getElementById('addClientBtn');
+    const btn   = document.getElementById('addClientBtn');
     const msgEl = document.getElementById('addClientMsg');
     btn.disabled = true;
     btn.textContent = 'Saving...';
-
-    // Check username not taken
     const snap = await getDocs(collection(db, 'clients'));
     const taken = snap.docs.some(d => d.data().username === document.getElementById('c-username').value.trim());
     if (taken) {
       showMsg(msgEl, '❌ Username already taken. Choose another.', 'red');
       btn.disabled = false; btn.innerHTML = '<i class="fas fa-user-plus"></i> Add Client'; return;
     }
-
     try {
       await addDoc(collection(db, 'clients'), {
         name:      document.getElementById('c-name').value.trim(),
@@ -533,8 +645,9 @@
         <td>${paymentBadge(ps)}</td>
         <td style="font-size:0.82rem;">${p.deadline||'—'}</td>
         <td><div style="display:flex;gap:6px;">
-          <button class="btn btn-sm btn-outline" onclick="window.editProject('${p.id}')"><i class="fas fa-edit"></i></button>
-          <button class="btn btn-sm btn-red" onclick="window.deleteProject('${p.id}')"><i class="fas fa-trash"></i></button>
+          <button class="btn btn-sm btn-outline" onclick="window.editProject('${p.id}')" title="Edit"><i class="fas fa-edit"></i></button>
+          <button class="btn btn-sm btn-outline" onclick="showPanel('deliverables');setTimeout(()=>{document.getElementById('d-project').value='${p.id}'},300);" title="Send File" style="color:#1565c0;border-color:#1565c0;"><i class="fas fa-share-alt"></i></button>
+          <button class="btn btn-sm btn-red" onclick="window.deleteProject('${p.id}')" title="Delete"><i class="fas fa-trash"></i></button>
         </div></td>
       </tr>`;
     }).join('');
@@ -551,11 +664,9 @@
     const btn   = document.getElementById('addProjectBtn');
     const msgEl = document.getElementById('addProjectMsg');
     btn.disabled = true; btn.textContent = 'Saving...';
-
     const amount = parseFloat(document.getElementById('p-amount').value) || 0;
     const paid   = parseFloat(document.getElementById('p-paid').value)   || 0;
     const note   = document.getElementById('p-note').value.trim() || 'Project created and added to your portal.';
-
     try {
       await addDoc(collection(db, 'projects'), {
         name:          document.getElementById('p-name').value.trim(),
@@ -594,6 +705,11 @@
     document.getElementById('ep-progress-val').textContent = (p.progress||0) + '%';
     document.getElementById('ep-deadline').value = p.deadline || '';
     document.getElementById('ep-note').value     = '';
+    // Clear deliverable fields
+    document.getElementById('ep-d-title').value  = '';
+    document.getElementById('ep-d-link').value   = '';
+    document.getElementById('ep-d-imgurl').value = '';
+    document.getElementById('ep-d-note').value   = '';
     openModal('editProjectModal');
   };
 
@@ -602,9 +718,9 @@
     const btn = document.getElementById('saveEditBtn');
     btn.disabled = true; btn.textContent = 'Saving...';
 
-    const amount = parseFloat(document.getElementById('ep-amount').value) || 0;
-    const paid   = parseFloat(document.getElementById('ep-paid').value)   || 0;
-    const note   = document.getElementById('ep-note').value.trim();
+    const amount   = parseFloat(document.getElementById('ep-amount').value) || 0;
+    const paid     = parseFloat(document.getElementById('ep-paid').value)   || 0;
+    const note     = document.getElementById('ep-note').value.trim();
     const progress = parseInt(document.getElementById('ep-progress').value) || 0;
 
     const updateData = {
@@ -615,14 +731,34 @@
       progress,
       deadline:      document.getElementById('ep-deadline').value,
     };
-
     if (note) {
-      updateData.note = note;
+      updateData.note    = note;
       updateData.updates = arrayUnion({ date: new Date().toLocaleDateString('en-KE'), msg: note });
     }
 
     try {
       await updateDoc(doc(db, 'projects', id), updateData);
+
+      // Also send deliverable if title or note filled in
+      const dTitle  = document.getElementById('ep-d-title').value.trim();
+      const dNote   = document.getElementById('ep-d-note').value.trim();
+      const dLink   = document.getElementById('ep-d-link').value.trim();
+      const dImgUrl = document.getElementById('ep-d-imgurl').value.trim();
+      const dType   = document.getElementById('ep-d-type').value;
+      if (dTitle || dNote || dLink || dImgUrl) {
+        const project = projects.find(x => x.id === id);
+        await addDoc(collection(db, 'deliverables'), {
+          projectId: id,
+          clientId:  project?.clientId || '',
+          title:     dTitle || 'Project Update',
+          link:      dLink,
+          imgUrl:    dImgUrl,
+          note:      dNote,
+          type:      dType,
+          sentAt:    serverTimestamp(),
+        });
+      }
+
       closeModal('editProjectModal');
       showToast('✅ Project updated! Client will see changes immediately.');
     } catch (err) { showToast('❌ Error: ' + err.message); }
@@ -641,7 +777,6 @@
   window.renderPayments = function() {
     const filter = document.getElementById('paymentFilter')?.value || 'all';
     const items  = filter === 'all' ? projects : projects.filter(p => getPaymentStatus(p.paid, p.amount) === filter);
-
     let collected = 0, partialAmt = 0, pendingAmt = 0;
     projects.forEach(p => {
       const pd = parseFloat(p.paid)||0, tt = parseFloat(p.amount)||0;
@@ -650,10 +785,9 @@
       if (ps === 'partial') partialAmt += pd;
       if (ps !== 'paid') pendingAmt += (tt - pd);
     });
-    document.getElementById('p-collected').textContent    = 'KSh ' + collected.toLocaleString();
-    document.getElementById('p-partial').textContent      = 'KSh ' + partialAmt.toLocaleString();
-    document.getElementById('p-pending-amt').textContent  = 'KSh ' + pendingAmt.toLocaleString();
-
+    document.getElementById('p-collected').textContent   = 'KSh ' + collected.toLocaleString();
+    document.getElementById('p-partial').textContent     = 'KSh ' + partialAmt.toLocaleString();
+    document.getElementById('p-pending-amt').textContent = 'KSh ' + pendingAmt.toLocaleString();
     const body = document.getElementById('paymentsTableBody');
     if (items.length === 0) { body.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:32px;color:#6b7c70;">No payment data.</td></tr>'; return; }
     body.innerHTML = items.map(p => {
@@ -673,15 +807,126 @@
     }).join('');
   };
 
+  // ---- DELIVERABLES ----
+  function populateDeliverableDropdown() {
+    const sel = document.getElementById('d-project');
+    sel.innerHTML = '<option value="">Choose a project...</option>' +
+      projects.map(p => {
+        const c = clients.find(x => x.id === p.clientId);
+        return `<option value="${p.id}">${p.name} — ${c ? c.name : 'Unknown Client'}</option>`;
+      }).join('');
+  }
+
+  window.loadSentDeliverables = async function() {
+    const list = document.getElementById('sentDeliverablesList');
+    list.innerHTML = '<p style="color:#6b7c70;font-size:0.88rem;padding:12px 0;">Loading...</p>';
+    try {
+      const snap = await getDocs(query(collection(db, 'deliverables'), orderBy('sentAt', 'desc')));
+      if (snap.empty) {
+        list.innerHTML = '<p style="color:#6b7c70;font-size:0.88rem;padding:12px 0;">No files sent yet. Use the form above to send your first file!</p>';
+        return;
+      }
+      const typeColors = {
+        'Final Delivery':  '#1a8c2e',
+        'Draft / Concept': '#1565c0',
+        'Revision':        '#b45309',
+        'Reference File':  '#6a1b9a',
+        'Invoice':         '#c62828',
+      };
+      list.innerHTML = snap.docs.map(d => {
+        const data  = d.data();
+        const p     = projects.find(x => x.id === data.projectId);
+        const c     = clients.find(x => x.id === data.clientId);
+        const date  = data.sentAt?.toDate ? data.sentAt.toDate().toLocaleDateString('en-KE') : 'N/A';
+        const color = typeColors[data.type] || '#444';
+        return `
+          <div style="background:#fff;border:1px solid #e2e8e4;border-radius:14px;padding:18px 20px;margin-bottom:12px;">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;">
+              <div style="flex:1;">
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;">
+                  <span style="background:${color}18;color:${color};font-size:0.68rem;font-weight:700;padding:3px 10px;border-radius:50px;letter-spacing:1px;">${data.type}</span>
+                  <span style="font-size:0.72rem;color:#6b7c70;">📅 ${date}</span>
+                </div>
+                <p style="font-weight:700;font-size:0.92rem;margin-bottom:3px;">${data.title}</p>
+                <p style="font-size:0.78rem;color:#6b7c70;margin-bottom:8px;">
+                  <i class="fas fa-folder" style="margin-right:4px;"></i>${p ? p.name : '—'}
+                  &nbsp;·&nbsp;
+                  <i class="fas fa-user" style="margin-right:4px;"></i>${c ? c.name : '—'}
+                </p>
+                <p style="font-size:0.84rem;color:#444;margin-bottom:10px;line-height:1.6;">${data.note}</p>
+                <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                  ${data.link ? `<a href="${data.link}" target="_blank" style="font-size:0.78rem;color:#1565c0;font-weight:700;text-decoration:none;"><i class="fas fa-external-link-alt"></i> View File Link</a>` : ''}
+                  ${data.imgUrl ? `<a href="${data.imgUrl}" target="_blank" style="font-size:0.78rem;color:#1a8c2e;font-weight:700;text-decoration:none;"><i class="fas fa-image"></i> View Image</a>` : ''}
+                </div>
+              </div>
+              <button onclick="window.deleteDeliverable('${d.id}')"
+                style="background:none;border:1px solid #fca5a5;color:#e53935;cursor:pointer;font-size:0.75rem;padding:5px 10px;border-radius:8px;flex-shrink:0;font-family:'DM Sans',sans-serif;"
+                title="Delete this delivery">
+                <i class="fas fa-trash"></i> Delete
+              </button>
+            </div>
+          </div>`;
+      }).join('');
+    } catch (e) {
+      list.innerHTML = `<p style="color:#e53935;font-size:0.88rem;">❌ Error loading: ${e.message}</p>`;
+    }
+  };
+
+  window.deleteDeliverable = async function(id) {
+    if (!confirm('Delete this delivery? The client will no longer see it in their portal.')) return;
+    try {
+      await deleteDoc(doc(db, 'deliverables', id));
+      showToast('✅ Delivery deleted.');
+      loadSentDeliverables();
+    } catch { showToast('❌ Error deleting.'); }
+  };
+
+  document.getElementById('deliverableForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn       = document.getElementById('sendDeliverableBtn');
+    const msgEl     = document.getElementById('deliverableMsg');
+    const projectId = document.getElementById('d-project').value;
+    const project   = projects.find(x => x.id === projectId);
+    if (!project) {
+      showMsg(msgEl, '❌ Please select a project first.', 'red');
+      return;
+    }
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+
+    try {
+      await addDoc(collection(db, 'deliverables'), {
+        projectId,
+        clientId:  project.clientId,
+        title:     document.getElementById('d-title').value.trim(),
+        link:      document.getElementById('d-link').value.trim(),
+        imgUrl:    document.getElementById('d-imgurl').value.trim(),
+        note:      document.getElementById('d-note').value.trim(),
+        type:      document.getElementById('d-type').value,
+        sentAt:    serverTimestamp(),
+      });
+      showMsg(msgEl, '✅ Sent! The client can now see this in their portal under "Files & Links".', 'green');
+      e.target.reset();
+      loadSentDeliverables();
+      setTimeout(() => { msgEl.style.display = 'none'; }, 5000);
+    } catch (err) {
+      showMsg(msgEl, '❌ Error: ' + err.message, 'red');
+    }
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-paper-plane"></i> Send to Client';
+  });
+
   // ---- PANEL NAV ----
   const panelTitles = {
-    dashboard: ['Dashboard Overview', "Welcome back! Here's what's happening today."],
-    clients:   ['Clients', 'Manage all your client accounts'],
-    projects:  ['Projects', 'Track all ongoing and completed projects'],
-    payments:  ['Payments', 'Monitor all project payments'],
-    addClient: ['Add New Client', 'Create a client portal account'],
-    addProject:['New Project', 'Create and assign a project to a client'],
+    dashboard:    ['Dashboard Overview', "Welcome back! Here's what's happening today."],
+    clients:      ['Clients', 'Manage all your client accounts'],
+    projects:     ['Projects', 'Track all ongoing and completed projects'],
+    payments:     ['Payments', 'Monitor all project payments'],
+    addClient:    ['Add New Client', 'Create a client portal account'],
+    addProject:   ['New Project', 'Create and assign a project to a client'],
+    deliverables: ['Send Files & Links', 'Share completed work with your clients'],
   };
+
   window.showPanel = function(id) {
     document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -689,10 +934,11 @@
     const [title, sub] = panelTitles[id] || ['Dashboard', ''];
     document.getElementById('pageTitle').textContent    = title;
     document.getElementById('pageSubtitle').textContent = sub;
-    if (id === 'clients')    renderClients();
-    if (id === 'projects')   renderProjects();
-    if (id === 'payments')   renderPayments();
-    if (id === 'addProject') populateClientDropdown();
+    if (id === 'clients')      renderClients();
+    if (id === 'projects')     renderProjects();
+    if (id === 'payments')     renderPayments();
+    if (id === 'addProject')   populateClientDropdown();
+    if (id === 'deliverables') { populateDeliverableDropdown(); loadSentDeliverables(); }
     document.getElementById('sidebar').classList.remove('open');
   };
 
@@ -713,21 +959,12 @@
     document.getElementById('sidebar').classList.toggle('open');
   });
 
-  // ---- TOAST / MSG ----
+  // ---- TOAST ----
   window.showToast = function(msg) {
     const t = document.getElementById('adminToast');
     t.textContent = msg; t.classList.add('show');
     setTimeout(() => t.classList.remove('show'), 3500);
   };
-  function showMsg(el, msg, type) {
-    el.textContent = msg;
-    el.style.display = 'block';
-    el.style.background = type === 'green' ? '#e8f5e9' : '#fce4ec';
-    el.style.color = type === 'green' ? '#2e7d32' : '#c62828';
-    el.style.borderLeft = `4px solid ${type === 'green' ? '#1a8c2e' : '#e53935'}`;
-    el.style.borderRadius = '10px';
-    el.style.padding = '12px 16px';
-  }
   </script>
 </body>
 </html>
