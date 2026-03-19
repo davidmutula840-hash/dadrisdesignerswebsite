@@ -308,11 +308,11 @@
           <input type="tel" id="payPhone" placeholder="e.g. 0712345678" />
         </div>
         <button class="pay-now-btn" id="payNowBtn" onclick="submitPayment()">
-          <i class="fas fa-lock"></i> Pay Securely with PesaPal
+          <i class="fas fa-lock"></i> Pay with M-Pesa
         </button>
         <button class="pay-cancel-btn" onclick="closePayModal()">Cancel</button>
         <div class="pay-secure">
-          <i class="fas fa-shield-alt"></i> Secured by PesaPal · M-Pesa · Visa · Mastercard
+          <i class="fas fa-shield-alt"></i> Secured by Safaricom M-Pesa · STK Push
         </div>
       </div>
     </div>
@@ -673,45 +673,74 @@
       const amount = parseFloat(document.getElementById('payAmount').value);
       const phone  = document.getElementById('payPhone').value.trim();
 
-      if (!amount || amount < 1) {
-        alert('Please enter a valid amount.'); return;
-      }
-      if (!phone || phone.length < 10) {
-        alert('Please enter your M-Pesa phone number.'); return;
-      }
+      if (!amount || amount < 1) { alert('Please enter a valid amount.'); return; }
+      if (!phone || phone.length < 10) { alert('Please enter your M-Pesa phone number.'); return; }
 
       const btn = document.getElementById('payNowBtn');
       btn.disabled = true;
-      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connecting to PesaPal...';
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending STK Push...';
 
       try {
-        const res = await fetch(`${RENDER_URL}/pesapal/pay`, {
+        const res = await fetch(`${RENDER_URL}/mpesa/pay`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            projectId:   activePayProject.projectId,
-            clientId:    clientId,
-            clientName:  clientName,
-            clientEmail: clientData?.email || '',
+            projectId:  activePayProject.projectId,
+            clientId:   clientId,
+            clientName: clientName,
             clientPhone: phone,
-            amount:      amount,
-            description: `Payment for ${activePayProject.projectName} — Dadris Designers`,
+            amount:     amount,
           })
         });
 
         const data = await res.json();
 
-        if (data.redirect_url) {
-          // Redirect to PesaPal payment page
-          window.location.href = data.redirect_url;
+        if (data.success && data.checkoutRequestId) {
+          // Show waiting message
+          btn.innerHTML = '<i class="fas fa-mobile-alt fa-beat"></i> Check your phone & enter PIN...';
+
+          // Poll for payment status every 3 seconds for up to 2 minutes
+          let attempts = 0;
+          const poll = setInterval(async () => {
+            attempts++;
+            try {
+              const statusRes  = await fetch(`${RENDER_URL}/mpesa/status/${data.checkoutRequestId}`);
+              const statusData = await statusRes.json();
+
+              if (statusData.status === 'COMPLETED') {
+                clearInterval(poll);
+                closePayModal();
+                // Show success banner
+                const banner = document.getElementById('paySuccessBanner');
+                const msg    = document.getElementById('paySuccessMsg');
+                banner.classList.add('show');
+                msg.textContent = `KSh ${amount.toLocaleString()} received! M-Pesa Ref: ${statusData.mpesaRef}. Your balance has been updated.`;
+                switchTab('payments', document.querySelector('.tab:nth-child(2)'));
+
+              } else if (statusData.status === 'FAILED') {
+                clearInterval(poll);
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-lock"></i> Pay with M-Pesa';
+                alert('Payment was cancelled or failed. Please try again.');
+
+              } else if (attempts >= 40) {
+                // 2 minutes timeout
+                clearInterval(poll);
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-lock"></i> Pay with M-Pesa';
+                alert('Payment timed out. If you entered your PIN, it will reflect shortly. Otherwise try again.');
+              }
+            } catch (e) { /* keep polling */ }
+          }, 3000);
+
         } else {
-          throw new Error(data.error || 'Payment initiation failed');
+          throw new Error(data.error || 'STK Push failed');
         }
 
       } catch (err) {
         alert('Payment failed: ' + err.message + '\n\nPlease try again or contact us on WhatsApp.');
         btn.disabled = false;
-        btn.innerHTML = '<i class="fas fa-lock"></i> Pay Securely with PesaPal';
+        btn.innerHTML = '<i class="fas fa-lock"></i> Pay with M-Pesa';
       }
     };
 
