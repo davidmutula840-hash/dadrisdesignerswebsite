@@ -23,16 +23,36 @@ app.use(express.json());
 
 // ---- Firebase Admin Init ----
 if (!admin.apps.length) {
-  let privateKey = process.env.FIREBASE_PRIVATE_KEY || '';
-  privateKey = privateKey.includes('\\n') ? privateKey.replace(/\\n/g, '\n') : privateKey;
-  privateKey = privateKey.replace(/^"|"$/g, '');
-  admin.initializeApp({
-    credential: admin.credential.cert({
-      projectId:   process.env.FIREBASE_PROJECT_ID,
-      clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-      privateKey:  privateKey,
-    }),
-  });
+  try {
+    let privateKey = process.env.FIREBASE_PRIVATE_KEY || '';
+
+    // Strip surrounding quotes if any
+    if (privateKey.startsWith('"')) privateKey = privateKey.slice(1);
+    if (privateKey.endsWith('"'))   privateKey = privateKey.slice(0, -1);
+
+    // Replace literal \n with real newlines
+    privateKey = privateKey.replace(/\\n/g, '\n');
+
+    // If still no newlines, try to reconstruct from base64 sections
+    if (!privateKey.includes('\n')) {
+      privateKey = privateKey
+        .replace('-----BEGIN PRIVATE KEY-----', '-----BEGIN PRIVATE KEY-----\n')
+        .replace('-----END PRIVATE KEY-----', '\n-----END PRIVATE KEY-----\n');
+    }
+
+    console.log('[Firebase] Key starts with:', privateKey.slice(0, 40));
+
+    admin.initializeApp({
+      credential: admin.credential.cert({
+        projectId:   process.env.FIREBASE_PROJECT_ID,
+        clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+        privateKey:  privateKey,
+      }),
+    });
+    console.log('[Firebase] Admin initialized ✅');
+  } catch (e) {
+    console.error('[Firebase] Init failed:', e.message);
+  }
 }
 const db = admin.firestore();
 
