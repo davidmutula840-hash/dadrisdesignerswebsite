@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Projects — DADRIS DESIGNERS Portal</title>
+  <link rel="icon" href="../images/logo.jpg" type="image/jpeg" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600;700&family=Bebas+Neue&display=swap');
+    :root {
+      --green:#1a8c2e; --green-light:#22a838; --blue:#1565c0;
+      --yellow:#f4b400; --red:#e53935;
+      --body-bg:#f0f7f1; --card-bg:#fff; --border:#e2e8e4;
+      --text:#1a1a1a; --text-light:#6b7c70;
+      --shadow:0 2px 12px rgba(0,0,0,0.07); --shadow-md:0 8px 28px rgba(0,0,0,0.1);
+      --radius:14px; --tr:0.25s ease;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--body-bg); color: var(--text); min-height: 100vh; }
+    a { text-decoration: none; color: inherit; }
+
+    /* HEADER */
+    .portal-header { background: linear-gradient(135deg, #0a1a0e, #1a8c2e); padding: 0 28px; height: 64px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+    .header-left { display: flex; align-items: center; gap: 14px; }
+    .header-left img { width: 40px; height: 40px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.25); }
+    .header-brand { font-family: 'Playfair Display', serif; font-weight: 900; color: #fff; font-size: 1rem; }
+    .header-portal-tag { font-size: 0.62rem; color: rgba(255,255,255,0.55); text-transform: uppercase; letter-spacing: 2px; }
+    .header-right { display: flex; align-items: center; gap: 12px; }
+    .welcome-chip { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); border-radius: 50px; padding: 6px 16px; display: flex; align-items: center; gap: 8px; }
+    .chip-avatar { width: 28px; height: 28px; background: var(--yellow); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; color: #333; font-size: 0.75rem; }
+    .chip-name { color: #fff; font-size: 0.82rem; font-weight: 600; }
+    .logout-btn { background: rgba(229,57,53,0.2); border: 1px solid rgba(229,57,53,0.3); color: rgba(255,255,255,0.85); border-radius: 50px; padding: 7px 16px; font-size: 0.78rem; font-weight: 600; cursor: pointer; transition: var(--tr); font-family: 'DM Sans', sans-serif; }
+    .logout-btn:hover { background: rgba(229,57,53,0.4); }
+
+    /* TABS */
+    .tab-bar { background: #fff; border-bottom: 1px solid var(--border); padding: 0 28px; display: flex; gap: 4px; overflow-x: auto; }
+    .tab { padding: 16px 20px; font-size: 0.87rem; font-weight: 600; cursor: pointer; color: var(--text-light); border-bottom: 3px solid transparent; transition: var(--tr); display: flex; align-items: center; gap: 8px; white-space: nowrap; flex-shrink: 0; }
+    .tab:hover { color: var(--green); }
+    .tab.active { color: var(--green); border-bottom-color: var(--green); }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* BODY */
+    .portal-body { max-width: 1100px; margin: 0 auto; padding: 32px 24px; }
+
+    /* WELCOME BANNER */
+    .welcome-banner { background: linear-gradient(135deg, #0a1a0e, #1a3a12); border-radius: var(--radius); padding: 32px 36px; margin-bottom: 28px; display: flex; align-items: center; justify-content: space-between; gap: 24px; position: relative; overflow: hidden; }
+    .welcome-banner::before { content: ''; position: absolute; right: -40px; top: -40px; width: 200px; height: 200px; background: rgba(26,140,46,0.12); border-radius: 50%; }
+    .welcome-banner h2 { color: #fff; font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-bottom: 6px; }
+    .welcome-banner p { color: rgba(255,255,255,0.6); font-size: 0.88rem; }
+    .banner-stats { display: flex; gap: 28px; flex-shrink: 0; }
+    .banner-stat .num { font-family: 'Bebas Neue', sans-serif; font-size: 2.2rem; color: #6ee87b; line-height: 1; }
+    .banner-stat .lbl { font-size: 0.68rem; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1.5px; }
+
+    /* LOADING */
+    .loading-state { text-align: center; padding: 64px 24px; }
+    .loading-spinner { width: 48px; height: 48px; border: 4px solid #e2e8e4; border-top-color: var(--green); border-radius: 50%; animation: spin .8s linear infinite; margin: 0 auto 16px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* PROJECT CARDS */
+    .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 24px; }
+    .project-card { background: var(--card-bg); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; border: 1px solid var(--border); transition: var(--tr); }
+    .project-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+    .project-card-header { padding: 20px 22px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: flex-start; }
+    .project-card-header h3 { font-size: 1rem; font-weight: 700; margin-bottom: 4px; }
+    .project-service { font-size: 0.75rem; color: var(--text-light); font-weight: 600; }
+    .project-card-body { padding: 20px 22px; }
+    .project-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 18px; }
+    .meta-item .lbl { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-light); margin-bottom: 3px; }
+    .meta-item .val { font-size: 0.88rem; font-weight: 600; }
+    .progress-section { margin-bottom: 18px; }
+    .progress-label { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 0.82rem; }
+    .progress-pct { font-weight: 700; color: var(--green); }
+    .progress-bar { height: 10px; background: #e8f5e9; border-radius: 50px; overflow: hidden; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, #1a8c2e, #22a838); border-radius: 50px; transition: width 0.8s ease; }
+    .update-box { background: #f0f7f1; border-radius: 10px; padding: 14px; border-left: 3px solid var(--green); }
+    .update-date { font-size: 0.7rem; color: var(--text-light); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+    .update-msg { font-size: 0.84rem; color: var(--text); line-height: 1.6; }
+    .project-card-footer { padding: 14px 22px; border-top: 1px solid var(--border); display: flex; gap: 10px; background: #fafcfa; }
+    .action-btn { flex: 1; padding: 10px; border-radius: 50px; border: 2px solid var(--green); background: transparent; color: var(--green); font-weight: 700; font-size: 0.8rem; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: var(--tr); display: flex; align-items: center; justify-content: center; gap: 6px; text-decoration: none; }
+    .action-btn:hover { background: var(--green); color: #fff; }
+    .action-btn.filled { background: var(--green); color: #fff; }
+    .action-btn.filled:hover { background: #22a838; }
+
+    /* BADGES */
+    .badge { display: inline-block; padding: 4px 12px; border-radius: 50px; font-size: 0.72rem; font-weight: 700; }
+    .badge-green { background: rgba(26,140,46,0.12); color: var(--green); }
+    .badge-blue  { background: rgba(21,101,192,0.12); color: var(--blue); }
+    .badge-yellow{ background: rgba(244,180,0,0.15);  color: #b45309; }
+    .badge-red   { background: rgba(229,57,53,0.12);  color: var(--red); }
+    .badge-gray  { background: #f0f4f1; color: var(--text-light); }
+
+    /* EMPTY STATE */
+    .empty-state { text-align: center; padding: 64px 24px; color: var(--text-light); }
+    .empty-state .icon { font-size: 4rem; margin-bottom: 16px; }
+    .empty-state h3 { font-size: 1.2rem; margin-bottom: 8px; color: var(--text); }
+    .empty-state p { font-size: 0.88rem; max-width: 360px; margin: 0 auto; }
+
+    /* MODAL */
+    .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 500; align-items: center; justify-content: center; padding: 20px; }
+    .modal.open { display: flex; }
+    .modal-box { background: #fff; border-radius: 20px; max-width: 560px; width: 100%; max-height: 90vh; overflow-y: auto; }
+    .modal-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; background: #fff; }
+    .modal-header h3 { font-size: 1rem; font-weight: 700; }
+    .modal-close { background: none; border: none; font-size: 1.3rem; color: var(--text-light); cursor: pointer; }
+    .modal-close:hover { color: var(--red); }
+    .modal-body { padding: 24px; }
+    .tl-item { display: flex; gap: 14px; margin-bottom: 20px; }
+    .tl-dot { width: 12px; height: 12px; background: var(--green); border-radius: 50%; margin-top: 4px; flex-shrink: 0; }
+    .tl-date { font-size: 0.72rem; font-weight: 700; color: var(--text-light); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 3px; }
+    .tl-msg { font-size: 0.88rem; line-height: 1.6; }
+
+    /* PAYMENT CARDS */
+    .payment-summary-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-bottom: 24px; }
+    .summary-card { background: #fff; border-radius: var(--radius); padding: 22px; box-shadow: var(--shadow); border: 1px solid var(--border); }
+    .summary-card .s-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-light); margin-bottom: 6px; }
+    .summary-card .s-value { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; }
+
+    /* FILES TAB */
+    .files-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+    .file-card { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--border); overflow: hidden; transition: var(--tr); }
+    .file-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+    .file-card-img { width: 100%; height: 180px; object-fit: cover; display: block; background: #f0f7f1; }
+    .file-card-img-placeholder { width: 100%; height: 130px; background: linear-gradient(135deg, #e8f5e9, #f0f7f1); display: flex; align-items: center; justify-content: center; font-size: 3rem; }
+    .file-card-body { padding: 18px 20px; }
+    .file-type-badge { display: inline-block; padding: 3px 10px; border-radius: 50px; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 10px; }
+    .file-card-title { font-weight: 700; font-size: 0.95rem; margin-bottom: 6px; }
+    .file-card-project { font-size: 0.75rem; color: var(--text-light); margin-bottom: 10px; display: flex; align-items: center; gap: 5px; }
+    .file-card-note { font-size: 0.82rem; color: #444; line-height: 1.6; margin-bottom: 14px; background: #f8faf8; border-radius: 8px; padding: 10px 12px; border-left: 3px solid var(--green); }
+    .file-card-footer { padding: 12px 20px; border-top: 1px solid var(--border); display: flex; gap: 8px; background: #fafcfa; }
+    .file-btn { flex: 1; padding: 9px 10px; border-radius: 50px; font-size: 0.78rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; font-family: 'DM Sans', sans-serif; transition: var(--tr); text-decoration: none; border: 2px solid transparent; }
+    .file-btn-green { background: var(--green); color: #fff; }
+    .file-btn-green:hover { background: #22a838; }
+    .file-btn-outline { background: transparent; color: var(--green); border-color: var(--green); }
+    .file-btn-outline:hover { background: var(--green); color: #fff; }
+    .file-btn-wa { background: #25d366; color: #fff; }
+    .file-btn-wa:hover { background: #20b958; }
+    .file-date { font-size: 0.7rem; color: var(--text-light); margin-top: 2px; }
+
+    /* PAYMENT MODAL */
+    .pay-modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:600; align-items:center; justify-content:center; padding:20px; }
+    .pay-modal.open { display:flex; }
+    .pay-box { background:#fff; border-radius:20px; max-width:420px; width:100%; overflow:hidden; animation: pop-in 0.3s cubic-bezier(.34,1.56,.64,1); }
+    @keyframes pop-in { from{transform:scale(0.85);opacity:0;} to{transform:scale(1);opacity:1;} }
+    .pay-header { background:linear-gradient(135deg,#0a1a0e,#1a8c2e); padding:20px 24px; }
+    .pay-header h3 { color:#fff; font-size:1rem; font-weight:700; margin-bottom:2px; }
+    .pay-header p  { color:rgba(255,255,255,0.6); font-size:0.78rem; }
+    .pay-body { padding:24px; }
+    .pay-summary { background:#f0f7f1; border-radius:12px; padding:16px; margin-bottom:20px; }
+    .pay-summary-row { display:flex; justify-content:space-between; font-size:0.86rem; padding:5px 0; }
+    .pay-summary-row.total { font-weight:700; font-size:1rem; border-top:1px solid #c8e6c9; margin-top:8px; padding-top:12px; }
+    .pay-input-group { margin-bottom:18px; }
+    .pay-input-group label { display:block; font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:#6b7c70; margin-bottom:8px; }
+    .pay-input-group input { width:100%; padding:12px 16px; border:2px solid #e2e8e4; border-radius:10px; font-size:1rem; font-weight:700; font-family:'DM Sans',sans-serif; outline:none; transition:0.2s; }
+    .pay-input-group input:focus { border-color:#1a8c2e; }
+    .pay-now-btn { width:100%; padding:14px; background:linear-gradient(135deg,#1a8c2e,#22a838); color:#fff; border:none; border-radius:50px; font-weight:700; font-size:0.95rem; cursor:pointer; font-family:'DM Sans',sans-serif; display:flex; align-items:center; justify-content:center; gap:10px; transition:0.2s; }
+    .pay-now-btn:hover { background:linear-gradient(135deg,#22a838,#2dc244); transform:scale(1.02); }
+    .pay-now-btn:disabled { opacity:0.6; cursor:not-allowed; transform:none; }
+    .pay-cancel-btn { width:100%; padding:11px; background:transparent; border:2px solid #e2e8e4; color:#6b7c70; border-radius:50px; font-weight:600; font-size:0.85rem; cursor:pointer; font-family:'DM Sans',sans-serif; margin-top:10px; }
+    .pay-cancel-btn:hover { border-color:#e53935; color:#e53935; }
+    .pay-secure { text-align:center; font-size:0.72rem; color:#aaa; margin-top:14px; display:flex; align-items:center; justify-content:center; gap:6px; }
+
+    /* PAYMENT SUCCESS BANNER */
+    .pay-success-banner { display:none; background:linear-gradient(135deg,#0a1a0e,#1a3a12); border-radius:16px; padding:24px; text-align:center; margin-bottom:24px; }
+    .pay-success-banner.show { display:block; animation:pop-in 0.4s ease; }
+    .pay-success-banner .tick { font-size:3rem; margin-bottom:12px; }
+    .pay-success-banner h3 { color:#6ee87b; font-family:'Playfair Display',serif; margin-bottom:6px; }
+    .pay-success-banner p { color:rgba(255,255,255,0.7); font-size:0.85rem; }
+
+  
+    .wa-float { position: fixed; bottom: 24px; right: 24px; z-index: 900; display: flex; flex-direction: column; gap: 12px; }
+    .wa-btn { width: 52px; height: 52px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; color: #fff; box-shadow: 0 4px 16px rgba(0,0,0,0.25); transition: var(--tr); }
+    .wa-btn:hover { transform: scale(1.12); }
+    .wa-btn.wa { background: #25d366; }
+    .wa-btn.call { background: var(--blue); }
+
+    @media(max-width:700px) {
+      .welcome-banner { flex-direction: column; align-items: flex-start; }
+      .projects-grid { grid-template-columns: 1fr; }
+      .files-grid { grid-template-columns: 1fr; }
+      .payment-summary-grid { grid-template-columns: 1fr; }
+      .tab span { display: none; }
+      .tab { padding: 14px 14px; }
+      .portal-body { padding: 20px 16px; }
+      .chip-name { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="portal-header">
+    <div class="header-left">
+      <img src="../images/logo.jpg" alt="Logo" />
+      <div>
+        <div class="header-brand">DADRIS DESIGNERS</div>
+        <div class="header-portal-tag">Client Portal</div>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="welcome-chip">
+        <div class="chip-avatar" id="clientInitial">?</div>
+        <div class="chip-name" id="clientNameDisplay">Loading...</div>
+      </div>
+      <button class="logout-btn" onclick="clientLogout()">
+        <i class="fas fa-sign-out-alt"></i> Logout
+      </button>
+    </div>
+  </header>
+
+  <div class="tab-bar">
+    <div class="tab active" onclick="switchTab('projects', this)"><i class="fas fa-folder-open"></i> <span>My Projects</span></div>
+    <div class="tab" onclick="switchTab('payments', this)"><i class="fas fa-credit-card"></i> <span>Payments</span></div>
+    <div class="tab" onclick="switchTab('files', this)"><i class="fas fa-share-alt"></i> <span>Files &amp; Links</span></div>
+    <div class="tab" onclick="switchTab('profile', this)"><i class="fas fa-user"></i> <span>My Profile</span></div>
+  </div>
+
+  <div class="portal-body">
+
+    <!-- PROJECTS TAB -->
+    <div class="tab-panel active" id="tab-projects">
+      <div class="welcome-banner">
+        <div>
+          <h2 id="welcomeMsg">Welcome back!</h2>
+          <p>Here's the latest status of your design projects — updated in real time.</p>
+        </div>
+        <div class="banner-stats">
+          <div class="banner-stat"><div class="num" id="totalProjects">0</div><div class="lbl">Projects</div></div>
+          <div class="banner-stat"><div class="num" id="ongoingProjects">0</div><div class="lbl">Ongoing</div></div>
+          <div class="banner-stat"><div class="num" id="doneProjects">0</div><div class="lbl">Done</div></div>
+        </div>
+      </div>
+      <div id="projectsGrid" class="projects-grid">
+        <div class="loading-state" style="grid-column:1/-1;"><div class="loading-spinner"></div><p style="color:#6b7c70;font-weight:600;">Loading your projects...</p></div>
+      </div>
+    </div>
+
+    <!-- PAYMENTS TAB -->
+    <div class="tab-panel" id="tab-payments">
+      <div class="pay-success-banner" id="paySuccessBanner">
+        <div class="tick">✅</div>
+        <h3>Payment Received!</h3>
+        <p id="paySuccessMsg">Your payment has been confirmed successfully.</p>
+      </div>
+      <h2 style="font-family:'Playfair Display',serif;margin-bottom:6px;">Payment Summary</h2>
+      <p style="color:var(--text-light);font-size:0.88rem;margin-bottom:28px;">Overview of payments for all your projects.</p>
+      <div id="paymentsContent"><div class="loading-state"><div class="loading-spinner"></div><p style="color:#6b7c70;font-weight:600;">Loading...</p></div></div>
+    </div>
+
+    <!-- FILES & LINKS TAB -->
+    <div class="tab-panel" id="tab-files">
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:24px;flex-wrap:wrap;gap:12px;">
+        <div>
+          <h2 style="font-family:'Playfair Display',serif;margin-bottom:6px;">Files &amp; Links</h2>
+          <p style="color:var(--text-light);font-size:0.88rem;">Completed work, drafts and files sent to you by our team.</p>
+        </div>
+        <div id="filesCount" style="background:#fff;border:1px solid var(--border);border-radius:50px;padding:8px 20px;font-size:0.82rem;font-weight:700;color:var(--green);box-shadow:var(--shadow);">
+          <i class="fas fa-file-alt" style="margin-right:6px;"></i>Loading...
+        </div>
+      </div>
+      <div id="filesGrid" class="files-grid">
+        <div class="loading-state" style="grid-column:1/-1;">
+          <div class="loading-spinner"></div>
+          <p style="color:#6b7c70;font-weight:600;">Loading your files...</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROFILE TAB -->
+    <div class="tab-panel" id="tab-profile">
+      <h2 style="font-family:'Playfair Display',serif;margin-bottom:6px;">My Profile</h2>
+      <p style="color:var(--text-light);font-size:0.88rem;margin-bottom:28px;">Your account information and portal access details.</p>
+      <div id="profileContent" style="max-width:500px;background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:32px;"></div>
+    </div>
+
+  </div>
+
+  <!-- PROJECT DETAIL MODAL -->
+  <div class="modal" id="projectModal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="modalTitle">Project Details</h3>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <!-- PAYMENT MODAL -->
+  <div class="pay-modal" id="payModal">
+    <div class="pay-box">
+      <div class="pay-header">
+        <h3>💳 Make a Payment</h3>
+        <p id="payModalProjectName">Project Name</p>
+      </div>
+      <div class="pay-body">
+        <div class="pay-summary">
+          <div class="pay-summary-row"><span>Total Amount</span><span id="payTotal" style="font-weight:600;">KSh 0</span></div>
+          <div class="pay-summary-row"><span>Already Paid</span><span id="payAlreadyPaid" style="color:#1a8c2e;font-weight:600;">KSh 0</span></div>
+          <div class="pay-summary-row total"><span>Balance Due</span><span id="payBalance" style="color:#e53935;">KSh 0</span></div>
+        </div>
+        <div class="pay-input-group">
+          <label>Amount to Pay (KSh)</label>
+          <input type="number" id="payAmount" placeholder="e.g. 2500" min="1" />
+        </div>
+        <div class="pay-input-group">
+          <label>Your M-Pesa Phone Number</label>
+          <input type="tel" id="payPhone" placeholder="e.g. 0712345678" />
+        </div>
+        <button class="pay-now-btn" id="payNowBtn" onclick="submitPayment()">
+          <i class="fas fa-lock"></i> Pay Securely with PesaPal
+        </button>
+        <button class="pay-cancel-btn" onclick="closePayModal()">Cancel</button>
+        <div class="pay-secure">
+          <i class="fas fa-shield-alt"></i> Secured by PesaPal · M-Pesa · Visa · Mastercard
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FLOATING BUTTONS -->
+  <div class="wa-float">
+    <a href="https://wa.me/254745365756?text=Hello!%20I%20have%20a%20question%20about%20my%20project." target="_blank" class="wa-btn wa"><i class="fab fa-whatsapp"></i></a>
+    <a href="tel:+254745365756" class="wa-btn call"><i class="fas fa-phone"></i></a>
+  </div>
+
+  <script type="module">
+    import { initializeApp }   from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getFirestore, collection, query, where, onSnapshot, orderBy, getDocs, getDoc, doc }
+                                from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCYcrazrmkXJXaRMBUzTZFBOwS2BUxs3QQ",
+      authDomain: "dadris-designers.firebaseapp.com",
+      projectId: "dadris-designers",
+      storageBucket: "dadris-designers.firebasestorage.app",
+      messagingSenderId: "813719033161",
+      appId: "1:813719033161:web:ee55f44da47a7748793698"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db  = getFirestore(app);
+
+    // Auth check
+    const clientId   = sessionStorage.getItem('dadris_client_id');
+    const clientName = sessionStorage.getItem('dadris_client_name');
+    if (!clientId || !clientName) { window.location.href = 'login.html'; }
+
+    // Set header
+    const initials = clientName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0,2);
+    document.getElementById('clientInitial').textContent     = initials;
+    document.getElementById('clientNameDisplay').textContent = clientName;
+    document.getElementById('welcomeMsg').textContent        = `Welcome back, ${clientName.split(' ')[0]}! 👋`;
+
+    let myProjects = [];
+    let myFiles    = [];
+    let clientData = null;
+
+    // Listen to client's projects in real time
+    const projectsQ = query(collection(db, 'projects'), where('clientId', '==', clientId));
+    onSnapshot(projectsQ, snap => {
+      myProjects = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      document.getElementById('totalProjects').textContent   = myProjects.length;
+      document.getElementById('ongoingProjects').textContent = myProjects.filter(p => p.status === 'ongoing').length;
+      document.getElementById('doneProjects').textContent    = myProjects.filter(p => p.status === 'completed').length;
+      renderProjects();
+    });
+
+    // Listen to deliverables in real time
+    const filesQ = query(
+      collection(db, 'deliverables'),
+      where('clientId', '==', clientId)
+    );
+    onSnapshot(filesQ, snap => {
+      // Sort by sentAt descending (newest first)
+      myFiles = snap.docs.map(d => ({ id: d.id, ...d.data() }))
+        .sort((a, b) => {
+          const ta = a.sentAt?.toDate?.() || new Date(0);
+          const tb = b.sentAt?.toDate?.() || new Date(0);
+          return tb - ta;
+        });
+      document.getElementById('filesCount').innerHTML =
+        `<i class="fas fa-file-alt" style="margin-right:6px;"></i>${myFiles.length} file(s) sent`;
+      // Re-render if tab is active
+      if (document.getElementById('tab-files').classList.contains('active')) renderFiles();
+    });
+
+    // Load profile from Firestore
+    const cDoc = await getDoc(doc(db, 'clients', clientId));
+    if (cDoc.exists()) clientData = { id: cDoc.id, ...cDoc.data() };
+
+    // ---- HELPERS ----
+    function statusBadge(s) {
+      const map = { ongoing:'badge-blue', completed:'badge-green', pending:'badge-gray', revision:'badge-yellow' };
+      const lbl = { ongoing:'🔵 Ongoing', completed:'✅ Completed', pending:'⏸ Pending', revision:'🔄 In Revision' };
+      return `<span class="badge ${map[s]||'badge-gray'}">${lbl[s]||s}</span>`;
+    }
+    function payBadge(paid, total) {
+      const p = parseFloat(paid)||0, t = parseFloat(total)||0;
+      if (t > 0 && p >= t) return '<span class="badge badge-green">✅ Fully Paid</span>';
+      if (p > 0)           return '<span class="badge badge-yellow">⏳ Partial Payment</span>';
+      return '<span class="badge badge-red">❌ Payment Pending</span>';
+    }
+
+    // ---- RENDER PROJECTS ----
+    function renderProjects() {
+      const grid = document.getElementById('projectsGrid');
+      if (myProjects.length === 0) {
+        grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;">
+          <div class="icon">🎨</div>
+          <h3>No Projects Yet</h3>
+          <p>Your projects will appear here once our team sets them up. Contact us to get started!</p>
+          <a href="https://wa.me/254745365756" target="_blank" style="display:inline-flex;align-items:center;gap:8px;margin-top:20px;background:#25d366;color:#fff;padding:12px 28px;border-radius:50px;font-weight:700;font-size:0.9rem;">
+            <i class="fab fa-whatsapp"></i> WhatsApp Us
+          </a>
+        </div>`;
+        return;
+      }
+      grid.innerHTML = myProjects.map(p => {
+        const paid = parseFloat(p.paid)||0, total = parseFloat(p.amount)||0;
+        const latestUpdate = p.updates?.length > 0 ? p.updates[p.updates.length - 1] : null;
+        return `
+          <div class="project-card">
+            <div class="project-card-header">
+              <div>
+                <h3>${p.name}</h3>
+                <div class="project-service">${p.service}</div>
+              </div>
+              ${statusBadge(p.status)}
+            </div>
+            <div class="project-card-body">
+              <div class="project-meta">
+                <div class="meta-item"><div class="lbl">Total Amount</div><div class="val" style="color:#1a8c2e;">KSh ${total.toLocaleString()}</div></div>
+                <div class="meta-item"><div class="lbl">Amount Paid</div><div class="val">KSh ${paid.toLocaleString()}</div></div>
+                <div class="meta-item"><div class="lbl">Balance Due</div><div class="val" style="color:${(total-paid)>0?'#e53935':'#1a8c2e'};">KSh ${(total-paid).toLocaleString()}</div></div>
+                <div class="meta-item"><div class="lbl">Deadline</div><div class="val">${p.deadline||'TBA'}</div></div>
+              </div>
+              <div class="progress-section">
+                <div class="progress-label"><span>Project Progress</span><span class="progress-pct">${p.progress||0}%</span></div>
+                <div class="progress-bar"><div class="progress-fill" style="width:${p.progress||0}%;"></div></div>
+              </div>
+              ${latestUpdate ? `<div class="update-box"><div class="update-date">📋 Latest Update — ${latestUpdate.date}</div><div class="update-msg">${latestUpdate.msg}</div></div>` : ''}
+            </div>
+            <div class="project-card-footer">
+              <button class="action-btn filled" onclick="viewProjectDetail('${p.id}')"><i class="fas fa-eye"></i> View Details</button>
+              ${(parseFloat(p.amount)||0) - (parseFloat(p.paid)||0) > 0
+                ? `<button class="action-btn" style="background:linear-gradient(135deg,#1a8c2e,#22a838);color:#fff;border-color:#1a8c2e;" onclick="openPayModal('${p.id}','${p.name}',${parseFloat(p.amount)||0},${parseFloat(p.paid)||0})"><i class="fas fa-credit-card"></i> Pay Now</button>`
+                : `<button class="action-btn" style="border-color:#1a8c2e;color:#1a8c2e;cursor:default;"><i class="fas fa-check-circle"></i> Paid</button>`
+              }
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    // ---- RENDER FILES ----
+    function renderFiles() {
+      const grid = document.getElementById('filesGrid');
+      if (myFiles.length === 0) {
+        grid.innerHTML = `
+          <div class="empty-state" style="grid-column:1/-1;">
+            <div class="icon">📂</div>
+            <h3>No Files Yet</h3>
+            <p>Files, design previews and links shared by our team will appear here. Stay tuned!</p>
+            <a href="https://wa.me/254745365756?text=Hi!%20I'm%20checking%20on%20my%20project%20files." target="_blank"
+               style="display:inline-flex;align-items:center;gap:8px;margin-top:20px;background:#25d366;color:#fff;padding:12px 28px;border-radius:50px;font-weight:700;font-size:0.9rem;">
+              <i class="fab fa-whatsapp"></i> Ask About Your Files
+            </a>
+          </div>`;
+        return;
+      }
+
+      // Type config
+      const typeConfig = {
+        'Final Delivery':  { color:'#1a8c2e', bg:'rgba(26,140,46,0.1)',  icon:'✅' },
+        'Draft / Concept': { color:'#1565c0', bg:'rgba(21,101,192,0.1)', icon:'📝' },
+        'Revision':        { color:'#b45309', bg:'rgba(244,180,0,0.12)', icon:'🔄' },
+        'Reference File':  { color:'#6a1b9a', bg:'rgba(106,27,154,0.1)', icon:'📎' },
+        'Invoice':         { color:'#c62828', bg:'rgba(229,57,53,0.1)',  icon:'💰' },
+      };
+
+      grid.innerHTML = myFiles.map(f => {
+        const proj   = myProjects.find(p => p.id === f.projectId);
+        const date   = f.sentAt?.toDate ? f.sentAt.toDate().toLocaleDateString('en-KE', { day:'numeric', month:'short', year:'numeric' }) : '';
+        const tc     = typeConfig[f.type] || { color:'#6b7c70', bg:'#f0f4f1', icon:'📄' };
+
+        const imgHtml = f.imgUrl
+          ? `<img src="${f.imgUrl}" class="file-card-img" alt="${f.title}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
+             <div class="file-card-img-placeholder" style="display:none;">${tc.icon}</div>`
+          : `<div class="file-card-img-placeholder">${tc.icon}</div>`;
+
+        return `
+          <div class="file-card">
+            ${imgHtml}
+            <div class="file-card-body">
+              <div class="file-type-badge" style="color:${tc.color};background:${tc.bg};">${tc.icon} ${f.type}</div>
+              <div class="file-card-title">${f.title}</div>
+              <div class="file-card-project">
+                <i class="fas fa-folder" style="color:var(--green);"></i>
+                ${proj ? proj.name : 'Your Project'}
+                ${date ? `<span style="margin-left:auto;" class="file-date">📅 ${date}</span>` : ''}
+              </div>
+              ${f.note ? `<div class="file-card-note">${f.note}</div>` : ''}
+            </div>
+            <div class="file-card-footer">
+              ${f.link
+                ? `<a href="${f.link}" target="_blank" class="file-btn file-btn-green">
+                     <i class="fas fa-external-link-alt"></i> Open / Download
+                   </a>`
+                : `<span class="file-btn" style="background:#f0f4f1;color:#6b7c70;cursor:default;">No link attached</span>`
+              }
+              <a href="https://wa.me/254745365756?text=Hi!%20Feedback%20on%20'${encodeURIComponent(f.title)}'%20for%20project%20${encodeURIComponent(proj?.name||'')}"
+                 target="_blank" class="file-btn file-btn-wa" style="flex:0 0 auto;padding:9px 14px;">
+                <i class="fab fa-whatsapp"></i>
+              </a>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    // ---- PROJECT DETAIL ----
+    window.viewProjectDetail = function(id) {
+      const p = myProjects.find(x => x.id === id);
+      if (!p) return;
+      const paid = parseFloat(p.paid)||0, total = parseFloat(p.amount)||0;
+      // Count files for this project
+      const projFiles = myFiles.filter(f => f.projectId === id);
+      document.getElementById('modalTitle').textContent = p.name;
+      document.getElementById('modalBody').innerHTML = `
+        <div style="margin-bottom:20px;display:flex;gap:8px;flex-wrap:wrap;">${statusBadge(p.status)}&nbsp;${payBadge(paid,total)}</div>
+        <div style="background:#f0f7f1;border-radius:12px;padding:20px;margin-bottom:20px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+            <div><div style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#6b7c70;margin-bottom:4px;">Service</div><div style="font-weight:600;">${p.service}</div></div>
+            <div><div style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#6b7c70;margin-bottom:4px;">Deadline</div><div style="font-weight:600;">${p.deadline||'TBA'}</div></div>
+            <div><div style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#6b7c70;margin-bottom:4px;">Total</div><div style="font-weight:700;color:#1a8c2e;font-size:1.15rem;">KSh ${total.toLocaleString()}</div></div>
+            <div><div style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#6b7c70;margin-bottom:4px;">Balance Due</div><div style="font-weight:700;color:${(total-paid)>0?'#e53935':'#1a8c2e'};font-size:1.15rem;">KSh ${(total-paid).toLocaleString()}</div></div>
+          </div>
+        </div>
+        <div style="margin-bottom:20px;">
+          <div style="display:flex;justify-content:space-between;font-size:0.85rem;margin-bottom:6px;"><span style="font-weight:700;">Completion</span><span style="font-weight:700;color:#1a8c2e;">${p.progress||0}%</span></div>
+          <div style="height:12px;background:#e8f5e9;border-radius:50px;overflow:hidden;"><div style="height:100%;width:${p.progress||0}%;background:linear-gradient(90deg,#1a8c2e,#22a838);border-radius:50px;"></div></div>
+        </div>
+        ${p.desc ? `<div style="margin-bottom:20px;"><div style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#6b7c70;margin-bottom:8px;">Description</div><p style="font-size:0.88rem;line-height:1.7;color:#444;">${p.desc}</p></div>` : ''}
+        ${projFiles.length > 0 ? `
+          <div style="margin-bottom:20px;padding:16px;background:#e8f5e9;border-radius:12px;border:1px solid #a5d6a7;">
+            <div style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#1a8c2e;margin-bottom:10px;">📎 Files Sent (${projFiles.length})</div>
+            ${projFiles.map(f => `
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #c8e6c9;gap:8px;">
+                <span style="font-size:0.84rem;font-weight:600;">${f.title}</span>
+                ${f.link ? `<a href="${f.link}" target="_blank" style="font-size:0.75rem;color:#1565c0;font-weight:700;white-space:nowrap;"><i class="fas fa-external-link-alt"></i> Open</a>` : ''}
+              </div>`).join('')}
+          </div>` : ''}
+        <div>
+          <div style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#6b7c70;margin-bottom:12px;">📋 Progress Updates</div>
+          ${(p.updates?.length > 0) ? [...p.updates].reverse().map(u => `
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div><div class="tl-date">${u.date}</div><div class="tl-msg">${u.msg}</div></div>
+            </div>`).join('') : '<p style="color:#6b7c70;font-size:0.88rem;">No updates yet. Check back soon!</p>'}
+        </div>
+        <a href="https://wa.me/254745365756?text=Hi!%20Question%20about%20my%20project:%20${encodeURIComponent(p.name)}" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:8px;margin-top:24px;padding:13px;background:#25d366;color:#fff;border-radius:50px;font-weight:700;font-size:0.88rem;">
+          <i class="fab fa-whatsapp"></i> Ask About This Project
+        </a>`;
+      document.getElementById('projectModal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    };
+
+    window.closeModal = function() {
+      document.getElementById('projectModal').classList.remove('open');
+      document.body.style.overflow = '';
+    };
+    document.getElementById('projectModal').addEventListener('click', e => { if (e.target === document.getElementById('projectModal')) closeModal(); });
+
+    // ---- PAYMENTS TAB ----
+    function renderPayments() {
+      const el = document.getElementById('paymentsContent');
+      if (myProjects.length === 0) {
+        el.innerHTML = `<div class="empty-state"><div class="icon">💳</div><h3>No Payment Data</h3><p>Payment info will appear once you have active projects.</p></div>`;
+        return;
+      }
+      let totalAmt = 0, totalPaid = 0;
+      myProjects.forEach(p => { totalAmt += parseFloat(p.amount)||0; totalPaid += parseFloat(p.paid)||0; });
+      const balance = totalAmt - totalPaid;
+      el.innerHTML = `
+        <div class="payment-summary-grid">
+          <div class="summary-card"><div class="s-label">Total Value</div><div class="s-value" style="color:#1a1a1a;">KSh ${totalAmt.toLocaleString()}</div></div>
+          <div class="summary-card"><div class="s-label">Total Paid</div><div class="s-value" style="color:#1a8c2e;">KSh ${totalPaid.toLocaleString()}</div></div>
+          <div class="summary-card"><div class="s-label">Balance Due</div><div class="s-value" style="color:${balance>0?'#e53935':'#1a8c2e'};">KSh ${balance.toLocaleString()}</div></div>
+        </div>
+        ${myProjects.map(p => {
+          const pd = parseFloat(p.paid)||0, tt = parseFloat(p.amount)||0;
+          const bal = tt - pd, pct = tt > 0 ? Math.round(pd/tt*100) : 0;
+          return `
+            <div style="background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid var(--border);overflow:hidden;margin-bottom:16px;">
+              <div style="padding:18px 22px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
+                <div><div style="font-weight:700;">${p.name}</div><div style="font-size:0.78rem;color:var(--text-light);margin-top:2px;">${p.service}</div></div>
+                ${payBadge(pd, tt)}
+              </div>
+              <div style="padding:20px 22px;">
+                <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);font-size:0.88rem;"><span style="color:var(--text-light);font-weight:600;">Total Amount</span><span style="font-weight:700;">KSh ${tt.toLocaleString()}</span></div>
+                <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);font-size:0.88rem;"><span style="color:var(--text-light);font-weight:600;">Amount Paid</span><span style="font-weight:700;color:#1a8c2e;">KSh ${pd.toLocaleString()}</span></div>
+                <div style="display:flex;justify-content:space-between;padding:10px 0;font-size:0.88rem;"><span style="color:var(--text-light);font-weight:600;">Balance Due</span><span style="font-weight:700;color:${bal>0?'#e53935':'#1a8c2e'};">KSh ${bal.toLocaleString()}</span></div>
+                <div style="margin-top:14px;"><div style="display:flex;justify-content:space-between;font-size:0.8rem;margin-bottom:6px;"><span style="color:var(--text-light);">Payment Progress</span><span style="font-weight:700;color:#1a8c2e;">${pct}%</span></div><div style="height:8px;background:#e8f5e9;border-radius:50px;overflow:hidden;"><div style="height:100%;width:${pct}%;background:linear-gradient(90deg,#1a8c2e,#22a838);border-radius:50px;"></div></div></div>
+                ${bal > 0 ? `<button onclick="openPayModal('${p.id}','${p.name}',${tt},${pd})" style="display:inline-flex;align-items:center;gap:8px;margin-top:14px;padding:10px 22px;background:linear-gradient(135deg,#1a8c2e,#22a838);color:#fff;border-radius:50px;font-weight:700;font-size:0.82rem;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;"><i class="fas fa-credit-card"></i> Pay Now</button>` : '<div style="margin-top:14px;padding:10px 16px;background:#e8f5e9;border-radius:50px;color:#1a8c2e;font-weight:700;font-size:0.82rem;display:inline-flex;align-items:center;gap:8px;"><i class="fas fa-check-circle"></i> Fully Paid</div>'}
+              </div>
+            </div>`;
+        }).join('')}`;
+    }
+
+    // ---- PROFILE TAB ----
+    function renderProfile() {
+      const el = document.getElementById('profileContent');
+      const c = clientData;
+      if (!c) { el.innerHTML = '<p style="color:#6b7c70;">Loading profile...</p>'; return; }
+      const joinDate = c.createdAt?.toDate ? c.createdAt.toDate().toLocaleDateString('en-KE', {year:'numeric',month:'long'}) : 'N/A';
+      el.innerHTML = `
+        <div style="width:72px;height:72px;background:linear-gradient(135deg,#1a8c2e,#0d4f1f);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2rem;color:#fff;font-weight:700;margin-bottom:16px;">${initials}</div>
+        <div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;margin-bottom:4px;">${c.name}</div>
+        <div style="color:var(--text-light);font-size:0.85rem;margin-bottom:24px;">${c.company||'Individual Client'}</div>
+        ${[
+          ['fa-envelope','Email', c.email],
+          ['fa-phone','Phone', c.phone],
+          ['fa-user','Username', c.username],
+          ['fa-calendar','Client Since', joinDate],
+          ['fa-folder','Total Projects', myProjects.length + ' project(s)'],
+          ['fa-file-alt','Files Received', myFiles.length + ' file(s)'],
+        ].map(([icon,label,val]) => `
+          <div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);">
+            <i class="fas ${icon}" style="width:20px;color:#1a8c2e;font-size:0.95rem;"></i>
+            <div><div style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-light);">${label}</div><div style="font-size:0.9rem;font-weight:600;margin-top:2px;">${val}</div></div>
+          </div>`).join('')}
+        <a href="https://wa.me/254745365756" target="_blank" style="display:inline-flex;align-items:center;gap:8px;margin-top:24px;padding:12px 24px;background:#25d366;color:#fff;border-radius:50px;font-weight:700;font-size:0.85rem;">
+          <i class="fab fa-whatsapp"></i> Contact Your Designer
+        </a>`;
+    }
+
+    // ---- TAB SWITCH ----
+    window.switchTab = function(name, el) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      el.classList.add('active');
+      document.getElementById('tab-' + name).classList.add('active');
+      if (name === 'payments') renderPayments();
+      if (name === 'files')    renderFiles();
+      if (name === 'profile')  renderProfile();
+    };
+
+    // ---- PESAPAL PAYMENT ----
+    const RENDER_URL = 'https://dadris-payment-server.onrender.com';
+
+    let activePayProject = null;
+
+    window.openPayModal = function(projectId, projectName, total, paid) {
+      const bal = total - paid;
+      activePayProject = { projectId, projectName, total, paid, balance: bal };
+      document.getElementById('payModalProjectName').textContent = projectName;
+      document.getElementById('payTotal').textContent        = 'KSh ' + total.toLocaleString();
+      document.getElementById('payAlreadyPaid').textContent  = 'KSh ' + paid.toLocaleString();
+      document.getElementById('payBalance').textContent      = 'KSh ' + bal.toLocaleString();
+      document.getElementById('payAmount').value             = bal;
+      document.getElementById('payPhone').value              = clientData?.phone || '';
+      document.getElementById('payModal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    };
+
+    window.closePayModal = function() {
+      document.getElementById('payModal').classList.remove('open');
+      document.body.style.overflow = '';
+      activePayProject = null;
+    };
+
+    window.submitPayment = async function() {
+      if (!activePayProject) return;
+      const amount = parseFloat(document.getElementById('payAmount').value);
+      const phone  = document.getElementById('payPhone').value.trim();
+
+      if (!amount || amount < 1) {
+        alert('Please enter a valid amount.'); return;
+      }
+      if (!phone || phone.length < 10) {
+        alert('Please enter your M-Pesa phone number.'); return;
+      }
+
+      const btn = document.getElementById('payNowBtn');
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connecting to PesaPal...';
+
+      try {
+        const res = await fetch(`${RENDER_URL}/pesapal/pay`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            projectId:   activePayProject.projectId,
+            clientId:    clientId,
+            clientName:  clientName,
+            clientEmail: clientData?.email || '',
+            clientPhone: phone,
+            amount:      amount,
+            description: `Payment for ${activePayProject.projectName} — Dadris Designers`,
+          })
+        });
+
+        const data = await res.json();
+
+        if (data.redirect_url) {
+          // Redirect to PesaPal payment page
+          window.location.href = data.redirect_url;
+        } else {
+          throw new Error(data.error || 'Payment initiation failed');
+        }
+
+      } catch (err) {
+        alert('Payment failed: ' + err.message + '\n\nPlease try again or contact us on WhatsApp.');
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-lock"></i> Pay Securely with PesaPal';
+      }
+    };
+
+    // Close pay modal on backdrop click
+    document.getElementById('payModal').addEventListener('click', e => {
+      if (e.target === document.getElementById('payModal')) closePayModal();
+    });
+
+    // ---- Check for payment return from PesaPal ----
+    const urlParams = new URLSearchParams(window.location.search);
+    const paymentStatus = urlParams.get('payment');
+    const paymentAmount = urlParams.get('amount');
+    if (paymentStatus) {
+      // Switch to payments tab
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      document.querySelector('.tab:nth-child(2)').classList.add('active');
+      document.getElementById('tab-payments').classList.add('active');
+
+      const banner = document.getElementById('paySuccessBanner');
+      const msg    = document.getElementById('paySuccessMsg');
+      if (paymentStatus === 'success') {
+        banner.classList.add('show');
+        msg.textContent = `KSh ${parseFloat(paymentAmount||0).toLocaleString()} received successfully. Your project balance has been updated.`;
+      } else if (paymentStatus === 'pending') {
+        banner.style.background = 'linear-gradient(135deg,#1a2a3a,#1565c0)';
+        banner.classList.add('show');
+        banner.querySelector('.tick').textContent = '⏳';
+        banner.querySelector('h3').style.color = '#90caf9';
+        banner.querySelector('h3').textContent = 'Payment Pending';
+        msg.textContent = 'Your payment is being processed. It will reflect shortly.';
+      }
+      // Clean URL
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+
+    // ---- LOGOUT ----
+    window.clientLogout = function() {
+      sessionStorage.clear();
+      window.location.href = 'login.html';
+    };
+  </script>
+</body>
+</html>
