@@ -138,7 +138,37 @@
     .file-btn-wa:hover { background: #20b958; }
     .file-date { font-size: 0.7rem; color: var(--text-light); margin-top: 2px; }
 
-    /* FLOATING BTNS */
+    /* PAYMENT MODAL */
+    .pay-modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:600; align-items:center; justify-content:center; padding:20px; }
+    .pay-modal.open { display:flex; }
+    .pay-box { background:#fff; border-radius:20px; max-width:420px; width:100%; overflow:hidden; animation: pop-in 0.3s cubic-bezier(.34,1.56,.64,1); }
+    @keyframes pop-in { from{transform:scale(0.85);opacity:0;} to{transform:scale(1);opacity:1;} }
+    .pay-header { background:linear-gradient(135deg,#0a1a0e,#1a8c2e); padding:20px 24px; }
+    .pay-header h3 { color:#fff; font-size:1rem; font-weight:700; margin-bottom:2px; }
+    .pay-header p  { color:rgba(255,255,255,0.6); font-size:0.78rem; }
+    .pay-body { padding:24px; }
+    .pay-summary { background:#f0f7f1; border-radius:12px; padding:16px; margin-bottom:20px; }
+    .pay-summary-row { display:flex; justify-content:space-between; font-size:0.86rem; padding:5px 0; }
+    .pay-summary-row.total { font-weight:700; font-size:1rem; border-top:1px solid #c8e6c9; margin-top:8px; padding-top:12px; }
+    .pay-input-group { margin-bottom:18px; }
+    .pay-input-group label { display:block; font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:#6b7c70; margin-bottom:8px; }
+    .pay-input-group input { width:100%; padding:12px 16px; border:2px solid #e2e8e4; border-radius:10px; font-size:1rem; font-weight:700; font-family:'DM Sans',sans-serif; outline:none; transition:0.2s; }
+    .pay-input-group input:focus { border-color:#1a8c2e; }
+    .pay-now-btn { width:100%; padding:14px; background:linear-gradient(135deg,#1a8c2e,#22a838); color:#fff; border:none; border-radius:50px; font-weight:700; font-size:0.95rem; cursor:pointer; font-family:'DM Sans',sans-serif; display:flex; align-items:center; justify-content:center; gap:10px; transition:0.2s; }
+    .pay-now-btn:hover { background:linear-gradient(135deg,#22a838,#2dc244); transform:scale(1.02); }
+    .pay-now-btn:disabled { opacity:0.6; cursor:not-allowed; transform:none; }
+    .pay-cancel-btn { width:100%; padding:11px; background:transparent; border:2px solid #e2e8e4; color:#6b7c70; border-radius:50px; font-weight:600; font-size:0.85rem; cursor:pointer; font-family:'DM Sans',sans-serif; margin-top:10px; }
+    .pay-cancel-btn:hover { border-color:#e53935; color:#e53935; }
+    .pay-secure { text-align:center; font-size:0.72rem; color:#aaa; margin-top:14px; display:flex; align-items:center; justify-content:center; gap:6px; }
+
+    /* PAYMENT SUCCESS BANNER */
+    .pay-success-banner { display:none; background:linear-gradient(135deg,#0a1a0e,#1a3a12); border-radius:16px; padding:24px; text-align:center; margin-bottom:24px; }
+    .pay-success-banner.show { display:block; animation:pop-in 0.4s ease; }
+    .pay-success-banner .tick { font-size:3rem; margin-bottom:12px; }
+    .pay-success-banner h3 { color:#6ee87b; font-family:'Playfair Display',serif; margin-bottom:6px; }
+    .pay-success-banner p { color:rgba(255,255,255,0.7); font-size:0.85rem; }
+
+  
     .wa-float { position: fixed; bottom: 24px; right: 24px; z-index: 900; display: flex; flex-direction: column; gap: 12px; }
     .wa-btn { width: 52px; height: 52px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; color: #fff; box-shadow: 0 4px 16px rgba(0,0,0,0.25); transition: var(--tr); }
     .wa-btn:hover { transform: scale(1.12); }
@@ -207,6 +237,11 @@
 
     <!-- PAYMENTS TAB -->
     <div class="tab-panel" id="tab-payments">
+      <div class="pay-success-banner" id="paySuccessBanner">
+        <div class="tick">✅</div>
+        <h3>Payment Received!</h3>
+        <p id="paySuccessMsg">Your payment has been confirmed successfully.</p>
+      </div>
       <h2 style="font-family:'Playfair Display',serif;margin-bottom:6px;">Payment Summary</h2>
       <p style="color:var(--text-light);font-size:0.88rem;margin-bottom:28px;">Overview of payments for all your projects.</p>
       <div id="paymentsContent"><div class="loading-state"><div class="loading-spinner"></div><p style="color:#6b7c70;font-weight:600;">Loading...</p></div></div>
@@ -248,6 +283,38 @@
         <button class="modal-close" onclick="closeModal()">✕</button>
       </div>
       <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <!-- PAYMENT MODAL -->
+  <div class="pay-modal" id="payModal">
+    <div class="pay-box">
+      <div class="pay-header">
+        <h3>💳 Make a Payment</h3>
+        <p id="payModalProjectName">Project Name</p>
+      </div>
+      <div class="pay-body">
+        <div class="pay-summary">
+          <div class="pay-summary-row"><span>Total Amount</span><span id="payTotal" style="font-weight:600;">KSh 0</span></div>
+          <div class="pay-summary-row"><span>Already Paid</span><span id="payAlreadyPaid" style="color:#1a8c2e;font-weight:600;">KSh 0</span></div>
+          <div class="pay-summary-row total"><span>Balance Due</span><span id="payBalance" style="color:#e53935;">KSh 0</span></div>
+        </div>
+        <div class="pay-input-group">
+          <label>Amount to Pay (KSh)</label>
+          <input type="number" id="payAmount" placeholder="e.g. 2500" min="1" />
+        </div>
+        <div class="pay-input-group">
+          <label>Your M-Pesa Phone Number</label>
+          <input type="tel" id="payPhone" placeholder="e.g. 0712345678" />
+        </div>
+        <button class="pay-now-btn" id="payNowBtn" onclick="submitPayment()">
+          <i class="fas fa-lock"></i> Pay Securely with PesaPal
+        </button>
+        <button class="pay-cancel-btn" onclick="closePayModal()">Cancel</button>
+        <div class="pay-secure">
+          <i class="fas fa-shield-alt"></i> Secured by PesaPal · M-Pesa · Visa · Mastercard
+        </div>
+      </div>
     </div>
   </div>
 
@@ -376,7 +443,10 @@
             </div>
             <div class="project-card-footer">
               <button class="action-btn filled" onclick="viewProjectDetail('${p.id}')"><i class="fas fa-eye"></i> View Details</button>
-              <a href="https://wa.me/254745365756?text=Hi!%20Question%20about%20my%20project:%20${encodeURIComponent(p.name)}" target="_blank" class="action-btn"><i class="fab fa-whatsapp"></i> Ask Us</a>
+              ${(parseFloat(p.amount)||0) - (parseFloat(p.paid)||0) > 0
+                ? `<button class="action-btn" style="background:linear-gradient(135deg,#1a8c2e,#22a838);color:#fff;border-color:#1a8c2e;" onclick="openPayModal('${p.id}','${p.name}',${parseFloat(p.amount)||0},${parseFloat(p.paid)||0})"><i class="fas fa-credit-card"></i> Pay Now</button>`
+                : `<button class="action-btn" style="border-color:#1a8c2e;color:#1a8c2e;cursor:default;"><i class="fas fa-check-circle"></i> Paid</button>`
+              }
             </div>
           </div>`;
       }).join('');
@@ -530,7 +600,7 @@
                 <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);font-size:0.88rem;"><span style="color:var(--text-light);font-weight:600;">Amount Paid</span><span style="font-weight:700;color:#1a8c2e;">KSh ${pd.toLocaleString()}</span></div>
                 <div style="display:flex;justify-content:space-between;padding:10px 0;font-size:0.88rem;"><span style="color:var(--text-light);font-weight:600;">Balance Due</span><span style="font-weight:700;color:${bal>0?'#e53935':'#1a8c2e'};">KSh ${bal.toLocaleString()}</span></div>
                 <div style="margin-top:14px;"><div style="display:flex;justify-content:space-between;font-size:0.8rem;margin-bottom:6px;"><span style="color:var(--text-light);">Payment Progress</span><span style="font-weight:700;color:#1a8c2e;">${pct}%</span></div><div style="height:8px;background:#e8f5e9;border-radius:50px;overflow:hidden;"><div style="height:100%;width:${pct}%;background:linear-gradient(90deg,#1a8c2e,#22a838);border-radius:50px;"></div></div></div>
-                ${bal > 0 ? `<a href="https://wa.me/254745365756?text=Hi!%20I'd%20like%20to%20pay%20for%20project:%20${encodeURIComponent(p.name)}" target="_blank" style="display:inline-flex;align-items:center;gap:8px;margin-top:14px;padding:10px 22px;background:#25d366;color:#fff;border-radius:50px;font-weight:700;font-size:0.82rem;"><i class="fab fa-whatsapp"></i> Pay via WhatsApp</a>` : ''}
+                ${bal > 0 ? `<button onclick="openPayModal('${p.id}','${p.name}',${tt},${pd})" style="display:inline-flex;align-items:center;gap:8px;margin-top:14px;padding:10px 22px;background:linear-gradient(135deg,#1a8c2e,#22a838);color:#fff;border-radius:50px;font-weight:700;font-size:0.82rem;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;"><i class="fas fa-credit-card"></i> Pay Now</button>` : '<div style="margin-top:14px;padding:10px 16px;background:#e8f5e9;border-radius:50px;color:#1a8c2e;font-weight:700;font-size:0.82rem;display:inline-flex;align-items:center;gap:8px;"><i class="fas fa-check-circle"></i> Fully Paid</div>'}
               </div>
             </div>`;
         }).join('')}`;
@@ -573,6 +643,110 @@
       if (name === 'files')    renderFiles();
       if (name === 'profile')  renderProfile();
     };
+
+    // ---- PESAPAL PAYMENT ----
+    const RENDER_URL = 'https://dadris-payment-server.onrender.com';
+
+    let activePayProject = null;
+
+    window.openPayModal = function(projectId, projectName, total, paid) {
+      const bal = total - paid;
+      activePayProject = { projectId, projectName, total, paid, balance: bal };
+      document.getElementById('payModalProjectName').textContent = projectName;
+      document.getElementById('payTotal').textContent        = 'KSh ' + total.toLocaleString();
+      document.getElementById('payAlreadyPaid').textContent  = 'KSh ' + paid.toLocaleString();
+      document.getElementById('payBalance').textContent      = 'KSh ' + bal.toLocaleString();
+      document.getElementById('payAmount').value             = bal;
+      document.getElementById('payPhone').value              = clientData?.phone || '';
+      document.getElementById('payModal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    };
+
+    window.closePayModal = function() {
+      document.getElementById('payModal').classList.remove('open');
+      document.body.style.overflow = '';
+      activePayProject = null;
+    };
+
+    window.submitPayment = async function() {
+      if (!activePayProject) return;
+      const amount = parseFloat(document.getElementById('payAmount').value);
+      const phone  = document.getElementById('payPhone').value.trim();
+
+      if (!amount || amount < 1) {
+        alert('Please enter a valid amount.'); return;
+      }
+      if (!phone || phone.length < 10) {
+        alert('Please enter your M-Pesa phone number.'); return;
+      }
+
+      const btn = document.getElementById('payNowBtn');
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connecting to PesaPal...';
+
+      try {
+        const res = await fetch(`${RENDER_URL}/pesapal/pay`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            projectId:   activePayProject.projectId,
+            clientId:    clientId,
+            clientName:  clientName,
+            clientEmail: clientData?.email || '',
+            clientPhone: phone,
+            amount:      amount,
+            description: `Payment for ${activePayProject.projectName} — Dadris Designers`,
+          })
+        });
+
+        const data = await res.json();
+
+        if (data.redirect_url) {
+          // Redirect to PesaPal payment page
+          window.location.href = data.redirect_url;
+        } else {
+          throw new Error(data.error || 'Payment initiation failed');
+        }
+
+      } catch (err) {
+        alert('Payment failed: ' + err.message + '\n\nPlease try again or contact us on WhatsApp.');
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-lock"></i> Pay Securely with PesaPal';
+      }
+    };
+
+    // Close pay modal on backdrop click
+    document.getElementById('payModal').addEventListener('click', e => {
+      if (e.target === document.getElementById('payModal')) closePayModal();
+    });
+
+    // ---- Check for payment return from PesaPal ----
+    const urlParams = new URLSearchParams(window.location.search);
+    const paymentStatus = urlParams.get('payment');
+    const paymentAmount = urlParams.get('amount');
+    if (paymentStatus) {
+      // Switch to payments tab
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      document.querySelector('.tab:nth-child(2)').classList.add('active');
+      document.getElementById('tab-payments').classList.add('active');
+
+      const banner = document.getElementById('paySuccessBanner');
+      const msg    = document.getElementById('paySuccessMsg');
+      if (paymentStatus === 'success') {
+        banner.classList.add('show');
+        msg.textContent = `KSh ${parseFloat(paymentAmount||0).toLocaleString()} received successfully. Your project balance has been updated.`;
+      } else if (paymentStatus === 'pending') {
+        banner.style.background = 'linear-gradient(135deg,#1a2a3a,#1565c0)';
+        banner.classList.add('show');
+        banner.querySelector('.tick').textContent = '⏳';
+        banner.querySelector('h3').style.color = '#90caf9';
+        banner.querySelector('h3').textContent = 'Payment Pending';
+        msg.textContent = 'Your payment is being processed. It will reflect shortly.';
+      }
+      // Clean URL
+      window.history.replaceState({}, '', window.location.pathname);
+    }
 
     // ---- LOGOUT ----
     window.clientLogout = function() {
