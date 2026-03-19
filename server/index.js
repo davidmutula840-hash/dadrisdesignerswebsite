@@ -2,7 +2,6 @@ require('dotenv').config();
 const express = require('express');
 const cors    = require('cors');
 const axios   = require('axios');
-const admin   = require('firebase-admin');
 
 const app  = express();
 const PORT = process.env.PORT || 3000;
@@ -21,50 +20,53 @@ app.use(cors({
 }));
 app.use(express.json());
 
-// ---- Firebase Admin Init ----
-if (!admin.apps.length) {
-  try {
-    let privateKey = process.env.FIREBASE_PRIVATE_KEY || '';
-
-    // Strip surrounding quotes if any
-    if (privateKey.startsWith('"')) privateKey = privateKey.slice(1);
-    if (privateKey.endsWith('"'))   privateKey = privateKey.slice(0, -1);
-
-    // Replace literal \n with real newlines
-    privateKey = privateKey.replace(/\\n/g, '\n');
-
-    // If still no newlines, try to reconstruct from base64 sections
-    if (!privateKey.includes('\n')) {
-      privateKey = privateKey
-        .replace('-----BEGIN PRIVATE KEY-----', '-----BEGIN PRIVATE KEY-----\n')
-        .replace('-----END PRIVATE KEY-----', '\n-----END PRIVATE KEY-----\n');
-    }
-
-    console.log('[Firebase] Key starts with:', privateKey.slice(0, 40));
-
-    admin.initializeApp({
-      credential: admin.credential.cert({
-        projectId:   process.env.FIREBASE_PROJECT_ID,
-        clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-        privateKey:  privateKey,
-      }),
-    });
-    console.log('[Firebase] Admin initialized ✅');
-  } catch (e) {
-    console.error('[Firebase] Init failed:', e.message);
-  }
-}
-const db = admin.firestore();
-
 // ---- Daraja Config ----
 const DARAJA_BASE = process.env.MPESA_ENV === 'live'
   ? 'https://api.safaricom.co.ke'
   : 'https://sandbox.safaricom.co.ke';
 
-const SHORTCODE = process.env.MPESA_SHORTCODE || '174379';
-const PASSKEY   = process.env.MPESA_PASSKEY   || 'bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919';
+const SHORTCODE = process.env.MPESA_SHORTCODE  || '174379';
+const PASSKEY   = process.env.MPESA_PASSKEY    || 'bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919';
 const CALLBACK  = process.env.MPESA_CALLBACK_URL || 'https://dadris-payment-server.onrender.com/mpesa/callback';
 
+// ---- Firebase REST API (no Admin SDK needed) ----
+const FIREBASE_PROJECT = process.env.FIREBASE_PROJECT_ID || 'dadris-designers';
+const FIREBASE_API_KEY = process.env.FIREBASE_API_KEY; // Web API key from Firebase project settings
+
+async function firestoreUpdate(projectId, amountPaid, mpesaRef) {
+  try {
+    // Get current project data
+    const getUrl = `https://firestore.googleapis.com/v1/projects/${FIREBASE_PROJECT}/databases/(default)/documents/projects/${projectId}?key=${FIREBASE_API_KEY}`;
+    const getRes = await axios.get(getUrl);
+    const fields = getRes.data.fields || {};
+
+    const currentPaid = parseFloat(fields.paid?.doubleValue || fields.paid?.integerValue || 0);
+    const total       = parseFloat(fields.amount?.doubleValue || fields.amount?.integerValue || 0);
+    const newPaid     = currentPaid + parseFloat(amountPaid || 0);
+    const isPaid      = newPaid >= total;
+
+    // Patch the project
+    const patchUrl = `https://firestore.googleapis.com/v1/projects/${FIREBASE_PROJECT}/databases/(default)/documents/projects/${projectId}?key=${FIREBASE_API_KEY}&updateMask.fieldPaths=paid&updateMask.fieldPaths=paymentStatus&updateMask.fieldPaths=lastMpesaRef`;
+    await axios.patch(patchUrl, {
+      fields: {
+        paid:          { doubleValue: newPaid },
+        paymentStatus: { stringValue: isPaid ? 'paid' : 'partial' },
+        lastMpesaRef:  { stringValue: mpesaRef || '' },
+      }
+    });
+
+    console.log(`[Firebase] ✅ Project ${projectId} updated — paid: ${newPaid}`);
+    return true;
+  } catch (e) {
+    console.error('[Firebase] Update failed:', e.response?.data?.error?.message || e.message);
+    return false;
+  }
+}
+
+// ---- Simple in-memory payment store (for status polling) ----
+const payments = new Map();
+
+// ---- Daraja Helpers ----
 async function getDarajaToken() {
   const auth = Buffer.from(`${process.env.MPESA_CONSUMER_KEY}:${process.env.MPESA_CONSUMER_SECRET}`).toString('base64');
   const res  = await axios.get(`${DARAJA_BASE}/oauth/v1/generate?grant_type=client_credentials`, {
@@ -87,7 +89,11 @@ function formatPhone(phone) {
   return '254' + phone;
 }
 
-// ---- Test Route: Check Daraja Token ----
+// ---- Routes ----
+app.get('/', (req, res) => {
+  res.json({ status: 'Dadris Payment Server ✅', env: process.env.MPESA_ENV || 'sandbox' });
+});
+
 app.get('/test', async (req, res) => {
   try {
     const token = await getDarajaToken();
@@ -97,17 +103,13 @@ app.get('/test', async (req, res) => {
   }
 });
 
-// ---- Health Check ----
-app.get('/', (req, res) => {
-  res.json({ status: 'Dadris Payment Server running', env: process.env.MPESA_ENV || 'sandbox' });
-});
-
 // ---- STK Push ----
 app.post('/mpesa/pay', async (req, res) => {
   const { projectId, clientId, clientName, clientPhone, amount } = req.body;
   if (!projectId || !amount || !clientPhone) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
+
   const phone = formatPhone(clientPhone);
   const amt   = Math.ceil(parseFloat(amount));
   if (amt < 1) return res.status(400).json({ error: 'Amount must be at least KSh 1' });
@@ -115,6 +117,7 @@ app.post('/mpesa/pay', async (req, res) => {
   try {
     const token = await getDarajaToken();
     const { timestamp, password } = getTimestampAndPassword();
+
     const payload = {
       BusinessShortCode: SHORTCODE,
       Password:          password,
@@ -129,29 +132,25 @@ app.post('/mpesa/pay', async (req, res) => {
       TransactionDesc:   'Design Services Payment',
     };
 
-    const response = await axios.post(`${DARAJA_BASE}/mpesa/stkpush/v1/processrequest`, payload, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
+    const response = await axios.post(
+      `${DARAJA_BASE}/mpesa/stkpush/v1/processrequest`,
+      payload,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
 
     const { CheckoutRequestID, ResponseCode, CustomerMessage } = response.data;
     console.log('[Daraja] STK Response:', JSON.stringify(response.data));
 
     if (ResponseCode === '0') {
-      // Save to Firestore (non-blocking — don't fail payment if Firebase has issues)
-      db.collection('payments').add({
-        projectId, clientId, clientName: clientName || '', phone, amount: amt,
-        checkoutRequestId: CheckoutRequestID, status: 'PENDING',
-        createdAt: admin.firestore.FieldValue.serverTimestamp(),
-      }).catch(e => console.error('[Firebase] Save payment failed:', e.message));
-
+      // Store in memory for polling
+      payments.set(CheckoutRequestID, { projectId, clientId, amount: amt, status: 'PENDING' });
       console.log(`[Daraja] STK Push sent to ${phone} KSh ${amt}`);
       res.json({ success: true, checkoutRequestId: CheckoutRequestID, message: CustomerMessage || 'Check your phone and enter M-Pesa PIN.' });
     } else {
       res.status(400).json({ error: response.data.ResponseDescription || 'STK Push failed' });
     }
   } catch (err) {
-    const errData = err.response?.data || err.message;
-    console.error('[Daraja] Pay error:', JSON.stringify(errData));
+    console.error('[Daraja] Pay error:', JSON.stringify(err.response?.data || err.message));
     res.status(500).json({ error: 'Payment initiation failed. Please try again.' });
   }
 });
@@ -159,52 +158,28 @@ app.post('/mpesa/pay', async (req, res) => {
 // ---- M-Pesa Callback ----
 app.post('/mpesa/callback', async (req, res) => {
   try {
-    const body    = req.body?.Body?.stkCallback;
-    const code    = body?.ResultCode;
-    const checkId = body?.CheckoutRequestID;
-    const amount  = body?.CallbackMetadata?.Item?.find(i => i.Name === 'Amount')?.Value;
+    const body     = req.body?.Body?.stkCallback;
+    const code     = body?.ResultCode;
+    const checkId  = body?.CheckoutRequestID;
+    const amount   = body?.CallbackMetadata?.Item?.find(i => i.Name === 'Amount')?.Value;
     const mpesaRef = body?.CallbackMetadata?.Item?.find(i => i.Name === 'MpesaReceiptNumber')?.Value;
 
-    console.log(`[Daraja] Callback — CheckoutID: ${checkId}, Code: ${code}`);
+    console.log(`[Daraja] Callback — CheckoutID: ${checkId}, Code: ${code}, Amount: ${amount}, Ref: ${mpesaRef}`);
 
     if (code === 0 && checkId) {
-      // Update Firebase (wrapped in try-catch to not fail the callback response)
-      try {
-        const snap = await db.collection('payments').where('checkoutRequestId', '==', checkId).get();
-        if (!snap.empty) {
-          const payDoc = snap.docs[0];
-          const { projectId } = payDoc.data();
-          if (projectId) {
-            const projRef  = db.collection('projects').doc(projectId);
-            const projSnap = await projRef.get();
-            if (projSnap.exists) {
-              const currentPaid = parseFloat(projSnap.data().paid) || 0;
-              const newPaid     = currentPaid + parseFloat(amount || 0);
-              const total       = parseFloat(projSnap.data().amount) || 0;
-              await projRef.update({
-                paid:          newPaid,
-                paymentStatus: newPaid >= total ? 'paid' : 'partial',
-                lastPayment:   admin.firestore.FieldValue.serverTimestamp(),
-                lastMpesaRef:  mpesaRef || '',
-              });
-              console.log(`[Daraja] ✅ Project ${projectId} updated — KSh ${amount} paid`);
-            }
-          }
-          await payDoc.ref.update({ status: 'COMPLETED', mpesaRef: mpesaRef || '', paidAt: admin.firestore.FieldValue.serverTimestamp() });
-        }
-      } catch (fbErr) {
-        console.error('[Firebase] Callback update failed:', fbErr.message);
+      const payment = payments.get(checkId);
+      if (payment) {
+        payments.set(checkId, { ...payment, status: 'COMPLETED', mpesaRef });
+        // Update Firebase via REST
+        await firestoreUpdate(payment.projectId, amount, mpesaRef);
       }
     } else {
-      try {
-        if (checkId) {
-          const snap = await db.collection('payments').where('checkoutRequestId', '==', checkId).get();
-          snap.forEach(doc => doc.ref.update({ status: 'FAILED' }));
-        }
-      } catch (fbErr) {
-        console.error('[Firebase] Failed status update error:', fbErr.message);
+      if (checkId && payments.has(checkId)) {
+        const payment = payments.get(checkId);
+        payments.set(checkId, { ...payment, status: 'FAILED' });
       }
     }
+
     res.json({ ResultCode: 0, ResultDesc: 'Accepted' });
   } catch (err) {
     console.error('[Daraja] Callback error:', err.message);
@@ -212,16 +187,11 @@ app.post('/mpesa/callback', async (req, res) => {
   }
 });
 
-// ---- Check Payment Status ----
-app.get('/mpesa/status/:checkoutRequestId', async (req, res) => {
-  try {
-    const snap = await db.collection('payments').where('checkoutRequestId', '==', req.params.checkoutRequestId).get();
-    if (snap.empty) return res.json({ status: 'PENDING' });
-    const data = snap.docs[0].data();
-    res.json({ status: data.status, mpesaRef: data.mpesaRef || '' });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+// ---- Poll Payment Status ----
+app.get('/mpesa/status/:checkoutRequestId', (req, res) => {
+  const payment = payments.get(req.params.checkoutRequestId);
+  if (!payment) return res.json({ status: 'PENDING' });
+  res.json({ status: payment.status, mpesaRef: payment.mpesaRef || '' });
 });
 
 app.listen(PORT, () => {
