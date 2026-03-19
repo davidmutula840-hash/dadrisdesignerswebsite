@@ -67,6 +67,16 @@ function formatPhone(phone) {
   return '254' + phone;
 }
 
+// ---- Test Route: Check Daraja Token ----
+app.get('/test', async (req, res) => {
+  try {
+    const token = await getDarajaToken();
+    res.json({ success: true, token: token.slice(0,20) + '...', env: DARAJA_BASE, shortcode: SHORTCODE });
+  } catch (err) {
+    res.json({ success: false, error: err.response?.data || err.message });
+  }
+});
+
 // ---- Health Check ----
 app.get('/', (req, res) => {
   res.json({ status: 'Dadris Payment Server running', env: process.env.MPESA_ENV || 'sandbox' });
@@ -95,8 +105,8 @@ app.post('/mpesa/pay', async (req, res) => {
       PartyB:            SHORTCODE,
       PhoneNumber:       phone,
       CallBackURL:       CALLBACK,
-      AccountReference:  `DADRIS-${projectId}`,
-      TransactionDesc:   `Payment for Dadris Designers`,
+      AccountReference:  'DadrisDesigners',
+      TransactionDesc:   'Design Services Payment',
     };
 
     const response = await axios.post(`${DARAJA_BASE}/mpesa/stkpush/v1/processrequest`, payload, {
@@ -104,6 +114,7 @@ app.post('/mpesa/pay', async (req, res) => {
     });
 
     const { CheckoutRequestID, ResponseCode, CustomerMessage } = response.data;
+    console.log('[Daraja] STK Response:', JSON.stringify(response.data));
 
     if (ResponseCode === '0') {
       await db.collection('payments').add({
@@ -117,7 +128,8 @@ app.post('/mpesa/pay', async (req, res) => {
       res.status(400).json({ error: response.data.ResponseDescription || 'STK Push failed' });
     }
   } catch (err) {
-    console.error('[Daraja] Pay error:', err.response?.data || err.message);
+    const errData = err.response?.data || err.message;
+    console.error('[Daraja] Pay error:', JSON.stringify(errData));
     res.status(500).json({ error: 'Payment initiation failed. Please try again.' });
   }
 });
