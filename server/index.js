@@ -117,11 +117,13 @@ app.post('/mpesa/pay', async (req, res) => {
     console.log('[Daraja] STK Response:', JSON.stringify(response.data));
 
     if (ResponseCode === '0') {
-      await db.collection('payments').add({
+      // Save to Firestore (non-blocking — don't fail payment if Firebase has issues)
+      db.collection('payments').add({
         projectId, clientId, clientName: clientName || '', phone, amount: amt,
         checkoutRequestId: CheckoutRequestID, status: 'PENDING',
         createdAt: admin.firestore.FieldValue.serverTimestamp(),
-      });
+      }).catch(e => console.error('[Firebase] Save payment failed:', e.message));
+
       console.log(`[Daraja] STK Push sent to ${phone} KSh ${amt}`);
       res.json({ success: true, checkoutRequestId: CheckoutRequestID, message: CustomerMessage || 'Check your phone and enter M-Pesa PIN.' });
     } else {
@@ -146,32 +148,41 @@ app.post('/mpesa/callback', async (req, res) => {
     console.log(`[Daraja] Callback — CheckoutID: ${checkId}, Code: ${code}`);
 
     if (code === 0 && checkId) {
-      const snap = await db.collection('payments').where('checkoutRequestId', '==', checkId).get();
-      if (!snap.empty) {
-        const payDoc = snap.docs[0];
-        const { projectId } = payDoc.data();
-        if (projectId) {
-          const projRef  = db.collection('projects').doc(projectId);
-          const projSnap = await projRef.get();
-          if (projSnap.exists) {
-            const currentPaid = parseFloat(projSnap.data().paid) || 0;
-            const newPaid     = currentPaid + parseFloat(amount || 0);
-            const total       = parseFloat(projSnap.data().amount) || 0;
-            await projRef.update({
-              paid:          newPaid,
-              paymentStatus: newPaid >= total ? 'paid' : 'partial',
-              lastPayment:   admin.firestore.FieldValue.serverTimestamp(),
-              lastMpesaRef:  mpesaRef || '',
-            });
-            console.log(`[Daraja] Project ${projectId} updated — KSh ${amount} paid`);
+      // Update Firebase (wrapped in try-catch to not fail the callback response)
+      try {
+        const snap = await db.collection('payments').where('checkoutRequestId', '==', checkId).get();
+        if (!snap.empty) {
+          const payDoc = snap.docs[0];
+          const { projectId } = payDoc.data();
+          if (projectId) {
+            const projRef  = db.collection('projects').doc(projectId);
+            const projSnap = await projRef.get();
+            if (projSnap.exists) {
+              const currentPaid = parseFloat(projSnap.data().paid) || 0;
+              const newPaid     = currentPaid + parseFloat(amount || 0);
+              const total       = parseFloat(projSnap.data().amount) || 0;
+              await projRef.update({
+                paid:          newPaid,
+                paymentStatus: newPaid >= total ? 'paid' : 'partial',
+                lastPayment:   admin.firestore.FieldValue.serverTimestamp(),
+                lastMpesaRef:  mpesaRef || '',
+              });
+              console.log(`[Daraja] ✅ Project ${projectId} updated — KSh ${amount} paid`);
+            }
           }
+          await payDoc.ref.update({ status: 'COMPLETED', mpesaRef: mpesaRef || '', paidAt: admin.firestore.FieldValue.serverTimestamp() });
         }
-        await payDoc.ref.update({ status: 'COMPLETED', mpesaRef: mpesaRef || '', paidAt: admin.firestore.FieldValue.serverTimestamp() });
+      } catch (fbErr) {
+        console.error('[Firebase] Callback update failed:', fbErr.message);
       }
     } else {
-      if (checkId) {
-        const snap = await db.collection('payments').where('checkoutRequestId', '==', checkId).get();
-        snap.forEach(doc => doc.ref.update({ status: 'FAILED' }));
+      try {
+        if (checkId) {
+          const snap = await db.collection('payments').where('checkoutRequestId', '==', checkId).get();
+          snap.forEach(doc => doc.ref.update({ status: 'FAILED' }));
+        }
+      } catch (fbErr) {
+        console.error('[Firebase] Failed status update error:', fbErr.message);
       }
     }
     res.json({ ResultCode: 0, ResultDesc: 'Accepted' });
