@@ -7,10 +7,18 @@ const admin      = require('firebase-admin');
 const app  = express();
 const PORT = process.env.PORT || 3000;
 
-// ---- CORS — only allow your GitHub Pages site ----
+// ---- CORS — allow GitHub Pages sites ----
 app.use(cors({
-  origin: process.env.ALLOWED_ORIGIN || 'https://davidmutula840-hash.github.io',
+  origin: function(origin, callback) {
+    // Allow requests with no origin (mobile apps, Postman) or from GitHub Pages
+    if (!origin || origin.includes('github.io') || origin === process.env.ALLOWED_ORIGIN) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   methods: ['GET', 'POST'],
+  credentials: true,
 }));
 app.use(express.json());
 
