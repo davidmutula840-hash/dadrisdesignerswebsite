@@ -4,7 +4,7 @@
    Place this file in your ROOT website folder (same level as index.html)
    ========================================================= */
 
-const CACHE_NAME = 'dadris-v1';
+const CACHE_NAME = 'dadris-v2';
 const BASE = '/dadrisdesignerswebsite';
 
 // Files to cache immediately on install
